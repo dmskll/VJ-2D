@@ -212,6 +212,7 @@ void Player::update(int deltaTime)
 				startY = posPlayer.y;
 			}
 		}
+		else canJump = false;
 	}
 	
 
