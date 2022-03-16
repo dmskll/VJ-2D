@@ -10,6 +10,7 @@
 #define JUMP_HEIGHT 96			//altura del salto
 #define FALL_STEP 3.5			//velocidad a la que cae cuando acaba el salto
 #define CLIMB_STEP 2			//velocidad a la que se cae cuando se esta CLIMB
+#define WALL_JUMP_STEP 8		//incremento que se suma (o resta) en la componente 'x' y 'y' en cada instancia de wall jump
 
 
 enum PlayerAnims
@@ -22,6 +23,9 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 {
 	bJumping = false;
 	climb = false;
+	walljumpleft = false;
+	walljumpright = false;
+
 	canJump = true; //canJump no se utiliza, la puse al principio para probar el walljump en clase
 	spritesheet.loadFromFile("images/bub.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	sprite = Sprite::createSprite(glm::ivec2(32, 32), glm::vec2(0.25, 0.25), &spritesheet, &shaderProgram);
@@ -54,6 +58,25 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 void Player::update(int deltaTime)
 {
 	sprite->update(deltaTime);
+
+
+	//checks de si se puede hacer el walljump
+
+	//check left
+	posPlayer.x -= 2;
+	if (map->collisionMoveLeft(posPlayer, glm::ivec2(32, 32)) && Game::instance().getSpecialKey(GLUT_KEY_UP) && !past_up && !canJump) {//wall jump left to right
+		bJumping = false;
+		walljumpleft = true;
+		wallJumpProgress = 0;
+	}
+	posPlayer.x += 2;
+	//check right
+	if (map->collisionMoveRight(posPlayer, glm::ivec2(34, 32)) && Game::instance().getSpecialKey(GLUT_KEY_UP) && !past_up && !canJump) {//wall jump right to left
+		bJumping = false;
+		walljumpright = true;
+		wallJumpProgress = 0;
+	}
+
 	if(Game::instance().getSpecialKey(GLUT_KEY_LEFT))
 	{
 		if(sprite->animation() != MOVE_LEFT)
@@ -96,7 +119,7 @@ void Player::update(int deltaTime)
 		//con bJumping true se calcula el salto parabolico. Cuando se llega a angle 180, el jugador
 		//toca el suelo (con angle > 90) 0 el jugador se choca con el techo bJumping pasa a ser false
 
-		if (Game::instance().getSpecialKey(GLUT_KEY_UP) && canJump)
+		if (!past_up && Game::instance().getSpecialKey(GLUT_KEY_UP) && canJump)
 		{
 			canJump = false;
 			jumpAngle = 0;
@@ -127,7 +150,52 @@ void Player::update(int deltaTime)
 
 		}
 	}
-	else 
+	else if (walljumpleft) {
+		if (wallJumpProgress == 10) { 
+			walljumpleft = false;
+			floatTime = 5;
+		}
+		else {
+			wallJumpProgress += 1;
+			posPlayer.x += WALL_JUMP_STEP;
+			posPlayer.y -= WALL_JUMP_STEP;
+
+			if(map->collisionMoveUp(posPlayer, glm::ivec2(32, 32), &posPlayer.y) || map->collisionMoveRight(posPlayer, glm::ivec2(32, 32))) {
+				walljumpleft = false;
+				posPlayer.x -= WALL_JUMP_STEP;
+				posPlayer.y += WALL_JUMP_STEP;
+				floatTime = 5;
+				
+			}
+
+		}
+
+	}
+	else if (walljumpright) {
+		if (wallJumpProgress == 10) {
+			walljumpright = false;
+			floatTime = 5;
+		}
+		else {
+			wallJumpProgress += 1;
+			posPlayer.x -= WALL_JUMP_STEP;
+			posPlayer.y -= WALL_JUMP_STEP;
+
+			if (map->collisionMoveUp(posPlayer, glm::ivec2(32, 32), &posPlayer.y) || map->collisionMoveRight(posPlayer, glm::ivec2(32, 32))) {
+				walljumpright= false;
+				posPlayer.x += WALL_JUMP_STEP;
+				posPlayer.y += WALL_JUMP_STEP;
+				floatTime = 5;
+
+			}
+
+		}
+
+	}
+	else if (floatTime > 0) {
+		floatTime -= 1;
+	}
+	else
 	{
 		//caida no parabolica dependiendo de si se esta climb o no
 		if (climb) posPlayer.y += CLIMB_STEP;
@@ -135,7 +203,8 @@ void Player::update(int deltaTime)
 		
 		if(map->collisionMoveDown(posPlayer, glm::ivec2(32, 32), &posPlayer.y))
 		{
-			if(Game::instance().getSpecialKey(GLUT_KEY_UP))
+			canJump = true;
+			if(!past_up && Game::instance().getSpecialKey(GLUT_KEY_UP))
 			{
 				bJumping = true;
 				canJump = false;
@@ -145,7 +214,18 @@ void Player::update(int deltaTime)
 		}
 	}
 	
+
+	
+
+
+
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
+
+	//actualizar valores para el siguiente update
+	past_up = Game::instance().getSpecialKey(GLUT_KEY_UP);
+	past_down = Game::instance().getSpecialKey(GLUT_KEY_DOWN);
+	past_left = Game::instance().getSpecialKey(GLUT_KEY_LEFT);
+	past_right = Game::instance().getSpecialKey(GLUT_KEY_RIGHT);
 }
 
 void Player::render()
