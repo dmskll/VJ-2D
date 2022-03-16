@@ -33,7 +33,7 @@ void Scene::init()
 	map = TileMap::createTileMap("levels/level01.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 	player = new Player();
 	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
-	player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), INIT_PLAYER_X_TILES * map->getTileSize()));
+	player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), INIT_PLAYER_Y_TILES * map->getTileSize()));
 	player->setTileMap(map);
 
 	berry = new Strawberry();
@@ -46,7 +46,7 @@ void Scene::init()
 
 	spring = new Spring();
 	spring->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
-	spring->setPosition(glm::vec2(5 * map->getTileSize(), 25 * map->getTileSize()));
+	spring->setPosition(glm::vec2(1 * map->getTileSize(), 25 * map->getTileSize()));
 	spring->setTileMap(map);
 	spring->setPlayer(player);
 
