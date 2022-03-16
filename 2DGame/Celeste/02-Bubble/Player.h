@@ -24,9 +24,11 @@ public:
 	glm::ivec2 getPosition();
 	
 private:
-	bool bJumping, canJump, climb, jumpSpring;
+	bool bJumping, canJump, climb, walljumpleft, walljumpright, jumpSpring;
+	bool past_up, past_down, past_left, past_right;//booleanos que indican si la tecla estaba presionada en el ultimo update
+
 	glm::ivec2 tileMapDispl, posPlayer;
-	int jumpAngle, startY;
+	int jumpAngle, startY, wallJumpProgress, floatTime;
 	Texture spritesheet;
 	Sprite *sprite;
 	TileMap *map;
