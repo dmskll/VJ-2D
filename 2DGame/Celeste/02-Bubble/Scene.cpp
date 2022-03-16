@@ -8,7 +8,7 @@
 #define SCREEN_X 32
 #define SCREEN_Y 16
 
-#define INIT_PLAYER_X_TILES 4
+#define INIT_PLAYER_X_TILES 5
 #define INIT_PLAYER_Y_TILES 25
 
 
@@ -35,6 +35,15 @@ void Scene::init()
 	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 	player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), INIT_PLAYER_Y_TILES * map->getTileSize()));
 	player->setTileMap(map);
+
+	berry = new Strawberry();
+	berry->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+	berry->setPosition(glm::vec2(15 * map->getTileSize(), 15 * map->getTileSize()));
+	berry->setTileMap(map);
+	berry->setPlayer(player);
+
+
+
 	projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
 	currentTime = 0.0f;
 }
@@ -43,6 +52,7 @@ void Scene::update(int deltaTime)
 {
 	currentTime += deltaTime;
 	player->update(deltaTime);
+	berry->update(deltaTime);
 }
 
 void Scene::render()
@@ -57,6 +67,7 @@ void Scene::render()
 	texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
 	map->render();
 	player->render();
+	berry->render();
 }
 
 void Scene::initShaders()
