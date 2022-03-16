@@ -1,6 +1,5 @@
 #pragma once
 
-
 #include "Sprite.h"
 #include "TileMap.h"
 #include "Player.h"

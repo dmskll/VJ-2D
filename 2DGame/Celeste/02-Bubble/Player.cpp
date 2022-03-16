@@ -22,6 +22,7 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 {
 	bJumping = false;
 	climb = false;
+	jumpSpring = false;
 	canJump = true; //canJump no se utiliza, la puse al principio para probar el walljump en clase
 	
 	spritesheet.loadFromFile("images/bub.png", TEXTURE_PIXEL_FORMAT_RGBA);
@@ -115,7 +116,9 @@ void Player::update(int deltaTime)
 		{
 			if (!map->collisionMoveUp(posPlayer, glm::ivec2(16, 16), &posPlayer.y))
 			{
-				posPlayer.y = int(startY - 96 * sin(3.14159f * jumpAngle / 180.f));
+				if(!jumpSpring) posPlayer.y = int(startY - 96 * sin(3.14159f * jumpAngle / 180.f));
+				else posPlayer.y = int(startY - 200 * sin(3.14159f * jumpAngle / 180.f));
+
 				if (jumpAngle > 90)
 					if (climb) bJumping = false;
 					else bJumping = !map->collisionMoveDown(posPlayer, glm::ivec2(32, 32), &posPlayer.y);
@@ -131,6 +134,7 @@ void Player::update(int deltaTime)
 	else 
 	{
 		//caida no parabolica dependiendo de si se esta climb o no
+		jumpSpring = false;
 		if (climb) posPlayer.y += CLIMB_STEP;
 		else posPlayer.y += FALL_STEP;
 		
@@ -170,6 +174,14 @@ glm::ivec2 Player::getPosition()
 	return posPlayer;
 }
 
+void Player::setJumpSpring()
+{
+	jumpSpring = true;
+	bJumping = true;
+	canJump = false;
+	jumpAngle = 0;
+	startY = posPlayer.y;
+}
 
 
 
