@@ -7,8 +7,9 @@
 
 
 #define JUMP_ANGLE_STEP 4       //el angulo que se suma al saltar
+#define SPRING_ANGLE_STEP 3   //el angulo que se suma al utilizar un spring
 #define JUMP_HEIGHT 96			//altura del salto
-#define FALL_STEP 3.5			//velocidad a la que cae cuando acaba el salto
+#define FALL_STEP 4			//velocidad a la que cae cuando acaba el salto
 #define CLIMB_STEP 2			//velocidad a la que se cae cuando se esta CLIMB
 #define WALL_JUMP_STEP 8		//incremento que se suma (o resta) en la componente 'x' y 'y' en cada instancia de wall jump
 
@@ -62,22 +63,33 @@ void Player::update(int deltaTime)
 	sprite->update(deltaTime);
 
 
-	//checks de si se puede hacer el walljump
-
+	//checks de si esta tocando la pared
+	//indica si se puede hacer el walljump o si puede hacer climb
 	//check left
 	posPlayer.x -= 2;
-	if (map->collisionMoveLeft(posPlayer, glm::ivec2(32, 32)) && Game::instance().getSpecialKey(GLUT_KEY_UP) && !past_up && !canJump) {//wall jump left to right
-		bJumping = false;
-		walljumpleft = true;
-		wallJumpProgress = 0;
+	if (map->collisionMoveLeft(posPlayer, glm::ivec2(32, 32))) 
+	{
+		if (Game::instance().getSpecialKey(GLUT_KEY_UP) && !past_up && !canJump) //wall jump left to right
+		{
+			bJumping = false;
+			walljumpleft = true;
+			wallJumpProgress = 0;
+		}
 	}
+	else climb = false; //si no toca ninguna pared no puede hacer climb
+
 	posPlayer.x += 2;
 	//check right
-	if (map->collisionMoveRight(posPlayer, glm::ivec2(34, 32)) && Game::instance().getSpecialKey(GLUT_KEY_UP) && !past_up && !canJump) {//wall jump right to left
-		bJumping = false;
-		walljumpright = true;
-		wallJumpProgress = 0;
+	if (map->collisionMoveRight(posPlayer, glm::ivec2(34, 32))) 
+	{
+		if (Game::instance().getSpecialKey(GLUT_KEY_UP) && !past_up && !canJump) //wall jump right to left
+		{
+			bJumping = false;
+			walljumpright = true;
+			wallJumpProgress = 0;
+		}
 	}
+	else climb = false;
 
 	if(Game::instance().getSpecialKey(GLUT_KEY_LEFT))
 	{
@@ -128,7 +140,9 @@ void Player::update(int deltaTime)
 			startY = posPlayer.y;
 		}
 
-		jumpAngle += JUMP_ANGLE_STEP;
+		if(!jumpSpring) jumpAngle += JUMP_ANGLE_STEP;
+		else jumpAngle += SPRING_ANGLE_STEP;
+
 		if(jumpAngle == 180)
 		{
 			canJump = true;
@@ -140,7 +154,7 @@ void Player::update(int deltaTime)
 			if (!map->collisionMoveUp(posPlayer, glm::ivec2(16, 16), &posPlayer.y))
 			{
 				if(!jumpSpring) posPlayer.y = int(startY - 96 * sin(3.14159f * jumpAngle / 180.f));
-				else posPlayer.y = int(startY - 200 * sin(3.14159f * jumpAngle / 180.f));
+				else posPlayer.y = int(startY - 190 * sin(3.14159f * jumpAngle / 180.f));
 
 				if (jumpAngle > 90)
 					if (climb) bJumping = false;
