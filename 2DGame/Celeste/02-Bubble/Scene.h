@@ -3,6 +3,7 @@
 
 
 #include <glm/glm.hpp>
+#include <vector>
 #include "ShaderProgram.h"
 #include "TileMap.h"
 #include "Player.h"
@@ -27,16 +28,22 @@ public:
 
 private:
 	void initShaders();
+	void initObjects();
+	void renderObjects();
+	void updateObjects(int deltaTime);
 
 private:
 	TileMap *map;
 	Player *player;
-	Strawberry *berry;
-	Spring *spring;
 	ShaderProgram texProgram;
 	float currentTime;
 	glm::mat4 projection;
-
+	vector<objects> objs;  //contiene info de los objetos de la escena (mulles, fresas, pinchos...)
+	bool berry;			   //hay una fresa en el mapa
+	Strawberry *berryObj;  //instancia de fresa
+	bool spring;		   //hay un muelle en el mapa
+	vector<Spring *> springObj; //tiene las instancias de los muelles
+	//faltan para los pinchos
 };
 
 

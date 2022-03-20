@@ -5,11 +5,11 @@
 #include "Game.h"
 
 
-#define SCREEN_X 32
+#define SCREEN_X 16
 #define SCREEN_Y 16
 
 #define INIT_PLAYER_X_TILES 5
-#define INIT_PLAYER_Y_TILES 25
+#define INIT_PLAYER_Y_TILES 5
 
 
 Scene::Scene()
@@ -26,31 +26,76 @@ Scene::~Scene()
 		delete player;
 }
 
+void Scene::initObjects()
+{
+	berry, spring = false;
+	for (int i = 0; i < objs.size(); i++)
+	{
+		if (objs[i].type == "BERRY")
+		{
+			berry = true;
+			berryObj = new Strawberry();
+			berryObj->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+			berryObj->setPosition(glm::vec2(objs[i].x * map->getTileSize(), objs[i].y * map->getTileSize()));
+			berryObj->setTileMap(map);
+			berryObj->setPlayer(player);
+		}
+		else if (objs[i].type == "SPRING")
+		{
+			spring = true;
+			springObj.push_back(new Spring());
+			springObj.back()->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+			springObj.back()->setPosition(glm::vec2((objs[i].x-0.5) * map->getTileSize(), (objs[i].y-0.3) * map->getTileSize()));
+			springObj.back()->setTileMap(map);
+			springObj.back()->setPlayer(player);
+		}
+		else if (objs[i].type == "SPIKE")
+		{
+
+		}
+	}
+}
+
+void Scene::renderObjects()
+{
+	if (berry)
+	{
+		berryObj->render();
+	}
+	if (spring)
+	{
+		for (int i = 0; i < springObj.size(); ++i)
+		{
+			springObj[i]->render();
+		}
+	}
+}
+
+void Scene::updateObjects(int deltaTime)
+{
+	if (berry)
+	{
+		berryObj->update(deltaTime);
+	}
+	if (spring)
+	{
+		for (int i = 0; i < springObj.size(); ++i)
+		{
+			springObj[i]->update(deltaTime);
+		}
+	}
+}
+
 
 void Scene::init()
 {
 	initShaders();
-	map = TileMap::createTileMap("levels/level01.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+	map = TileMap::createTileMap("levels/level01.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram, objs);
 	player = new Player();
 	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 	player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), INIT_PLAYER_Y_TILES * map->getTileSize()));
 	player->setTileMap(map);
-
-	berry = new Strawberry();
-	berry->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
-	berry->setPosition(glm::vec2(1 * map->getTileSize(), 15 * map->getTileSize()));
-	berry->setTileMap(map);
-	berry->setPlayer(player);
-
-
-
-	spring = new Spring();
-	spring->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
-	spring->setPosition(glm::vec2(1 * map->getTileSize(), 25 * map->getTileSize()));
-	spring->setTileMap(map);
-	spring->setPlayer(player);
-
-
+	initObjects();
 
 	projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
 	currentTime = 0.0f;
@@ -60,8 +105,9 @@ void Scene::update(int deltaTime)
 {
 	currentTime += deltaTime;
 	player->update(deltaTime);
-	berry->update(deltaTime);
-	spring->update(deltaTime);
+	updateObjects(deltaTime);
+	//berry->update(deltaTime);
+	//spring->update(deltaTime);
 }
 
 void Scene::render()
@@ -76,8 +122,9 @@ void Scene::render()
 	texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
 	map->render();
 	player->render();
-	berry->render();
-	spring->render();
+	renderObjects();
+	//berry->render();
+	//spring->render();
 }
 
 void Scene::initShaders()

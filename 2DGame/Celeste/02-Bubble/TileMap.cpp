@@ -1,24 +1,24 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
-#include <vector>
 #include "TileMap.h"
+
 
 
 using namespace std;
 
 
-TileMap *TileMap::createTileMap(const string &levelFile, const glm::vec2 &minCoords, ShaderProgram &program)
+TileMap *TileMap::createTileMap(const string &levelFile, const glm::vec2 &minCoords, ShaderProgram &program, vector<objects> &objs)
 {
-	TileMap *map = new TileMap(levelFile, minCoords, program);
+	TileMap *map = new TileMap(levelFile, minCoords, program, objs);
 	
 	return map;
 }
 
 
-TileMap::TileMap(const string &levelFile, const glm::vec2 &minCoords, ShaderProgram &program)
+TileMap::TileMap(const string &levelFile, const glm::vec2 &minCoords, ShaderProgram &program, vector<objects> &objs)
 {
-	loadLevel(levelFile);
+	loadLevel(levelFile, objs);
 	prepareArrays(minCoords, program);
 }
 
@@ -45,19 +45,29 @@ void TileMap::free()
 	glDeleteBuffers(1, &vbo);
 }
 
-bool TileMap::loadLevel(const string &levelFile)
+bool TileMap::isWall(char s)
+{
+	return (s > '0') && (s < '@');
+}
+
+
+bool TileMap::loadLevel(const string &levelFile, vector<objects> &objs)
 {
 	ifstream fin;
 	string line, tilesheetFile;
 	stringstream sstream;
 	char tile;
+	objects aux;
 	
 	fin.open(levelFile.c_str());
-	if(!fin.is_open())
+	if (!fin.is_open())
 		return false;
+
 	getline(fin, line);
-	if(line.compare(0, 7, "TILEMAP") != 0)
+	if (line.compare(0, 7, "TILEMAP") != 0)
 		return false;
+
+		
 	getline(fin, line);
 	sstream.str(line);
 	sstream >> mapSize.x >> mapSize.y;
@@ -83,7 +93,36 @@ bool TileMap::loadLevel(const string &levelFile)
 		for(int i=0; i<mapSize.x; i++)
 		{
 			fin.get(tile);
-			if(tile == ' ')
+			if (tile == 'o')
+			{
+				aux.type = "SPIKE";
+				aux.y = j;
+				aux.x = i;
+				objs.push_back(aux);
+			}
+			else if (tile == 'p')
+			{
+				aux.type = "BERRY";
+				aux.y = j;
+				aux.x = i;
+				objs.push_back(aux);
+			}
+			else if (tile == 'q')
+			{
+				aux.type = "BERRY_UP";
+				aux.y = j;
+				aux.x = i;
+				objs.push_back(aux);
+			}
+			else if (tile == 'r')
+			{
+				aux.type = "SPRING";
+				aux.y = j;
+				aux.x = i;
+				objs.push_back(aux);
+			}
+			
+			if(!isWall(tile))
 				map[j*mapSize.x+i] = 0;
 			else
 				map[j*mapSize.x+i] = tile - int('0');
@@ -115,7 +154,7 @@ void TileMap::prepareArrays(const glm::vec2 &minCoords, ShaderProgram &program)
 				// Non-empty tile
 				nTiles++;
 				posTile = glm::vec2(minCoords.x + i * tileSize, minCoords.y + j * tileSize);
-				texCoordTile[0] = glm::vec2(float((tile-1)%2) / tilesheetSize.x, float((tile-1)/2) / tilesheetSize.y);
+				texCoordTile[0] = glm::vec2(float((tile-1)%4) / tilesheetSize.x, float((tile-1)/4) / tilesheetSize.y);
 				texCoordTile[1] = texCoordTile[0] + tileTexSize;
 				//texCoordTile[0] += halfTexel;
 				texCoordTile[1] -= halfTexel;

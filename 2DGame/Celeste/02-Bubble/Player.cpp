@@ -158,7 +158,7 @@ void Player::update(int deltaTime)
 
 				if (jumpAngle > 90)
 					if (climb) bJumping = false;
-					else bJumping = !map->collisionMoveDown(posPlayer, glm::ivec2(32, 32), &posPlayer.y);
+					else bJumping = !map->collisionMoveDown(posPlayer, glm::ivec2(32, 52), &posPlayer.y); //antes 32 32
 			}
 			else
 			{

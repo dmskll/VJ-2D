@@ -1,0 +1,9 @@
+1 UNO	7   SIETE
+2 DOS	8   OCHO
+3 TRES	9    NUEVE
+4 CUATRO  :     ..
+5 CINCO   ;     . I ,
+6 SEIS    <    MENOR
+> MAYOR	? INTERROG
+
+
