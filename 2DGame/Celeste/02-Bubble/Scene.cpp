@@ -87,10 +87,14 @@ void Scene::updateObjects(int deltaTime)
 }
 
 
-void Scene::init()
+void Scene::init(int level)
 {
 	initShaders();
-	map = TileMap::createTileMap("levels/level01.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram, objs);
+	string s = "levels/level";
+	if (level < 10) s += "0";
+	s += std::to_string(level) + ".txt";
+	
+	map = TileMap::createTileMap(s, glm::vec2(SCREEN_X, SCREEN_Y), texProgram, objs);
 	player = new Player();
 	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 	player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), INIT_PLAYER_Y_TILES * map->getTileSize()));
@@ -108,7 +112,16 @@ void Scene::update(int deltaTime)
 	updateObjects(deltaTime);
 	//berry->update(deltaTime);
 	//spring->update(deltaTime);
+
 }
+
+bool Scene::check_win() {
+	return player->check_win();
+}
+bool Scene::check_lose() {
+	return player->check_lose();
+}
+
 
 void Scene::render()
 {

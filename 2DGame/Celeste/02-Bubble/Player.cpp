@@ -22,11 +22,15 @@ enum PlayerAnims
 
 void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 {
+	win = false;
+	lose = false;
 	bJumping = false;
 	climb = false;
 	jumpSpring = false;
 	walljumpleft = false;
 	walljumpright = false;
+	past_f1 = true; //para que no empieze a iniciar niveles a lo loco
+	past_f3 = true;
 
 	canJump = true; //canJump no se utiliza, la puse al principio para probar el walljump en clase
 	
@@ -62,6 +66,16 @@ void Player::update(int deltaTime)
 {
 	sprite->update(deltaTime);
 
+
+	if (Game::instance().getSpecialKey(GLUT_KEY_F1) && !past_f1)
+	{
+		win = true;
+	}
+
+	if (Game::instance().getSpecialKey(GLUT_KEY_F3) && !past_f3)
+	{
+		lose = true;
+	}
 
 	//checks de si esta tocando la pared
 	//indica si se puede hacer el walljump o si puede hacer climb
@@ -246,6 +260,8 @@ void Player::update(int deltaTime)
 	past_down = Game::instance().getSpecialKey(GLUT_KEY_DOWN);
 	past_left = Game::instance().getSpecialKey(GLUT_KEY_LEFT);
 	past_right = Game::instance().getSpecialKey(GLUT_KEY_RIGHT);
+	past_f1 = Game::instance().getSpecialKey(GLUT_KEY_F1);
+	past_f3 = Game::instance().getSpecialKey(GLUT_KEY_F3);
 }
 
 void Player::render()
@@ -279,4 +295,10 @@ void Player::setJumpSpring()
 }
 
 
+bool Player::check_win() {
+	return win;
+}
 
+bool Player::check_lose() {
+	return lose;
+}

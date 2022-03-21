@@ -22,9 +22,12 @@ public:
 	Scene();
 	~Scene();
 
-	void init();
+	void init(int level);
 	void update(int deltaTime);
 	void render();
+
+	bool check_win();
+	bool check_lose();
 
 private:
 	void initShaders();

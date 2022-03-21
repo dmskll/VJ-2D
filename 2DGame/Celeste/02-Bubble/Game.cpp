@@ -7,12 +7,24 @@ void Game::init()
 {
 	bPlay = true;
 	glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
-	scene.init();
+	level = 1;
+	scene.init(level);
 }
 
 bool Game::update(int deltaTime)
 {
 	scene.update(deltaTime);
+
+	if (scene.check_win()) {
+		level++;
+		scene = Scene();
+		scene.init(level);
+	}
+
+	if (scene.check_lose()) {
+		scene = Scene();
+		scene.init(level);
+	}
 	
 	return bPlay;
 }

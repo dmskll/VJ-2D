@@ -17,7 +17,11 @@ public:
 	void init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram);
 	void update(int deltaTime);
 	void render();
-	
+
+	bool  win, lose;
+	bool check_win();
+	bool check_lose();
+
 	void setTileMap(TileMap *tileMap);
 	void setPosition(const glm::vec2 &pos);
 	void setJumpSpring();
@@ -25,7 +29,7 @@ public:
 	
 private:
 	bool bJumping, canJump, climb, walljumpleft, walljumpright, jumpSpring;
-	bool past_up, past_down, past_left, past_right;//booleanos que indican si la tecla estaba presionada en el ultimo update
+	bool past_up, past_down, past_left, past_right, past_f1, past_f3;//booleanos que indican si la tecla estaba presionada en el ultimo update
 
 	glm::ivec2 tileMapDispl, posPlayer;
 	int jumpAngle, startY, wallJumpProgress, floatTime;
