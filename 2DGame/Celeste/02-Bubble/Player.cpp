@@ -76,6 +76,9 @@ void Player::update(int deltaTime)
 	{
 		lose = true;
 	}
+	if (posPlayer.y <= -5) win = true;
+	else if (posPlayer.y > 479) lose = true;
+
 
 	//checks de si esta tocando la pared
 	//indica si se puede hacer el walljump o si puede hacer climb
