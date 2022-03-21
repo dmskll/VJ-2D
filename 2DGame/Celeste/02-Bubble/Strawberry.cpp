@@ -10,12 +10,12 @@ enum StrawberryAnims
 
 void Strawberry::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 {
-	spritesheet.loadFromFile("images/varied.png", TEXTURE_PIXEL_FORMAT_RGBA);
-	sprite = Sprite::createSprite(glm::ivec2(64, 64), glm::vec2(0.5, 0.5), &spritesheet, &shaderProgram);
+	spritesheet.loadFromFile("images/berries.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	sprite = Sprite::createSprite(glm::ivec2(32, 32), glm::vec2(0.5, 0.5), &spritesheet, &shaderProgram);
 	sprite->setNumberAnimations(1);
 
 		sprite->setAnimationSpeed(IDLE, 8);
-		sprite->addKeyframe(IDLE, glm::vec2(0.f, 0.5f));
+		sprite->addKeyframe(IDLE, glm::vec2(0.f, 0.f));
 
 	sprite->changeAnimation(0);
 	tileMapDispl = tileMapPos;
@@ -36,7 +36,7 @@ void Strawberry::update(int deltaTime)
 		posPlayer = player->getPosition();
 		if (posPlayer.x < posStrawBerry.x + 50 && posPlayer.x > posStrawBerry.x - 20)
 		{
-			if (posPlayer.y < posStrawBerry.y + 20 && posPlayer.y > posStrawBerry.y - 20)
+			if (posPlayer.y < posStrawBerry.y + 35 && posPlayer.y > posStrawBerry.y - 20)
 			{
 				collected = true;
 			}

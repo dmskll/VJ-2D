@@ -18,6 +18,7 @@ public:
 
 private:
 	glm::ivec2 tileMapDispl, posSpring, posPlayer;
+	float timeAnim;
 	Texture spritesheet;
 	Sprite *sprite;
 	TileMap *map;
