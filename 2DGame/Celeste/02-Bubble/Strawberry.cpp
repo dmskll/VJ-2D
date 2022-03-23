@@ -34,9 +34,9 @@ void Strawberry::update(int deltaTime)
 		sprite->setPosition(glm::vec2(float(tileMapDispl.x + posStrawBerry.x), float(tileMapDispl.y + posStrawBerry.y)));
 
 		posPlayer = player->getPosition();
-		if (posPlayer.x < posStrawBerry.x + 50 && posPlayer.x > posStrawBerry.x - 20)
+		if (posPlayer.x < posStrawBerry.x + 25 && posPlayer.x > posStrawBerry.x - 20)
 		{
-			if (posPlayer.y < posStrawBerry.y + 35 && posPlayer.y > posStrawBerry.y - 20)
+			if (posPlayer.y < posStrawBerry.y + 25 && posPlayer.y > posStrawBerry.y - 20)
 			{
 				collected = true;
 			}

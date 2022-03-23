@@ -28,7 +28,9 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	jumpSpring = false;
 	walljumpleft = false;
 	walljumpright = false;
-
+	air = false;
+	faceRight = false;
+	moving = false;
 	canJump = true; //canJump no se utiliza, la puse al principio para probar el walljump en clase
 	
 	spritesheet.loadFromFile("images/madeline.png", TEXTURE_PIXEL_FORMAT_RGBA);
@@ -89,11 +91,11 @@ void Player::update(int deltaTime)
 			wallJumpProgress = 0;
 		}
 	}
-	else climb = false; //si no toca ninguna pared no puede hacer climb
 
-	posPlayer.x += WALK_STEP;
+
+	posPlayer.x += WALK_STEP*2;
 	//check right
-	if (map->collisionMoveRight(posPlayer, glm::ivec2(34, 32))) 
+	if (map->collisionMoveRight(posPlayer, glm::ivec2(32, 32))) 
 	{
 		if (Game::instance().getSpecialKey(GLUT_KEY_UP) && !past_up && !canJump) //wall jump right to left
 		{
@@ -102,43 +104,74 @@ void Player::update(int deltaTime)
 			wallJumpProgress = 0;
 		}
 	}
-	else climb = false;
+	posPlayer.x -= WALK_STEP;
+
+	if (!walljumpleft && !walljumpright) climb = false; //si no se toca ninguna de las dos paredes no puede estar haciendo climb
+
+	if (air)
+	{
+		if (faceRight)
+			sprite->changeAnimation(JUMP_RIGHT);
+		else
+			sprite->changeAnimation(JUMP_LEFT);
+	}
+	else if (!moving)
+	{
+		if (faceRight)
+			sprite->changeAnimation(STAND_RIGHT);
+		else
+			sprite->changeAnimation(STAND_LEFT);
+	}
+
+
 
 	if(Game::instance().getSpecialKey(GLUT_KEY_LEFT))
 	{
-		if(sprite->animation() != MOVE_LEFT)
-			sprite->changeAnimation(MOVE_LEFT);
+		faceRight = false;
+		moving = true;
+		if (sprite->animation() != MOVE_LEFT && !air)
+		{
+				sprite->changeAnimation(MOVE_LEFT);
+		}
 		posPlayer.x -= WALK_STEP;
 		
 		if(map->collisionMoveLeft(posPlayer, glm::ivec2(32, 32))) //antes 32
 		{
 			//canJump = true;
+			sprite->changeAnimation(CLIMB_LEFT);
 			climb = true; //cuando se toca una pared climb es true
 			posPlayer.x += WALK_STEP;
-			sprite->changeAnimation(CLIMB_LEFT);
 		}
 	}
 	else if(Game::instance().getSpecialKey(GLUT_KEY_RIGHT))
 	{
-		if(sprite->animation() != MOVE_RIGHT)
-			sprite->changeAnimation(MOVE_RIGHT);
+		faceRight = true;
+		moving = true;
+		if (sprite->animation() != MOVE_RIGHT && !air)
+		{
+				sprite->changeAnimation(MOVE_RIGHT);
+		}
+			
 		posPlayer.x += WALK_STEP;
 		if(map->collisionMoveRight(posPlayer, glm::ivec2(32, 32)))
 		{
+			sprite->changeAnimation(CLIMB_RIGHT);
 			climb = true;
 			posPlayer.x -= WALK_STEP;
-
-			sprite->changeAnimation(CLIMB_RIGHT);
 		}
 	}
 	else
 	{
+		moving = false;
 		climb = false; //si no se toca ninguna tecla no puedes hacer climb
 		if(sprite->animation() == MOVE_LEFT)
 			sprite->changeAnimation(STAND_LEFT);
 		else if(sprite->animation() == MOVE_RIGHT)
 			sprite->changeAnimation(STAND_RIGHT);
 	}
+
+	
+
 
 	//CALCULO DE SALTO
 	if(bJumping) 
@@ -236,8 +269,10 @@ void Player::update(int deltaTime)
 		if(map->collisionMoveDown(posPlayer, glm::ivec2(32, 32), &posPlayer.y))
 		{
 			canJump = true;
+			air = false;
 			if(!past_up && Game::instance().getSpecialKey(GLUT_KEY_UP))
 			{
+				air = true; //indica que esta en el aire
 				bJumping = true;
 				canJump = false;
 				jumpAngle = 0;
@@ -284,6 +319,7 @@ glm::ivec2 Player::getPosition()
 
 void Player::setJumpSpring()
 {
+	air = true; //indica que esta en el aire
 	jumpSpring = true;
 	bJumping = true;
 	canJump = false;
