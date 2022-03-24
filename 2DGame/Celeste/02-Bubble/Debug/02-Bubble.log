@@ -1,10 +1,10 @@
-﻿Compilación iniciada a las 24/03/2022 9:23:48.
-     1>Proyecto "C:\Users\daniel.molleja\vj\VJ-2D\2DGame\Celeste\02-Bubble\02-Bubble.vcxproj" en el nodo 2 (Build destinos).
+﻿Compilación iniciada a las 24/03/2022 11:58:45.
+     1>Proyecto "F:\vj\VJ-2D\2DGame\Celeste\02-Bubble\02-Bubble.vcxproj" en el nodo 2 (Build destinos).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /I"..\..\..\libs\Simple OpenGL Image Library\src" /I..\..\..\libs\freeglut\include /I"..\..\..\libs\glew-1.13.0\include" /I..\..\..\libs\glm /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"Debug\\" /Fd"Debug\vc140.pdb" /Gd /TP /analyze- /errorReport:prompt Texture.cpp
-         Texture.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /I"..\..\..\libs\Simple OpenGL Image Library\src" /I..\..\..\libs\freeglut\include /I"..\..\..\libs\glew-1.13.0\include" /I..\..\..\libs\glm /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"Debug\\" /Fd"Debug\vc140.pdb" /Gd /TP /analyze- /errorReport:prompt Player.cpp
+         Player.cpp
        Link:
-         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\daniel.molleja\vj\VJ-2D\2DGame\Celeste\Debug\02-Bubble.exe" /INCREMENTAL /NOLOGO /LIBPATH:"..\..\..\libs\Simple OpenGL Image Library\projects\VC9\Debug" /LIBPATH:..\..\..\libs\freeglut\lib /LIBPATH:"..\..\..\libs\glew-1.13.0\lib\Release\Win32" SOIL.lib glew32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /Debug /PDB:"C:\Users\daniel.molleja\vj\VJ-2D\2DGame\Celeste\Debug\02-Bubble.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\daniel.molleja\vj\VJ-2D\2DGame\Celeste\Debug\02-Bubble.lib" /MACHINE:X86 Debug\Game.obj
+         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"F:\vj\VJ-2D\2DGame\Celeste\Debug\02-Bubble.exe" /INCREMENTAL /NOLOGO /LIBPATH:"..\..\..\libs\Simple OpenGL Image Library\projects\VC9\Debug" /LIBPATH:..\..\..\libs\freeglut\lib /LIBPATH:"..\..\..\libs\glew-1.13.0\lib\Release\Win32" SOIL.lib glew32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /Debug /PDB:"F:\vj\VJ-2D\2DGame\Celeste\Debug\02-Bubble.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"F:\vj\VJ-2D\2DGame\Celeste\Debug\02-Bubble.lib" /MACHINE:X86 Debug\Game.obj
          Debug\main.obj
          Debug\Player.obj
          Debug\Scene.obj
@@ -15,13 +15,13 @@
          Debug\Strawberry.obj
          Debug\Texture.obj
          Debug\TileMap.obj
-     1>SOIL.lib(image_DXT.obj) : warning LNK4099: no se encontró PDB 'vc100.pdb' con 'SOIL.lib(image_DXT.obj)' o en 'C:\Users\daniel.molleja\vj\VJ-2D\2DGame\Celeste\Debug\vc100.pdb'; se vinculará el objeto sin tener en cuenta información de depuración
-     1>SOIL.lib(image_helper.obj) : warning LNK4099: no se encontró PDB 'vc100.pdb' con 'SOIL.lib(image_helper.obj)' o en 'C:\Users\daniel.molleja\vj\VJ-2D\2DGame\Celeste\Debug\vc100.pdb'; se vinculará el objeto sin tener en cuenta información de depuración
-     1>SOIL.lib(SOIL.obj) : warning LNK4099: no se encontró PDB 'vc100.pdb' con 'SOIL.lib(SOIL.obj)' o en 'C:\Users\daniel.molleja\vj\VJ-2D\2DGame\Celeste\Debug\vc100.pdb'; se vinculará el objeto sin tener en cuenta información de depuración
-     1>SOIL.lib(stb_image_aug.obj) : warning LNK4099: no se encontró PDB 'vc100.pdb' con 'SOIL.lib(stb_image_aug.obj)' o en 'C:\Users\daniel.molleja\vj\VJ-2D\2DGame\Celeste\Debug\vc100.pdb'; se vinculará el objeto sin tener en cuenta información de depuración
-         02-Bubble.vcxproj -> C:\Users\daniel.molleja\vj\VJ-2D\2DGame\Celeste\Debug\02-Bubble.exe
-     1>Compilación del proyecto terminada "C:\Users\daniel.molleja\vj\VJ-2D\2DGame\Celeste\02-Bubble\02-Bubble.vcxproj" (Build destinos).
+     1>SOIL.lib(image_DXT.obj) : warning LNK4099: no se encontró PDB 'vc100.pdb' con 'SOIL.lib(image_DXT.obj)' o en 'F:\vj\VJ-2D\2DGame\Celeste\Debug\vc100.pdb'; se vinculará el objeto sin tener en cuenta información de depuración
+     1>SOIL.lib(image_helper.obj) : warning LNK4099: no se encontró PDB 'vc100.pdb' con 'SOIL.lib(image_helper.obj)' o en 'F:\vj\VJ-2D\2DGame\Celeste\Debug\vc100.pdb'; se vinculará el objeto sin tener en cuenta información de depuración
+     1>SOIL.lib(SOIL.obj) : warning LNK4099: no se encontró PDB 'vc100.pdb' con 'SOIL.lib(SOIL.obj)' o en 'F:\vj\VJ-2D\2DGame\Celeste\Debug\vc100.pdb'; se vinculará el objeto sin tener en cuenta información de depuración
+     1>SOIL.lib(stb_image_aug.obj) : warning LNK4099: no se encontró PDB 'vc100.pdb' con 'SOIL.lib(stb_image_aug.obj)' o en 'F:\vj\VJ-2D\2DGame\Celeste\Debug\vc100.pdb'; se vinculará el objeto sin tener en cuenta información de depuración
+         02-Bubble.vcxproj -> F:\vj\VJ-2D\2DGame\Celeste\Debug\02-Bubble.exe
+     1>Compilación del proyecto terminada "F:\vj\VJ-2D\2DGame\Celeste\02-Bubble\02-Bubble.vcxproj" (Build destinos).
 
 Compilación correcta.
 
-Tiempo transcurrido 00:00:00.93
+Tiempo transcurrido 00:00:11.88

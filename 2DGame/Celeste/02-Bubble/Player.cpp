@@ -13,6 +13,7 @@
 #define FALL_STEP 4			//velocidad a la que cae cuando acaba el salto
 #define CLIMB_STEP 2			//velocidad a la que se cae cuando se esta CLIMB
 #define WALL_JUMP_STEP 8		//incremento que se suma (o resta) en la componente 'x' y 'y' en cada instancia de wall jump
+#define DASH_STEP 10
 
 
 enum PlayerAnims
@@ -77,33 +78,46 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 
 void Player::updateKeys()
 {
-	keyUp = Game::instance().getSpecialKey(GLUT_KEY_UP);
-	keyDown = Game::instance().getSpecialKey(GLUT_KEY_UP);
-	keyLeft = Game::instance().getSpecialKey(GLUT_KEY_UP);
-	keyRight = Game::instance().getSpecialKey(GLUT_KEY_UP);
+	if (!dashing)
+	{
+		keyUp = Game::instance().getSpecialKey(GLUT_KEY_UP);
+		keyDown = Game::instance().getSpecialKey(GLUT_KEY_UP);
+		keyLeft = Game::instance().getSpecialKey(GLUT_KEY_UP);
+		keyRight = Game::instance().getSpecialKey(GLUT_KEY_UP);
+	}
 }
 
 void Player::doDash()
 {
+	dashTime -= 1;
+	if (dashTime < 0)
+		dashing = false;
+
 	if (keyUp)
 	{
-		if(keyLeft)  //arriba izq
-		if(keyRight) //arriba derecha
+		if (keyLeft)  //arriba izq
+			posPlayer.y -= DASH_STEP;
+		else if (keyRight) //arriba derecha
+			posPlayer.y -= DASH_STEP;
 		else //solo dash hacia arriba
+			posPlayer.y -= DASH_STEP;
 	}
 	else if (keyDown)
 	{
 		if (keyLeft)
-		if (keyRight)
+			posPlayer.y += DASH_STEP;
+		else if (keyRight)
+			posPlayer.y += DASH_STEP;
 		else //solo dash hacia abajo
+			posPlayer.y += DASH_STEP;
 	}
 	else if (keyLeft)
 	{
-
+		posPlayer.x += DASH_STEP;
 	}
 	else if (keyRight)
 	{
-
+		posPlayer.x -= DASH_STEP;
 	}
 	
 }
@@ -219,15 +233,16 @@ void Player::update(int deltaTime)
 			sprite->changeAnimation(STAND_RIGHT);
 	}
 
-	
+	if (Game::instance().getKey(88) )
+	{
+		dashing = true;
+		dashTime = 40;
+	}
+
+	updateKeys();
 	if (dashing)
 		doDash();
-	else
-	    updateKeys(); //actualizar que teclas se pulsan mienras no se dashea
-
-	
-	//CALCULO DE SALTO
-	if(bJumping) 
+	else if(bJumping) //CALCULO DE SALTO
 	{
 		//con bJumping true se calcula el salto parabolico. Cuando se llega a angle 180, el jugador
 		//toca el suelo (con angle > 90) 0 el jugador se choca con el techo bJumping pasa a ser false
@@ -281,12 +296,9 @@ void Player::update(int deltaTime)
 				walljumpleft = false;
 				posPlayer.x -= WALL_JUMP_STEP;
 				posPlayer.y += WALL_JUMP_STEP;
-				floatTime = 5;
-				
+				floatTime = 5;	
 			}
-
 		}
-
 	}
 	else if (walljumpright) {
 		if (wallJumpProgress == 10) {
@@ -303,11 +315,8 @@ void Player::update(int deltaTime)
 				posPlayer.x += WALL_JUMP_STEP;
 				posPlayer.y += WALL_JUMP_STEP;
 				floatTime = 5;
-
 			}
-
 		}
-
 	}
 	else if (floatTime > 0) {
 		floatTime -= 1;

@@ -37,7 +37,7 @@ private:
 	bool keyUp, keyLeft, keyDown, keyRight, dashing;
 
 	glm::ivec2 tileMapDispl, posPlayer;
-	int jumpAngle, startY, wallJumpProgress, floatTime;
+	int jumpAngle, startY, wallJumpProgress, floatTime, dashTime; //TOFIX EL TIMER DEBERIA DEPENDER DEL DELTA TIME
 	Texture spritesheet;
 	Sprite *sprite;
 	TileMap *map;
