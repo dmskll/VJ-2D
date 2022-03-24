@@ -34,10 +34,10 @@ private:
 	bool past_up, past_down, past_left, past_right, past_f1, past_f3;;//booleanos que indican si la tecla estaba presionada en el ultimo update
 	bool air; //indica si el jugador esta en el aire, se utiliza en las animaciones
 	bool faceRight, moving;
-	bool keyUp, keyLeft, keyDown, keyRight, dashing;
+	bool keyUp, keyLeft, keyDown, keyRight, dashing, canDash;
 
 	glm::ivec2 tileMapDispl, posPlayer;
-	int jumpAngle, startY, wallJumpProgress, floatTime, dashTime; //TOFIX EL TIMER DEBERIA DEPENDER DEL DELTA TIME
+	int jumpAngle, startY, wallJumpProgress, floatTime, dashTime, cd_dash; //TOFIX EL TIMER DEBERIA DEPENDER DEL DELTA TIME
 	Texture spritesheet;
 	Sprite *sprite;
 	TileMap *map;

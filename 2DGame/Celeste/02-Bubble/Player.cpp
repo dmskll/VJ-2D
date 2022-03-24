@@ -37,6 +37,7 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	moving = false;
 	canJump = true; //canJump no se utiliza, la puse al principio para probar el walljump en clase
 	dashing = false;
+	canDash = false;
 
 	spritesheet.loadFromFile("images/madeline.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	sprite = Sprite::createSprite(glm::ivec2(32, 32), glm::vec2(0.25, 0.25), &spritesheet, &shaderProgram);
@@ -78,47 +79,81 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 
 void Player::updateKeys()
 {
-	if (!dashing)
+	if (!dashing && canDash)
 	{
 		keyUp = Game::instance().getSpecialKey(GLUT_KEY_UP);
-		keyDown = Game::instance().getSpecialKey(GLUT_KEY_UP);
-		keyLeft = Game::instance().getSpecialKey(GLUT_KEY_UP);
-		keyRight = Game::instance().getSpecialKey(GLUT_KEY_UP);
+		keyDown = Game::instance().getSpecialKey(GLUT_KEY_DOWN);
+		keyLeft = Game::instance().getSpecialKey(GLUT_KEY_LEFT);
+		keyRight = Game::instance().getSpecialKey(GLUT_KEY_RIGHT);
+
+
+		if (cd_dash < 0)
+		{
+			if (Game::instance().getKey(120))
+			{
+				dashing = true;
+				canDash = false;
+				dashTime = 9; //se tiene que mover 5tiles
+				cd_dash = dashTime + 5;
+			}
+		}
+		else
+			cd_dash -= 1;
 	}
 }
 
 void Player::doDash()
 {
-	dashTime -= 1;
+	
 	if (dashTime < 0)
 		dashing = false;
+	else
+		dashTime -= 1;
 
 	if (keyUp)
 	{
 		if (keyLeft)  //arriba izq
-			posPlayer.y -= DASH_STEP;
+		{
+			posPlayer.y -= DASH_STEP * 0.7;
+			posPlayer.x -= DASH_STEP * 0.7;
+		}
 		else if (keyRight) //arriba derecha
-			posPlayer.y -= DASH_STEP;
+		{
+			posPlayer.y -= DASH_STEP * 0.7;
+			posPlayer.x += DASH_STEP * 0.7;
+		}
 		else //solo dash hacia arriba
 			posPlayer.y -= DASH_STEP;
+
+		startY = posPlayer.y;
 	}
 	else if (keyDown)
 	{
 		if (keyLeft)
-			posPlayer.y += DASH_STEP;
+		{
+			posPlayer.y += DASH_STEP * 0.7;
+			posPlayer.x -= DASH_STEP * 0.7;
+		}
 		else if (keyRight)
-			posPlayer.y += DASH_STEP;
+		{
+			posPlayer.y += DASH_STEP * 0.7;
+			posPlayer.x += DASH_STEP * 0.7;
+		}
 		else //solo dash hacia abajo
 			posPlayer.y += DASH_STEP;
+
+		startY = posPlayer.y;
 	}
-	else if (keyLeft)
-	{
-		posPlayer.x += DASH_STEP;
-	}
-	else if (keyRight)
+	else if (keyLeft || !faceRight)
 	{
 		posPlayer.x -= DASH_STEP;
 	}
+	else if (keyRight || faceRight)
+	{
+		posPlayer.x += DASH_STEP;
+	}
+
+	;
 	
 }
 
@@ -188,7 +223,7 @@ void Player::update(int deltaTime)
 
 
 
-	if(Game::instance().getSpecialKey(GLUT_KEY_LEFT))
+	if(Game::instance().getSpecialKey(GLUT_KEY_LEFT) && !dashing)
 	{
 		faceRight = false;
 		moving = true;
@@ -206,7 +241,7 @@ void Player::update(int deltaTime)
 			posPlayer.x += WALK_STEP;
 		}
 	}
-	else if(Game::instance().getSpecialKey(GLUT_KEY_RIGHT))
+	else if(Game::instance().getSpecialKey(GLUT_KEY_RIGHT) && !dashing)
 	{
 		faceRight = true;
 		moving = true;
@@ -232,12 +267,8 @@ void Player::update(int deltaTime)
 		else if(sprite->animation() == MOVE_RIGHT)
 			sprite->changeAnimation(STAND_RIGHT);
 	}
+	
 
-	if (Game::instance().getKey(88) )
-	{
-		dashing = true;
-		dashTime = 40;
-	}
 
 	updateKeys();
 	if (dashing)
@@ -276,7 +307,6 @@ void Player::update(int deltaTime)
 			}
 			else
 			{
-				//jumpAngle += 90;
 				bJumping = false;
 			}
 
@@ -330,6 +360,7 @@ void Player::update(int deltaTime)
 		
 		if(map->collisionMoveDown(posPlayer, glm::ivec2(32, 32), &posPlayer.y))
 		{
+			canDash = true;
 			canJump = true;
 			air = false;
 			if(!past_up && Game::instance().getSpecialKey(GLUT_KEY_UP))
@@ -384,6 +415,7 @@ void Player::setJumpSpring()
 	jumpSpring = true;
 	bJumping = true;
 	canJump = false;
+	canDash = true;
 	jumpAngle = 0;
 	startY = posPlayer.y;
 }
