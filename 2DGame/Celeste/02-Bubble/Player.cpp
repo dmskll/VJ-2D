@@ -77,7 +77,40 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	
 }
 
-void Player::updateKeys()
+void Player::updateWallJump()
+{
+	//checks de si esta tocando la pared
+	//indica si se puede hacer el walljump o si puede hacer climb
+	//check left
+	posPlayer.x -= WALK_STEP;
+	if (map->collisionMoveLeft(posPlayer, glm::ivec2(32, 32)))
+	{
+		if (Game::instance().getSpecialKey(GLUT_KEY_UP) && !past_up && !canJump) //wall jump left to right
+		{
+			bJumping = false;
+			walljumpleft = true;
+			wallJumpProgress = 0;
+		}
+	}
+
+
+	posPlayer.x += WALK_STEP * 2;
+	//check right
+	if (map->collisionMoveRight(posPlayer, glm::ivec2(32, 32)))
+	{
+		if (Game::instance().getSpecialKey(GLUT_KEY_UP) && !past_up && !canJump) //wall jump right to left
+		{
+			bJumping = false;
+			walljumpright = true;
+			wallJumpProgress = 0;
+		}
+	}
+	posPlayer.x -= WALK_STEP;
+
+	if (!walljumpleft && !walljumpright) climb = false; //si no se toca ninguna de las dos paredes no puede estar haciendo climb
+}
+
+void Player::updateDash()
 {
 	if (!dashing && canDash)
 	{
@@ -157,61 +190,74 @@ void Player::doDash()
 	
 }
 
-void Player::update(int deltaTime)
+void Player::updateMeta()
 {
-	sprite->update(deltaTime);
-
-	
-
 	if (Game::instance().getSpecialKey(GLUT_KEY_F1) && !past_f1)
 	{
 		win = true;
 	}
-
 	if (Game::instance().getSpecialKey(GLUT_KEY_F3) && !past_f3)
 	{
 		lose = true;
 	}
 	if (posPlayer.y <= -5) win = true;
 	else if (posPlayer.y > 479) lose = true;
+}
 
-
-	//checks de si esta tocando la pared
-	//indica si se puede hacer el walljump o si puede hacer climb
-	//check left
-	posPlayer.x -= WALK_STEP;
-	if (map->collisionMoveLeft(posPlayer, glm::ivec2(32, 32))) 
+void Player::horizontalMovement()
+{
+	if (Game::instance().getSpecialKey(GLUT_KEY_LEFT) && !dashing)
 	{
-		if (Game::instance().getSpecialKey(GLUT_KEY_UP) && !past_up && !canJump) //wall jump left to right
+		faceRight = false;
+		moving = true;
+		posPlayer.x -= WALK_STEP;
+
+		if (map->collisionMoveLeft(posPlayer, glm::ivec2(32, 32))) //antes 32
 		{
-			bJumping = false;
-			walljumpleft = true;
-			wallJumpProgress = 0;
+			//canJump = true;
+			sprite->changeAnimation(CLIMB_LEFT);
+			climb = true; //cuando se toca una pared climb es true
+			posPlayer.x += WALK_STEP;
 		}
 	}
-
-
-	posPlayer.x += WALK_STEP*2;
-	//check right
-	if (map->collisionMoveRight(posPlayer, glm::ivec2(32, 32))) 
+	else if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT) && !dashing)
 	{
-		if (Game::instance().getSpecialKey(GLUT_KEY_UP) && !past_up && !canJump) //wall jump right to left
+		faceRight = true;
+		moving = true;
+		posPlayer.x += WALK_STEP;
+		if (map->collisionMoveRight(posPlayer, glm::ivec2(32, 32)))
 		{
-			bJumping = false;
-			walljumpright = true;
-			wallJumpProgress = 0;
+			
+			climb = true;
+			posPlayer.x -= WALK_STEP;
 		}
 	}
-	posPlayer.x -= WALK_STEP;
+	else //no se mueve
+	{
+		moving = false;
+		climb = false; //si no se toca ninguna tecla no puedes hacer climb
+	}
 
-	if (!walljumpleft && !walljumpright) climb = false; //si no se toca ninguna de las dos paredes no puede estar haciendo climb
+}
 
+void Player::updateAnimations()
+{
 	if (air)
 	{
-		if (faceRight)
-			sprite->changeAnimation(JUMP_RIGHT);
+		if (climb)
+		{
+			if (faceRight)
+				sprite->changeAnimation(CLIMB_RIGHT);
+			else
+				sprite->changeAnimation(CLIMB_LEFT);
+		}
 		else
-			sprite->changeAnimation(JUMP_LEFT);
+		{
+			if (faceRight)
+				sprite->changeAnimation(JUMP_RIGHT);
+			else
+				sprite->changeAnimation(JUMP_LEFT);
+		}
 	}
 	else if (!moving)
 	{
@@ -220,59 +266,44 @@ void Player::update(int deltaTime)
 		else
 			sprite->changeAnimation(STAND_LEFT);
 	}
-
-
-
-	if(Game::instance().getSpecialKey(GLUT_KEY_LEFT) && !dashing)
+	else if (climb)
 	{
-		faceRight = false;
-		moving = true;
-		if (sprite->animation() != MOVE_LEFT && !air)
-		{
-				sprite->changeAnimation(MOVE_LEFT);
-		}
-		posPlayer.x -= WALK_STEP;
-		
-		if(map->collisionMoveLeft(posPlayer, glm::ivec2(32, 32))) //antes 32
-		{
-			//canJump = true;
-			sprite->changeAnimation(CLIMB_LEFT);
-			climb = true; //cuando se toca una pared climb es true
-			posPlayer.x += WALK_STEP;
-		}
-	}
-	else if(Game::instance().getSpecialKey(GLUT_KEY_RIGHT) && !dashing)
-	{
-		faceRight = true;
-		moving = true;
-		if (sprite->animation() != MOVE_RIGHT && !air)
-		{
-				sprite->changeAnimation(MOVE_RIGHT);
-		}
-			
-		posPlayer.x += WALK_STEP;
-		if(map->collisionMoveRight(posPlayer, glm::ivec2(32, 32)))
-		{
+		if (faceRight)
 			sprite->changeAnimation(CLIMB_RIGHT);
-			climb = true;
-			posPlayer.x -= WALK_STEP;
+		else
+			sprite->changeAnimation(CLIMB_LEFT);
+	}
+	else if (moving)
+	{
+		if (faceRight)
+		{
+			if (sprite->animation() != MOVE_RIGHT)
+			{
+				sprite->changeAnimation(MOVE_RIGHT);
+			}
+		}
+		else
+		{
+			if (sprite->animation() != MOVE_LEFT)
+			{
+				sprite->changeAnimation(MOVE_LEFT);
+			}
 		}
 	}
-	else
-	{
-		moving = false;
-		climb = false; //si no se toca ninguna tecla no puedes hacer climb
-		if(sprite->animation() == MOVE_LEFT)
-			sprite->changeAnimation(STAND_LEFT);
-		else if(sprite->animation() == MOVE_RIGHT)
-			sprite->changeAnimation(STAND_RIGHT);
-	}
-	
+}
 
+void Player::update(int deltaTime)
+{
+	sprite->update(deltaTime);
 
-	updateKeys();
+	updateMeta();			//cosas relacionadas con el godmode o ganar/perder
+	updateWallJump();		//actualizar si se esta tocando una pared
+	horizontalMovement();	//gestiona el movimiento horizontal
+	updateAnimations();		//gestiona animaciones 
+
+	updateDash();			//actualiza parametros del dash
 	if (dashing)
-		doDash();
+		doDash();			//ejecuta el dash
 	else if(bJumping) //CALCULO DE SALTO
 	{
 		//con bJumping true se calcula el salto parabolico. Cuando se llega a angle 180, el jugador
@@ -309,7 +340,6 @@ void Player::update(int deltaTime)
 			{
 				bJumping = false;
 			}
-
 		}
 	}
 	else if (walljumpleft) {
@@ -375,10 +405,14 @@ void Player::update(int deltaTime)
 		else canJump = false;
 	}
 	
-
-
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
 
+	//actualizar valores para el siguiente update
+	updatePressedKeys();
+}
+
+void Player::updatePressedKeys()
+{
 	//actualizar valores para el siguiente update
 	past_up = Game::instance().getSpecialKey(GLUT_KEY_UP);
 	past_down = Game::instance().getSpecialKey(GLUT_KEY_DOWN);

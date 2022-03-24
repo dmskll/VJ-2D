@@ -25,11 +25,18 @@ public:
 	void setTileMap(TileMap *tileMap);
 	void setPosition(const glm::vec2 &pos);
 	void setJumpSpring();
-	void updateKeys();
-	void doDash();
 	glm::ivec2 getPosition();
 	
 private:
+	void updateDash();
+	void doDash();
+	void updateWallJump();
+	void updateMeta(); //cosas relacionadas con el god mode/ganar/perder
+	void horizontalMovement();
+	void updatePressedKeys();
+	void updateAnimations();
+
+
 	bool bJumping, canJump, climb, walljumpleft, walljumpright, jumpSpring;
 	bool past_up, past_down, past_left, past_right, past_f1, past_f3;;//booleanos que indican si la tecla estaba presionada en el ultimo update
 	bool air; //indica si el jugador esta en el aire, se utiliza en las animaciones
