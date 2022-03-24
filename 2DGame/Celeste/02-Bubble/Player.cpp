@@ -35,7 +35,8 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	faceRight = false;
 	moving = false;
 	canJump = true; //canJump no se utiliza, la puse al principio para probar el walljump en clase
-	
+	dashing = false;
+
 	spritesheet.loadFromFile("images/madeline.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	sprite = Sprite::createSprite(glm::ivec2(32, 32), glm::vec2(0.25, 0.25), &spritesheet, &shaderProgram);
 	sprite->setNumberAnimations(8);
@@ -74,12 +75,44 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	
 }
 
+void Player::updateKeys()
+{
+	keyUp = Game::instance().getSpecialKey(GLUT_KEY_UP);
+	keyDown = Game::instance().getSpecialKey(GLUT_KEY_UP);
+	keyLeft = Game::instance().getSpecialKey(GLUT_KEY_UP);
+	keyRight = Game::instance().getSpecialKey(GLUT_KEY_UP);
+}
 
+void Player::doDash()
+{
+	if (keyUp)
+	{
+		if(keyLeft)  //arriba izq
+		if(keyRight) //arriba derecha
+		else //solo dash hacia arriba
+	}
+	else if (keyDown)
+	{
+		if (keyLeft)
+		if (keyRight)
+		else //solo dash hacia abajo
+	}
+	else if (keyLeft)
+	{
+
+	}
+	else if (keyRight)
+	{
+
+	}
+	
+}
 
 void Player::update(int deltaTime)
 {
 	sprite->update(deltaTime);
 
+	
 
 	if (Game::instance().getSpecialKey(GLUT_KEY_F1) && !past_f1)
 	{
@@ -187,8 +220,12 @@ void Player::update(int deltaTime)
 	}
 
 	
+	if (dashing)
+		doDash();
+	else
+	    updateKeys(); //actualizar que teclas se pulsan mienras no se dashea
 
-
+	
 	//CALCULO DE SALTO
 	if(bJumping) 
 	{
@@ -298,9 +335,6 @@ void Player::update(int deltaTime)
 		else canJump = false;
 	}
 	
-
-	
-
 
 
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));

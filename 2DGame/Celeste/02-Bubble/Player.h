@@ -25,6 +25,8 @@ public:
 	void setTileMap(TileMap *tileMap);
 	void setPosition(const glm::vec2 &pos);
 	void setJumpSpring();
+	void updateKeys();
+	void doDash();
 	glm::ivec2 getPosition();
 	
 private:
@@ -32,6 +34,7 @@ private:
 	bool past_up, past_down, past_left, past_right, past_f1, past_f3;;//booleanos que indican si la tecla estaba presionada en el ultimo update
 	bool air; //indica si el jugador esta en el aire, se utiliza en las animaciones
 	bool faceRight, moving;
+	bool keyUp, keyLeft, keyDown, keyRight, dashing;
 
 	glm::ivec2 tileMapDispl, posPlayer;
 	int jumpAngle, startY, wallJumpProgress, floatTime;
