@@ -29,7 +29,9 @@ public:
 	
 private:
 	bool bJumping, canJump, climb, walljumpleft, walljumpright, jumpSpring;
-	bool past_up, past_down, past_left, past_right, past_f1, past_f3;//booleanos que indican si la tecla estaba presionada en el ultimo update
+	bool past_up, past_down, past_left, past_right, past_f1, past_f3;;//booleanos que indican si la tecla estaba presionada en el ultimo update
+	bool air; //indica si el jugador esta en el aire, se utiliza en las animaciones
+	bool faceRight, moving;
 
 	glm::ivec2 tileMapDispl, posPlayer;
 	int jumpAngle, startY, wallJumpProgress, floatTime;

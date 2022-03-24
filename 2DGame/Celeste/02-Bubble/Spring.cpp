@@ -8,12 +8,15 @@ enum StrawberryAnims
 
 void Spring::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 {
-	spritesheet.loadFromFile("images/varied.png", TEXTURE_PIXEL_FORMAT_RGBA);
-	sprite = Sprite::createSprite(glm::ivec2(64, 64), glm::vec2(0.5, 0.5), &spritesheet, &shaderProgram);
-	sprite->setNumberAnimations(1);
+	spritesheet.loadFromFile("images/springs.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	sprite = Sprite::createSprite(glm::ivec2(32, 32), glm::vec2(0.5, 0.5), &spritesheet, &shaderProgram);
+	sprite->setNumberAnimations(2);
 
 		sprite->setAnimationSpeed(IDLE, 8);
-		sprite->addKeyframe(IDLE, glm::vec2(0.f, 0.5f));
+		sprite->addKeyframe(IDLE, glm::vec2(0.f, 0.f));
+
+		sprite->setAnimationSpeed(USE, 8);
+		sprite->addKeyframe(USE, glm::vec2(0.5f, 0.f));
 
 	sprite->changeAnimation(0);
 	tileMapDispl = tileMapPos;
@@ -30,8 +33,12 @@ void Spring::update(int deltaTime)
 		if (posPlayer.y < posSpring.y + 20 && posPlayer.y > posSpring.y - 20)
 		{
 			player->setJumpSpring();
+			sprite->changeAnimation(USE);
+			timeAnim = 25;
 		}
 	}
+	if (timeAnim > 0) timeAnim -= 1;
+	else sprite->changeAnimation(IDLE);
 }
 
 void Spring::render()

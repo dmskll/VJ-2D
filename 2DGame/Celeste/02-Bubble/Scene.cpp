@@ -45,7 +45,7 @@ void Scene::initObjects()
 			spring = true;
 			springObj.push_back(new Spring());
 			springObj.back()->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
-			springObj.back()->setPosition(glm::vec2((objs[i].x-0.5) * map->getTileSize(), (objs[i].y-0.3) * map->getTileSize()));
+			springObj.back()->setPosition(glm::vec2((objs[i].x) * map->getTileSize(), (objs[i].y) * map->getTileSize()));
 			springObj.back()->setTileMap(map);
 			springObj.back()->setPlayer(player);
 		}
