@@ -18,7 +18,7 @@
 
 enum PlayerAnims
 {
-	STAND_LEFT, STAND_RIGHT, MOVE_LEFT, MOVE_RIGHT, JUMP_LEFT, JUMP_RIGHT, CLIMB_LEFT, CLIMB_RIGHT
+	STAND_LEFT, STAND_RIGHT, MOVE_LEFT, MOVE_RIGHT, JUMP_LEFT, JUMP_RIGHT, CLIMB_LEFT, CLIMB_RIGHT, CLIMB_LEFT_DASH, CLIMB_RIGHT_DASH, JUMP_LEFT_DASH, JUMP_RIGHT_DASH
 };
 
 
@@ -36,23 +36,26 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	faceRight = false;
 	moving = false;
 	canJump = true; //canJump no se utiliza, la puse al principio para probar el walljump en clase
+
 	dashing = false;
 	canDash = false;
+	dashTime = 9; //se tiene que mover 5tiles
+	cd_dash = 0;
 
 	spritesheet.loadFromFile("images/madeline.png", TEXTURE_PIXEL_FORMAT_RGBA);
-	sprite = Sprite::createSprite(glm::ivec2(32, 32), glm::vec2(0.25, 0.25), &spritesheet, &shaderProgram);
-	sprite->setNumberAnimations(8);
+	sprite = Sprite::createSprite(glm::ivec2(32, 32), glm::vec2(0.25, 0.20), &spritesheet, &shaderProgram);
+	sprite->setNumberAnimations(12);
 	
 		sprite->setAnimationSpeed(STAND_LEFT, 8);
-		sprite->addKeyframe(STAND_LEFT, glm::vec2(0.5f, 0.25f));
+		sprite->addKeyframe(STAND_LEFT, glm::vec2(0.5f, 0.20f)); //horizontal, vertical
 		
 		sprite->setAnimationSpeed(STAND_RIGHT, 8);
 		sprite->addKeyframe(STAND_RIGHT, glm::vec2(0.f, 0.f));
 		
 		sprite->setAnimationSpeed(MOVE_LEFT, 8);
-		sprite->addKeyframe(MOVE_LEFT, glm::vec2(0.5f, 0.25f));
-		sprite->addKeyframe(MOVE_LEFT, glm::vec2(0.25f, 0.25f));
-		sprite->addKeyframe(MOVE_LEFT, glm::vec2(0.f, 0.25f));
+		sprite->addKeyframe(MOVE_LEFT, glm::vec2(0.5f, 0.20f));
+		sprite->addKeyframe(MOVE_LEFT, glm::vec2(0.25f, 0.20f));
+		sprite->addKeyframe(MOVE_LEFT, glm::vec2(0.f, 0.20f));
 		
 		sprite->setAnimationSpeed(MOVE_RIGHT, 8);
 		sprite->addKeyframe(MOVE_RIGHT, glm::vec2(0.f, 0.f));
@@ -60,16 +63,28 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 		sprite->addKeyframe(MOVE_RIGHT, glm::vec2(0.5, 0.f));
 
 		sprite->setAnimationSpeed(JUMP_LEFT, 8);
-		sprite->addKeyframe(JUMP_LEFT, glm::vec2(0.75f, 0.25f));
+		sprite->addKeyframe(JUMP_LEFT, glm::vec2(0.75f, 0.20f));
+
+		sprite->setAnimationSpeed(JUMP_LEFT_DASH, 8);
+		sprite->addKeyframe(JUMP_LEFT_DASH, glm::vec2(0.75f, 0.8f));
 
 		sprite->setAnimationSpeed(JUMP_RIGHT, 8);
 		sprite->addKeyframe(JUMP_RIGHT, glm::vec2(0.75f, 0.f));
 
+		sprite->setAnimationSpeed(JUMP_RIGHT_DASH, 8);
+		sprite->addKeyframe(JUMP_RIGHT_DASH, glm::vec2(0.5f, 0.8f));
+
 		sprite->setAnimationSpeed(CLIMB_LEFT, 8);
-		sprite->addKeyframe(CLIMB_LEFT, glm::vec2(0.5f, 0.5f));
+		sprite->addKeyframe(CLIMB_LEFT, glm::vec2(0.5f, 0.4f));
+
+		sprite->setAnimationSpeed(CLIMB_LEFT_DASH, 8);
+		sprite->addKeyframe(CLIMB_LEFT_DASH, glm::vec2(0.f, 0.8f));
 
 		sprite->setAnimationSpeed(CLIMB_RIGHT, 8);
-		sprite->addKeyframe(CLIMB_RIGHT, glm::vec2(0.5f, 0.75f));
+		sprite->addKeyframe(CLIMB_RIGHT, glm::vec2(0.5f, 0.6f));
+
+		sprite->setAnimationSpeed(CLIMB_RIGHT_DASH, 8);
+		sprite->addKeyframe(CLIMB_RIGHT_DASH, glm::vec2(0.25f, 0.8f));
 		
 	sprite->changeAnimation(0);
 	tileMapDispl = tileMapPos;
@@ -126,7 +141,7 @@ void Player::updateDash()
 			{
 				dashing = true;
 				canDash = false;
-				dashTime = 9; //se tiene que mover 5tiles
+				dashTime = 9;
 				cd_dash = dashTime + 5;
 			}
 		}
@@ -139,7 +154,10 @@ void Player::doDash()
 {
 	
 	if (dashTime < 0)
+	{
 		dashing = false;
+		canDash = false;
+	}
 	else
 		dashTime -= 1;
 
@@ -247,16 +265,36 @@ void Player::updateAnimations()
 		if (climb)
 		{
 			if (faceRight)
-				sprite->changeAnimation(CLIMB_RIGHT);
+			{
+				if (canDash)
+					sprite->changeAnimation(CLIMB_RIGHT);
+				else
+					sprite->changeAnimation(CLIMB_RIGHT_DASH);
+			}
 			else
-				sprite->changeAnimation(CLIMB_LEFT);
+			{
+				if (canDash)
+					sprite->changeAnimation(CLIMB_LEFT);
+				else
+					sprite->changeAnimation(CLIMB_LEFT_DASH);
+			}
 		}
 		else
 		{
 			if (faceRight)
-				sprite->changeAnimation(JUMP_RIGHT);
+			{
+				if (canDash)
+					sprite->changeAnimation(JUMP_RIGHT);
+				else
+					sprite->changeAnimation(JUMP_RIGHT_DASH);
+			}
 			else
-				sprite->changeAnimation(JUMP_LEFT);
+			{
+				if (canDash)
+					sprite->changeAnimation(JUMP_LEFT);
+				else
+					sprite->changeAnimation(JUMP_LEFT_DASH);
+			}
 		}
 	}
 	else if (!moving)
@@ -390,7 +428,19 @@ void Player::update(int deltaTime)
 		
 		if(map->collisionMoveDown(posPlayer, glm::ivec2(32, 32), &posPlayer.y))
 		{
-			canDash = true;
+
+			//gestionar si se puede o no se puede hacer dash
+			//canDash tmb se utiliza para las animaciones por eso hay que mirar el timer
+			//porque si haces dash hacia arriba de otra forma sigue siendo true
+			if (dashing)
+			{
+				if(dashTime < 7)
+					canDash = true;
+			}
+			else
+				canDash = true;
+				
+
 			canJump = true;
 			air = false;
 			if(!past_up && Game::instance().getSpecialKey(GLUT_KEY_UP))
@@ -402,7 +452,11 @@ void Player::update(int deltaTime)
 				startY = posPlayer.y;
 			}
 		}
-		else canJump = false;
+		else
+		{
+			air = true; //si no toca el suelo esta en el aire
+			canJump = false;
+		}
 	}
 	
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
