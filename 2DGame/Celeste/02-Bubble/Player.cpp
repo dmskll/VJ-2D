@@ -42,6 +42,10 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	dashTime = 9; //se tiene que mover 5tiles
 	cd_dash = 0;
 
+
+	//god mode 
+	godDash = false; 
+
 	spritesheet.loadFromFile("images/madeline.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	sprite = Sprite::createSprite(glm::ivec2(32, 32), glm::vec2(0.25, 0.20), &spritesheet, &shaderProgram);
 	sprite->setNumberAnimations(12);
@@ -137,12 +141,20 @@ void Player::updateDash()
 
 		if (cd_dash < 0)
 		{
-			if (Game::instance().getKey(120) || Game::instance().getKey(88))
+			if ((Game::instance().getKey(120) || Game::instance().getKey(88)) && !past_X)
 			{
 				dashing = true;
-				canDash = false;
 				dashTime = 9;
-				cd_dash = dashTime + 5;
+				if (!godDash) 
+				{
+					canDash = false; //si el godDash está a true no ponemos el canDash a false
+					cd_dash = dashTime + 5;
+				}
+				else
+				{
+					canDash = true;
+					cd_dash = 0;
+				}			
 			}
 		}
 		else
@@ -156,7 +168,7 @@ void Player::doDash()
 	if (dashTime < 0)
 	{
 		dashing = false;
-		canDash = false;
+		if(!godDash) canDash = false;
 	}
 	else
 		dashTime -= 1;
@@ -202,10 +214,7 @@ void Player::doDash()
 	else if (keyRight || faceRight)
 	{
 		posPlayer.x += DASH_STEP;
-	}
-
-	;
-	
+	}	
 }
 
 void Player::updateMeta()
@@ -218,6 +227,11 @@ void Player::updateMeta()
 	{
 		lose = true;
 	}
+	if((Game::instance().getKey(68) || Game::instance().getKey(100)) && !past_D)
+	{
+		godDash = !godDash;
+	}
+
 	if (posPlayer.y <= -5) win = true;
 	else if (posPlayer.y > 479) lose = true;
 }
@@ -487,11 +501,13 @@ void Player::updatePressedKeys()
 {
 	//actualizar valores para el siguiente update
 	past_C = (Game::instance().getKey(67) || Game::instance().getKey(99));
+	past_X = (Game::instance().getKey(120) || Game::instance().getKey(88));
 	past_down = Game::instance().getSpecialKey(GLUT_KEY_DOWN);
 	past_left = Game::instance().getSpecialKey(GLUT_KEY_LEFT);
 	past_right = Game::instance().getSpecialKey(GLUT_KEY_RIGHT);
 	past_f1 = Game::instance().getSpecialKey(GLUT_KEY_F1);
 	past_f3 = Game::instance().getSpecialKey(GLUT_KEY_F3);
+	past_D = (Game::instance().getKey(68) || Game::instance().getKey(100));
 }
 
 void Player::render()
