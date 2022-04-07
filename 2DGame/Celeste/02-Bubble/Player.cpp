@@ -7,7 +7,7 @@
 
 
 #define JUMP_ANGLE_STEP 4       //el angulo que se suma al saltar
-#define WALK_STEP 3
+#define WALK_STEP 4		//antes a 3 pero 4 es mas parecida al juego original		
 #define SPRING_ANGLE_STEP 3   //el angulo que se suma al utilizar un spring
 #define JUMP_HEIGHT 96			//altura del salto
 #define FALL_STEP 4	 //antes 5 pero creo que el celeste es mas lento		//velocidad a la que cae cuando acaba el salto
@@ -40,8 +40,10 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	dashing = false;
 	canDash = false;
 	dashTime = 9; //se tiene que mover 5tiles
-	cd_dash = 0;
+	//cd_dash = 0;
 
+	dashInitSpeed = 13;
+	dashDeceleration = -0.7f;
 
 	//god mode 
 	godDash = false; 
@@ -156,7 +158,9 @@ void Player::updateDash()
 		{
 			dashing = true;
 			bJumping = false; //si se hace un dash ya no se salta
-			dashTime = 12;
+			//dashTime = 12;
+			dashSpeed = dashInitSpeed;
+
 			if (!godDash) 
 			{
 				canDash = false; //si el godDash está a true no ponemos el canDash a false
@@ -171,7 +175,7 @@ void Player::updateDash()
 
 void Player::doDash()
 {
-	
+	/*
 	if (dashTime < 0)
 	{
 		dashing = false;
@@ -179,21 +183,25 @@ void Player::doDash()
 	}
 	else
 		dashTime -= 1;
+	*/
+
+	dashSpeed += dashDeceleration;
+	if (dashSpeed < 0) dashing = false;
 
 	if (keyUp)
 	{
 		if (keyLeft)  //arriba izq
 		{
-			posPlayer.y -= DASH_STEP * 0.8;
-			posPlayer.x -= DASH_STEP * 0.8;
+			posPlayer.y -= dashSpeed * 0.8;
+			posPlayer.x -= dashSpeed * 0.8;
 		}
 		else if (keyRight) //arriba derecha
 		{
-			posPlayer.y -= DASH_STEP * 0.8;
-			posPlayer.x += DASH_STEP * 0.8;
+			posPlayer.y -= dashSpeed * 0.8;
+			posPlayer.x += dashSpeed * 0.8;
 		}
 		else //solo dash hacia arriba
-			posPlayer.y -= DASH_STEP;
+			posPlayer.y -= dashSpeed;
 
 		startY = posPlayer.y;
 	}
@@ -201,26 +209,26 @@ void Player::doDash()
 	{
 		if (keyLeft)
 		{
-			posPlayer.y += DASH_STEP * 0.8;
-			posPlayer.x -= DASH_STEP * 0.8;
+			posPlayer.y += dashSpeed * 0.8;
+			posPlayer.x -= dashSpeed * 0.8;
 		}
 		else if (keyRight)
 		{
-			posPlayer.y += DASH_STEP * 0.8;
-			posPlayer.x += DASH_STEP * 0.8;
+			posPlayer.y += dashSpeed * 0.8;
+			posPlayer.x += dashSpeed * 0.8;
 		}
 		else //solo dash hacia abajo
-			posPlayer.y += DASH_STEP;
+			posPlayer.y += dashSpeed;
 
 		startY = posPlayer.y;
 	}
 	else if (keyLeft || !faceRight)
 	{
-		posPlayer.x -= DASH_STEP;
+		posPlayer.x -= dashSpeed;
 	}
 	else if (keyRight || faceRight)
 	{
-		posPlayer.x += DASH_STEP;
+		posPlayer.x += dashSpeed;
 	}	
 }
 

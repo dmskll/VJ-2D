@@ -44,6 +44,9 @@ private:
 	bool faceRight, moving;
 	bool keyUp, keyLeft, keyDown, keyRight, dashing, canDash, godDash;
 
+	float dashInitSpeed, dashSpeed, dashDeceleration;
+
+
 	glm::ivec2 tileMapDispl, posPlayer;
 	int jumpAngle, startY, wallJumpProgress, floatTime, dashTime, cd_dash; //TOFIX EL TIMER DEBERIA DEPENDER DEL DELTA TIME
 	Texture spritesheet;
