@@ -1,2 +1,6 @@
-/Debug
+Debug
+*.pdb
+*.obj
+*log
+*.tlog
 
