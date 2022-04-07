@@ -28,7 +28,7 @@ Scene::~Scene()
 
 void Scene::initObjects()
 {
-	berry, spring = false;
+	ballon, berry, spring = false;
 	for (int i = 0; i < objs.size(); i++)
 	{
 		if (objs[i].type == "BERRY")
@@ -53,6 +53,15 @@ void Scene::initObjects()
 		{
 
 		}
+		else if (objs[i].type == "BALLON")
+		{
+			ballon = true;
+			ballonObj.push_back(new Ballon());
+			ballonObj.back()->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+			ballonObj.back()->setPosition(glm::vec2((objs[i].x) * map->getTileSize(), (objs[i].y) * map->getTileSize()));
+			ballonObj.back()->setTileMap(map);
+			ballonObj.back()->setPlayer(player);
+		}
 	}
 }
 
@@ -69,6 +78,13 @@ void Scene::renderObjects()
 			springObj[i]->render();
 		}
 	}
+	if (ballon)
+	{
+		for (int i = 0; i < ballonObj.size(); ++i)
+		{
+			ballonObj[i]->render();
+		}
+	}
 }
 
 void Scene::updateObjects(int deltaTime)
@@ -82,6 +98,13 @@ void Scene::updateObjects(int deltaTime)
 		for (int i = 0; i < springObj.size(); ++i)
 		{
 			springObj[i]->update(deltaTime);
+		}
+	}
+	if (ballon)
+	{
+		for (int i = 0; i < ballonObj.size(); ++i)
+		{
+			ballonObj[i]->update(deltaTime);
 		}
 	}
 }
@@ -135,9 +158,8 @@ void Scene::render()
 	texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
 	map->render();
 	player->render();
+
 	renderObjects();
-	//berry->render();
-	//spring->render();
 }
 
 void Scene::initShaders()

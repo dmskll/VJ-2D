@@ -10,7 +10,7 @@
 #define WALK_STEP 3
 #define SPRING_ANGLE_STEP 3   //el angulo que se suma al utilizar un spring
 #define JUMP_HEIGHT 96			//altura del salto
-#define FALL_STEP 5			//velocidad a la que cae cuando acaba el salto
+#define FALL_STEP 4	 //antes 5 pero creo que el celeste es mas lento		//velocidad a la que cae cuando acaba el salto
 #define CLIMB_STEP 2			//velocidad a la que se cae cuando se esta CLIMB
 #define WALL_JUMP_STEP 6		//incremento que se suma (o resta) en la componente 'x' y 'y' en cada instancia de wall jump
 #define DASH_STEP 10
@@ -18,7 +18,7 @@
 
 enum PlayerAnims
 {
-	STAND_LEFT, STAND_RIGHT, MOVE_LEFT, MOVE_RIGHT, JUMP_LEFT, JUMP_RIGHT, CLIMB_LEFT, CLIMB_RIGHT, CLIMB_LEFT_DASH, CLIMB_RIGHT_DASH, JUMP_LEFT_DASH, JUMP_RIGHT_DASH
+	STAND_LEFT, STAND_RIGHT, MOVE_LEFT, MOVE_RIGHT, JUMP_LEFT, JUMP_RIGHT, CLIMB_LEFT, CLIMB_RIGHT, CLIMB_LEFT_DASH, CLIMB_RIGHT_DASH, JUMP_LEFT_DASH, JUMP_RIGHT_DASH, UP_LEFT, UP_RIGHT, DOWN_LEFT, DOWN_RIGHT
 };
 
 
@@ -48,7 +48,7 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 
 	spritesheet.loadFromFile("images/madeline.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	sprite = Sprite::createSprite(glm::ivec2(32, 32), glm::vec2(0.25, 0.20), &spritesheet, &shaderProgram);
-	sprite->setNumberAnimations(12);
+	sprite->setNumberAnimations(16);
 	
 		sprite->setAnimationSpeed(STAND_LEFT, 8);
 		sprite->addKeyframe(STAND_LEFT, glm::vec2(0.5f, 0.20f)); //horizontal, vertical
@@ -89,6 +89,18 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 
 		sprite->setAnimationSpeed(CLIMB_RIGHT_DASH, 8);
 		sprite->addKeyframe(CLIMB_RIGHT_DASH, glm::vec2(0.25f, 0.8f));
+
+		sprite->setAnimationSpeed(DOWN_LEFT, 8);
+		sprite->addKeyframe(DOWN_LEFT, glm::vec2(0.f, 0.6f));
+
+		sprite->setAnimationSpeed(DOWN_RIGHT, 8);
+		sprite->addKeyframe(DOWN_RIGHT, glm::vec2(0.f, 0.4f));
+
+		sprite->setAnimationSpeed(UP_LEFT, 8);
+		sprite->addKeyframe(UP_LEFT, glm::vec2(0.25f, 0.6f));
+
+		sprite->setAnimationSpeed(UP_RIGHT, 8);
+		sprite->addKeyframe(UP_RIGHT, glm::vec2(0.25f, 0.4f));
 		
 	sprite->changeAnimation(0);
 	tileMapDispl = tileMapPos;
@@ -131,34 +143,29 @@ void Player::updateWallJump()
 
 void Player::updateDash()
 {
-	if (!dashing && canDash)
+	if (!dashing)
 	{
 		keyUp = Game::instance().getSpecialKey(GLUT_KEY_UP);
 		keyDown = Game::instance().getSpecialKey(GLUT_KEY_DOWN);
 		keyLeft = Game::instance().getSpecialKey(GLUT_KEY_LEFT);
 		keyRight = Game::instance().getSpecialKey(GLUT_KEY_RIGHT);
-
-
-		if (cd_dash < 0)
+	}
+	if (canDash)
+	{
+		if ((Game::instance().getKey(120) || Game::instance().getKey(88)) && !past_X)
 		{
-			if ((Game::instance().getKey(120) || Game::instance().getKey(88)) && !past_X)
+			dashing = true;
+			bJumping = false; //si se hace un dash ya no se salta
+			dashTime = 12;
+			if (!godDash) 
 			{
-				dashing = true;
-				dashTime = 9;
-				if (!godDash) 
-				{
-					canDash = false; //si el godDash está a true no ponemos el canDash a false
-					cd_dash = dashTime + 5;
-				}
-				else
-				{
-					canDash = true;
-					cd_dash = 0;
-				}			
+				canDash = false; //si el godDash está a true no ponemos el canDash a false
 			}
+			else
+			{
+				canDash = true;
+			}			
 		}
-		else
-			cd_dash -= 1;
 	}
 }
 
@@ -168,7 +175,7 @@ void Player::doDash()
 	if (dashTime < 0)
 	{
 		dashing = false;
-		if(!godDash) canDash = false;
+		//if(!godDash) canDash = false;
 	}
 	else
 		dashTime -= 1;
@@ -177,13 +184,13 @@ void Player::doDash()
 	{
 		if (keyLeft)  //arriba izq
 		{
-			posPlayer.y -= DASH_STEP * 0.7;
-			posPlayer.x -= DASH_STEP * 0.7;
+			posPlayer.y -= DASH_STEP * 0.8;
+			posPlayer.x -= DASH_STEP * 0.8;
 		}
 		else if (keyRight) //arriba derecha
 		{
-			posPlayer.y -= DASH_STEP * 0.7;
-			posPlayer.x += DASH_STEP * 0.7;
+			posPlayer.y -= DASH_STEP * 0.8;
+			posPlayer.x += DASH_STEP * 0.8;
 		}
 		else //solo dash hacia arriba
 			posPlayer.y -= DASH_STEP;
@@ -194,13 +201,13 @@ void Player::doDash()
 	{
 		if (keyLeft)
 		{
-			posPlayer.y += DASH_STEP * 0.7;
-			posPlayer.x -= DASH_STEP * 0.7;
+			posPlayer.y += DASH_STEP * 0.8;
+			posPlayer.x -= DASH_STEP * 0.8;
 		}
 		else if (keyRight)
 		{
-			posPlayer.y += DASH_STEP * 0.7;
-			posPlayer.x += DASH_STEP * 0.7;
+			posPlayer.y += DASH_STEP * 0.8;
+			posPlayer.x += DASH_STEP * 0.8;
 		}
 		else //solo dash hacia abajo
 			posPlayer.y += DASH_STEP;
@@ -274,7 +281,7 @@ void Player::horizontalMovement()
 
 void Player::updateAnimations()
 {
-	if (air)
+	if (air || dashing) // or dashing para que se actualice bien el pelo y la animacion al dashear
 	{
 		if (climb)
 		{
@@ -314,9 +321,15 @@ void Player::updateAnimations()
 	else if (!moving)
 	{
 		if (faceRight)
-			sprite->changeAnimation(STAND_RIGHT);
+			if(keyDown) sprite->changeAnimation(DOWN_RIGHT);
+			else if (keyUp) sprite->changeAnimation(UP_RIGHT);
+			else sprite->changeAnimation(STAND_RIGHT);
+			
 		else
-			sprite->changeAnimation(STAND_LEFT);
+			if (keyDown) sprite->changeAnimation(DOWN_LEFT);
+			else if (keyUp) sprite->changeAnimation(UP_LEFT);
+			else sprite->changeAnimation(STAND_LEFT);
+			
 	}
 	else if (climb)
 	{
@@ -540,6 +553,11 @@ void Player::setJumpSpring()
 	canDash = true;
 	jumpAngle = 0;
 	startY = posPlayer.y;
+}
+
+void Player::touchBallon()
+{
+	canDash = true;
 }
 
 

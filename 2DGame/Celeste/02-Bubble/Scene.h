@@ -9,6 +9,7 @@
 #include "Player.h"
 #include "Strawberry.h"
 #include "Spring.h"
+#include "Ballon.h"
 
 
 // Scene contains all the entities of our game.
@@ -46,6 +47,9 @@ private:
 	Strawberry *berryObj;  //instancia de fresa
 	bool spring;		   //hay un muelle en el mapa
 	vector<Spring *> springObj; //tiene las instancias de los muelles
+	bool ballon;
+	vector<Ballon *> ballonObj;
+
 	//faltan para los pinchos
 };
 

@@ -25,6 +25,7 @@ public:
 	void setTileMap(TileMap *tileMap);
 	void setPosition(const glm::vec2 &pos);
 	void setJumpSpring();
+	void touchBallon();
 	glm::ivec2 getPosition();
 	
 private:
