@@ -26,21 +26,33 @@ public:
 	void init(int level);
 	void update(int deltaTime);
 	void render();
+	void setShake();
 
 	bool check_win();
 	bool check_lose();
 
+	float spawnX;
+	float spawnY;
+	
+
 private:
 	void initShaders();
+	void initPlayer();
 	void initObjects();
 	void renderObjects();
 	void updateObjects(int deltaTime);
+	void updateShake(int deltaTime);
 
 private:
 	TileMap *map;
 	Player *player;
 	ShaderProgram texProgram;
 	float currentTime;
+
+	float shakeAngle;
+	bool shake;
+	float shake_duration;
+
 	glm::mat4 projection;
 	vector<objects> objs;  //contiene info de los objetos de la escena (mulles, fresas, pinchos...)
 	bool berry;			   //hay una fresa en el mapa

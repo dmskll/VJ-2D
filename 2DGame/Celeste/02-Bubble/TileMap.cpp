@@ -128,6 +128,13 @@ bool TileMap::loadLevel(const string &levelFile, vector<objects> &objs)
 				aux.x = i;
 				objs.push_back(aux);
 			}
+			else if (tile == 's')
+			{
+				aux.type = "SPAWN";
+				aux.y = j;
+				aux.x = i;
+				objs.push_back(aux);
+			}
 			
 			if(!isWall(tile))
 				map[j*mapSize.x+i] = 0;
