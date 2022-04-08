@@ -31,8 +31,13 @@ public:
 	bool check_win();
 	bool check_lose();
 
+	float spawnX;
+	float spawnY;
+	
+
 private:
 	void initShaders();
+	void initPlayer();
 	void initObjects();
 	void renderObjects();
 	void updateObjects(int deltaTime);

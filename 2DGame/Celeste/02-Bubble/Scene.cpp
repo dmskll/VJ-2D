@@ -29,13 +29,27 @@ Scene::~Scene()
 		delete player;
 }
 
-void Scene::initObjects()
+void Scene::initPlayer()
 {
+	for (int i = 0; i < objs.size(); i++)
+	{
+		if (objs[i].type == "SPAWN")
+		{
+			spawnX = objs[i].x * map->getTileSize();
+			spawnY = objs[i].y * map->getTileSize();
+		}
+	}
 	player = new Player();
 	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
-	player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), INIT_PLAYER_Y_TILES * map->getTileSize()));
+	player->setPosition(glm::vec2(spawnX, spawnY));
 	player->setTileMap(map);
 	player->setLevel(this);
+
+}
+
+void Scene::initObjects()
+{
+
 
 	ballon = false;
 	berry = false;
@@ -156,6 +170,7 @@ void Scene::init(int level)
 	
 	map = TileMap::createTileMap(s, glm::vec2(SCREEN_X, SCREEN_Y), texProgram, objs);
 
+	initPlayer();
 	initObjects();
 
 	shakeAngle = 0;

@@ -39,7 +39,7 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	past_f3 = true; //para que no empieze a iniciar niveles a lo loco
 	
 	air = false;
-	faceRight = false;
+	faceRight = true;
 	moving = false;
 
 	canJump = true; //canJump no se utiliza, la puse al principio para probar el walljump en clase
@@ -110,7 +110,7 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 		sprite->setAnimationSpeed(UP_RIGHT, 8);
 		sprite->addKeyframe(UP_RIGHT, glm::vec2(0.25f, 0.4f));
 		
-	sprite->changeAnimation(0);
+	sprite->changeAnimation(1);
 	tileMapDispl = tileMapPos;
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
 	
