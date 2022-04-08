@@ -34,7 +34,7 @@ private:
 	void updateDash();
 	void doDash();
 	void updateWallJump();
-	void updateMeta(); //cosas relacionadas con el god mode/ganar/perder
+	void updateMeta(int deltaTime); //cosas relacionadas con el god mode/ganar/perder
 	void horizontalMovement();
 	void updatePressedKeys();
 	void updateAnimations();
@@ -47,6 +47,9 @@ private:
 	bool keyUp, keyLeft, keyDown, keyRight, dashing, canDash, godDash;
 
 	float dashInitSpeed, dashSpeed, dashDeceleration;
+
+	bool pre_lose;
+	float cd_lose;
 
 
 	glm::ivec2 tileMapDispl, posPlayer;

@@ -27,11 +27,16 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 {
 	win = false;
 	lose = false;
+	pre_lose = false;
 	bJumping = false;
 	climb = false;
 	jumpSpring = false;
-	walljumpleft, walljumpright = false;
-	past_f1, past_f3 = true; //para que no empieze a iniciar niveles a lo loco
+
+	walljumpleft = false;
+	walljumpright = false;
+
+	past_f1 = true;
+	past_f3 = true; //para que no empieze a iniciar niveles a lo loco
 	
 	air = false;
 	faceRight = false;
@@ -234,7 +239,7 @@ void Player::doDash()
 	}	
 }
 
-void Player::updateMeta()
+void Player::updateMeta(int deltaTime)
 {
 	if (Game::instance().getSpecialKey(GLUT_KEY_F1) && !past_f1)
 	{
@@ -250,7 +255,22 @@ void Player::updateMeta()
 	}
 
 	if (posPlayer.y <= -5) win = true;
-	else if (posPlayer.y > 479) lose = true;
+	else if (posPlayer.y > 479 && !pre_lose)
+	{
+		level->setShake();
+		pre_lose = true;
+		cd_lose = 300;
+	}
+
+	if (pre_lose)
+	{
+		if (cd_lose > 0)
+			cd_lose -= 1.f * deltaTime;
+		else
+			lose = true;
+	}
+
+
 }
 
 void Player::horizontalMovement()
@@ -369,152 +389,154 @@ void Player::updateAnimations()
 
 void Player::update(int deltaTime)
 {
-	sprite->update(deltaTime);
+	updateMeta(deltaTime); //cosas relacionadas con el godmode o ganar/perder
 
-	updateMeta();			//cosas relacionadas con el godmode o ganar/perder
-	updateWallJump();		//actualizar si se esta tocando una pared
-	horizontalMovement();	//gestiona el movimiento horizontal
-	updateAnimations();		//gestiona animaciones 
-
-	updateDash();			//actualiza parametros del dash
-	if (dashing)
-		doDash();			//ejecuta el dash
-	else if(bJumping) //CALCULO DE SALTO
+	if (!pre_lose)
 	{
-		//con bJumping true se calcula el salto parabolico. Cuando se llega a angle 180, el jugador
-		//toca el suelo (con angle > 90) 0 el jugador se choca con el techo bJumping pasa a ser false
+		sprite->update(deltaTime);
 
-		if (!past_C && Game::instance().getSpecialKey(GLUT_KEY_UP) && canJump)
+		updateWallJump();		//actualizar si se esta tocando una pared
+		horizontalMovement();	//gestiona el movimiento horizontal
+		updateAnimations();		//gestiona animaciones 
+
+		updateDash();			//actualiza parametros del dash
+		if (dashing)
+			doDash();			//ejecuta el dash
+		else if (bJumping) //CALCULO DE SALTO
 		{
-			canJump = false;
-			jumpAngle = 0;
-			startY = posPlayer.y;
-		}
+			//con bJumping true se calcula el salto parabolico. Cuando se llega a angle 180, el jugador
+			//toca el suelo (con angle > 90) 0 el jugador se choca con el techo bJumping pasa a ser false
 
-		if(!jumpSpring) jumpAngle += JUMP_ANGLE_STEP;
-		else jumpAngle += SPRING_ANGLE_STEP;
-
-		if(jumpAngle == 180)
-		{
-			canJump = true;
-			bJumping = false;
-			posPlayer.y = startY;
-		}
-		else
-		{
-			if (!map->collisionMoveUp(posPlayer, glm::ivec2(16, 16), &posPlayer.y))
+			if (!past_C && Game::instance().getSpecialKey(GLUT_KEY_UP) && canJump)
 			{
-				if(!jumpSpring) posPlayer.y = int(startY - 96 * sin(3.14159f * jumpAngle / 180.f));
-				else posPlayer.y = int(startY - 150 * sin(3.14159f * jumpAngle / 180.f));
-
-				if (jumpAngle > 90)
-					if (climb) bJumping = false;
-					else bJumping = !map->collisionMoveDown(posPlayer, glm::ivec2(32, 52), &posPlayer.y); //antes 32 32
-			}
-			else
-			{
-				bJumping = false;
-			}
-		}
-	}
-	else if (walljumpleft) {
-		if (wallJumpProgress == 16) {
-			walljumpleft = false;
-			floatTime = 10;
-		}
-		else {
-			wallJumpProgress += 1;
-			posPlayer.x += WALL_JUMP_STEP;
-			posPlayer.y -= WALL_JUMP_STEP;
-
-			if (map->collisionMoveUp(posPlayer, glm::ivec2(32, 32), &posPlayer.y) || map->collisionMoveRight(posPlayer, glm::ivec2(32, 32))) {
-				walljumpleft = false;
-				posPlayer.x -= WALL_JUMP_STEP*0.8;
-				posPlayer.y += WALL_JUMP_STEP*0.8;
-				floatTime = 10;
-
-			}
-
-		}
-
-	}
-	else if (walljumpright) {
-		if (wallJumpProgress == 16) {
-			walljumpright = false;
-			floatTime = 10;
-		}
-		else {
-			wallJumpProgress += 1;
-			posPlayer.x -= WALL_JUMP_STEP;
-			posPlayer.y -= WALL_JUMP_STEP;
-
-			if (map->collisionMoveUp(posPlayer, glm::ivec2(32, 32), &posPlayer.y) || map->collisionMoveRight(posPlayer, glm::ivec2(32, 32))) {
-				walljumpright = false;
-				posPlayer.x += WALL_JUMP_STEP*0.8;
-				posPlayer.y += WALL_JUMP_STEP*0.8;
-				floatTime = 10;
-
-			}
-
-		}
-
-	}
-	else if (floatTime > 0) {
-		floatTime -= 1;
-	}
-	else
-	{
-		//caida no parabolica dependiendo de si se esta climb o no
-		jumpSpring = false;
-
-
-		int distance;
-
-		if (climb) distance = CLIMB_STEP;
-		else distance = FALL_STEP;
-
-		
-		for (int i = 0; i < distance && !map->collisionMoveDown(posPlayer, glm::ivec2(32, 32), &posPlayer.y); i++) {
-			posPlayer.y += 1;
-		}
-
-		posPlayer.y += 1;
-
-
-		if(map->collisionMoveDown(posPlayer, glm::ivec2(32, 32), &posPlayer.y))
-		{
-
-			//gestionar si se puede o no se puede hacer dash
-			//canDash tmb se utiliza para las animaciones por eso hay que mirar el timer
-			//porque si haces dash hacia arriba de otra forma sigue siendo true
-			if (dashing)
-			{
-				if(dashTime < 7)
-					canDash = true;
-			}
-			else
-				canDash = true;
-				
-
-			canJump = true;
-			air = false;
-			if(!past_C && (Game::instance().getKey(67) || Game::instance().getKey(99)))
-			{
-				air = true; //indica que esta en el aire
-				bJumping = true;
 				canJump = false;
 				jumpAngle = 0;
 				startY = posPlayer.y;
 			}
+
+			if (!jumpSpring) jumpAngle += JUMP_ANGLE_STEP;
+			else jumpAngle += SPRING_ANGLE_STEP;
+
+			if (jumpAngle == 180)
+			{
+				canJump = true;
+				bJumping = false;
+				posPlayer.y = startY;
+			}
+			else
+			{
+				if (!map->collisionMoveUp(posPlayer, glm::ivec2(16, 16), &posPlayer.y))
+				{
+					if (!jumpSpring) posPlayer.y = int(startY - 96 * sin(3.14159f * jumpAngle / 180.f));
+					else posPlayer.y = int(startY - 150 * sin(3.14159f * jumpAngle / 180.f));
+
+					if (jumpAngle > 90)
+						if (climb) bJumping = false;
+						else bJumping = !map->collisionMoveDown(posPlayer, glm::ivec2(32, 52), &posPlayer.y); //antes 32 32
+				}
+				else
+				{
+					bJumping = false;
+				}
+			}
+		}
+		else if (walljumpleft) {
+			if (wallJumpProgress == 16) {
+				walljumpleft = false;
+				floatTime = 10;
+			}
+			else {
+				wallJumpProgress += 1;
+				posPlayer.x += WALL_JUMP_STEP;
+				posPlayer.y -= WALL_JUMP_STEP;
+
+				if (map->collisionMoveUp(posPlayer, glm::ivec2(32, 32), &posPlayer.y) || map->collisionMoveRight(posPlayer, glm::ivec2(32, 32))) {
+					walljumpleft = false;
+					posPlayer.x -= WALL_JUMP_STEP*0.8;
+					posPlayer.y += WALL_JUMP_STEP*0.8;
+					floatTime = 10;
+
+				}
+			}
+		}
+		else if (walljumpright) {
+			if (wallJumpProgress == 16) {
+				walljumpright = false;
+				floatTime = 10;
+			}
+			else {
+				wallJumpProgress += 1;
+				posPlayer.x -= WALL_JUMP_STEP;
+				posPlayer.y -= WALL_JUMP_STEP;
+
+				if (map->collisionMoveUp(posPlayer, glm::ivec2(32, 32), &posPlayer.y) || map->collisionMoveRight(posPlayer, glm::ivec2(32, 32))) {
+					walljumpright = false;
+					posPlayer.x += WALL_JUMP_STEP*0.8;
+					posPlayer.y += WALL_JUMP_STEP*0.8;
+					floatTime = 10;
+
+				}
+
+			}
+
+		}
+		else if (floatTime > 0) {
+			floatTime -= 1;
 		}
 		else
 		{
-			air = true; //si no toca el suelo esta en el aire
-			canJump = false;
+			//caida no parabolica dependiendo de si se esta climb o no
+			jumpSpring = false;
+
+
+			int distance;
+
+			if (climb) distance = CLIMB_STEP;
+			else distance = FALL_STEP;
+
+
+			for (int i = 0; i < distance && !map->collisionMoveDown(posPlayer, glm::ivec2(32, 32), &posPlayer.y); i++) {
+				posPlayer.y += 1;
+			}
+
+			posPlayer.y += 1;
+
+
+			if (map->collisionMoveDown(posPlayer, glm::ivec2(32, 32), &posPlayer.y))
+			{
+
+				//gestionar si se puede o no se puede hacer dash
+				//canDash tmb se utiliza para las animaciones por eso hay que mirar el timer
+				//porque si haces dash hacia arriba de otra forma sigue siendo true
+				if (dashing)
+				{
+					if (dashTime < 7)
+						canDash = true;
+				}
+				else
+					canDash = true;
+
+
+				canJump = true;
+				air = false;
+				if (!past_C && (Game::instance().getKey(67) || Game::instance().getKey(99)))
+				{
+					air = true; //indica que esta en el aire
+					bJumping = true;
+					canJump = false;
+					jumpAngle = 0;
+					startY = posPlayer.y;
+				}
+			}
+			else
+			{
+				air = true; //si no toca el suelo esta en el aire
+				canJump = false;
+			}
 		}
+
+		sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
 	}
-	
-	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
 
 	//actualizar valores para el siguiente update
 	updatePressedKeys();
@@ -535,7 +557,7 @@ void Player::updatePressedKeys()
 
 void Player::render()
 {
-	sprite->render();
+	if(!pre_lose) sprite->render();
 }
 
 void Player::setTileMap(TileMap *tileMap)

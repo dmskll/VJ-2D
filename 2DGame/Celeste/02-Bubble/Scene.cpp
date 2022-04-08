@@ -12,7 +12,7 @@
 #define INIT_PLAYER_Y_TILES 5
 
 #define CAM_OFFSET 15.f  //es para que esté la camara bien ajustada
-#define SHAKE_TIME 20.f
+#define SHAKE_TIME 14.f
 
 
 Scene::Scene()
@@ -37,7 +37,10 @@ void Scene::initObjects()
 	player->setTileMap(map);
 	player->setLevel(this);
 
-	ballon, berry, spring = false;
+	ballon = false;
+	berry = false;
+	spring = false;
+
 	for (int i = 0; i < objs.size(); i++)
 	{
 		if (objs[i].type == "BERRY")
@@ -121,7 +124,7 @@ void Scene::updateObjects(int deltaTime)
 void Scene::updateShake(int deltaTime)
 {
 	shakeAngle += 30;			//cuanto mas alto mas brusco
-	float shakeY = sin(3.14159f * shakeAngle / 180.f) * 6;
+	float shakeY = sin(3.14159f * shakeAngle / 180.f) * 4;
 	float shakeX = shakeY * 2.f; //si no es igual queda mejor (?)
 
 	projection = projection = glm::ortho(CAM_OFFSET + shakeX, float(SCREEN_WIDTH - CAM_OFFSET) + shakeX, float(SCREEN_HEIGHT - CAM_OFFSET) - shakeY, CAM_OFFSET - shakeY);
@@ -170,8 +173,6 @@ void Scene::update(int deltaTime)
 	//spring->update(deltaTime);
 	if (shake) updateShake(deltaTime);
 }
-
-
 
 bool Scene::check_win() {
 	return player->check_win();
