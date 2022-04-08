@@ -11,6 +11,9 @@
 #define INIT_PLAYER_X_TILES 5
 #define INIT_PLAYER_Y_TILES 5
 
+#define CAM_OFFSET 15.f  //es para que esté la camara bien ajustada
+#define SHAKE_TIME 20.f
+
 
 Scene::Scene()
 {
@@ -28,6 +31,12 @@ Scene::~Scene()
 
 void Scene::initObjects()
 {
+	player = new Player();
+	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+	player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), INIT_PLAYER_Y_TILES * map->getTileSize()));
+	player->setTileMap(map);
+	player->setLevel(this);
+
 	ballon, berry, spring = false;
 	for (int i = 0; i < objs.size(); i++)
 	{
@@ -109,6 +118,31 @@ void Scene::updateObjects(int deltaTime)
 	}
 }
 
+void Scene::updateShake(int deltaTime)
+{
+	shakeAngle += 30;			//cuanto mas alto mas brusco
+	float shakeY = sin(3.14159f * shakeAngle / 180.f) * 6;
+	float shakeX = shakeY * 2.f; //si no es igual queda mejor (?)
+
+	projection = projection = glm::ortho(CAM_OFFSET + shakeX, float(SCREEN_WIDTH - CAM_OFFSET) + shakeX, float(SCREEN_HEIGHT - CAM_OFFSET) - shakeY, CAM_OFFSET - shakeY);
+
+	if (shake_duration > 0)
+	{
+		shake_duration -= 0.1f * deltaTime;
+	}
+	else
+	{
+		projection = glm::ortho(CAM_OFFSET, float(SCREEN_WIDTH - CAM_OFFSET) + 0, float(SCREEN_HEIGHT - CAM_OFFSET), CAM_OFFSET);
+		shake = false;
+	}
+}
+
+void Scene::setShake()
+{
+	shake = true;
+	shake_duration = SHAKE_TIME;
+	shakeAngle = 0;
+}
 
 void Scene::init(int level)
 {
@@ -118,13 +152,12 @@ void Scene::init(int level)
 	s += std::to_string(level) + ".txt";
 	
 	map = TileMap::createTileMap(s, glm::vec2(SCREEN_X, SCREEN_Y), texProgram, objs);
-	player = new Player();
-	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
-	player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), INIT_PLAYER_Y_TILES * map->getTileSize()));
-	player->setTileMap(map);
+
 	initObjects();
 
-	projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
+	shakeAngle = 0;
+	shake = false;
+	projection = glm::ortho(CAM_OFFSET, float(SCREEN_WIDTH - CAM_OFFSET) + 0, float(SCREEN_HEIGHT - CAM_OFFSET), CAM_OFFSET);
 	currentTime = 0.0f;
 }
 
@@ -135,8 +168,10 @@ void Scene::update(int deltaTime)
 	updateObjects(deltaTime);
 	//berry->update(deltaTime);
 	//spring->update(deltaTime);
-
+	if (shake) updateShake(deltaTime);
 }
+
+
 
 bool Scene::check_win() {
 	return player->check_win();

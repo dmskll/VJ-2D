@@ -4,12 +4,13 @@
 
 #include "Sprite.h"
 #include "TileMap.h"
+//#include "Scene.h"
 
 
 // Player is basically a Sprite that represents the player. As such it has
 // all properties it needs to track its movement, jumping, and collisions.
 
-
+class Scene;
 class Player
 {
 
@@ -23,6 +24,7 @@ public:
 	bool check_lose();
 
 	void setTileMap(TileMap *tileMap);
+	void setLevel(Scene *scene);
 	void setPosition(const glm::vec2 &pos);
 	void setJumpSpring();
 	void touchBallon();
@@ -50,6 +52,7 @@ private:
 	glm::ivec2 tileMapDispl, posPlayer;
 	int jumpAngle, startY, wallJumpProgress, floatTime, dashTime, cd_dash; //TOFIX EL TIMER DEBERIA DEPENDER DEL DELTA TIME
 	Texture spritesheet;
+	Scene *level;
 	Sprite *sprite;
 	TileMap *map;
 

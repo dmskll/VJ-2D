@@ -4,6 +4,7 @@
 #include <GL/glut.h>
 #include "Player.h"
 #include "Game.h"
+#include "Scene.h"
 
 
 #define JUMP_ANGLE_STEP 4       //el angulo que se suma al saltar
@@ -156,6 +157,7 @@ void Player::updateDash()
 	{
 		if ((Game::instance().getKey(120) || Game::instance().getKey(88)) && !past_X)
 		{
+			level->setShake();
 			dashing = true;
 			bJumping = false; //si se hace un dash ya no se salta
 			//dashTime = 12;
@@ -539,6 +541,11 @@ void Player::render()
 void Player::setTileMap(TileMap *tileMap)
 {
 	map = tileMap;
+}
+
+void Player::setLevel(Scene *scene)
+{
+	level = scene;
 }
 
 void Player::setPosition(const glm::vec2 &pos)
