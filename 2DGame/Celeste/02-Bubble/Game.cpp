@@ -8,6 +8,10 @@ void Game::init()
 	bPlay = true;
 	glClearColor(0.f, 0.f, 0.f, 1.0f);
 	level = 1;
+	death_counter = 0;
+	score = 0;
+	strawberry_counter = 0;
+	Strawberry_picked_up_in_level = false;
 	scene.init(level);
 }
 
@@ -19,11 +23,22 @@ bool Game::update(int deltaTime)
 		level++;
 		scene = Scene();
 		scene.init(level);
+		if (Strawberry_picked_up_in_level) {
+			score += 1000;
+			strawberry_counter++;
+			Strawberry_picked_up_in_level = false;
+		}
 	}
 
 	if (scene.check_lose()) {
 		scene = Scene();
+		death_counter++;
 		scene.init(level);
+		scene.setShake();
+		Strawberry_picked_up_in_level = false;
+	}
+	if (scene.check_strawberry()) {
+		Strawberry_picked_up_in_level = true;
 	}
 	
 	return bPlay;

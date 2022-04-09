@@ -14,6 +14,7 @@
     <ClInclude Include="AnimKeyframes.h" />
     <ClInclude Include="ballon.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="Number.h" />
     <ClInclude Include="objects.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Scene.h" />
@@ -29,6 +30,7 @@
     <ClCompile Include="ballon.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Number.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Shader.cpp" />

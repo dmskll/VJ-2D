@@ -55,6 +55,9 @@ void Scene::initObjects()
 	berry = false;
 	spring = false;
 
+	Plus1000Obj = vector<Number *>(4);
+	picked_up_strawberry_progress = 10000;
+
 	for (int i = 0; i < objs.size(); i++)
 	{
 		if (objs[i].type == "BERRY")
@@ -111,6 +114,27 @@ void Scene::renderObjects()
 			ballonObj[i]->render();
 		}
 	}
+
+	if (picked_up_strawberry_progress < 50) {
+		for (int i = 0; i < 4; i++) {
+
+			if (picked_up_strawberry_progress % 6 == 3) {
+				int digit = 0;
+				if (i == 0) digit += 1;
+				Plus1000Obj[i]->setNumber(digit);
+			}
+			else if (picked_up_strawberry_progress % 6 == 0) {
+				int digit = 10;
+				if (i == 0) digit += 1;
+				Plus1000Obj[i]->setNumber(digit);
+			};
+			Plus1000Obj[i]->increaseHeight();
+			Plus1000Obj[i]->render();
+
+		}
+		picked_up_strawberry_progress++;
+	}
+		
 }
 
 void Scene::updateObjects(int deltaTime)
@@ -195,7 +219,25 @@ bool Scene::check_win() {
 bool Scene::check_lose() {
 	return player->check_lose();
 }
+bool Scene::check_strawberry() {
+	if (player->check_strawberry()) {
 
+
+		for (int i = 0; i < 4; i++) {
+			Plus1000Obj[i] = new Number();
+			if (i == 0) Plus1000Obj[i]->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, 1);
+			else Plus1000Obj[i]->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, 0);
+			glm::vec2 pos = player->getPosition();
+			pos.x = player->getPosition().x + (i * 20) - 20;
+			pos.y = player->getPosition().y - 30;
+			Plus1000Obj[i]->setPosition(pos);
+			picked_up_strawberry_progress = 0;
+		}
+
+		return true;
+	}
+	return false;
+}
 
 void Scene::render()
 {

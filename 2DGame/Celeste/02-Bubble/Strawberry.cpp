@@ -38,6 +38,7 @@ void Strawberry::update(int deltaTime)
 		{
 			if (posPlayer.y < posStrawBerry.y + 25 && posPlayer.y > posStrawBerry.y - 20)
 			{
+				player->touchStrawBerry();
 				collected = true;
 			}
 		}

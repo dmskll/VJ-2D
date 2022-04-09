@@ -10,6 +10,7 @@
 #include "Strawberry.h"
 #include "Spring.h"
 #include "Ballon.h"
+#include "Number.h"
 
 
 // Scene contains all the entities of our game.
@@ -30,6 +31,7 @@ public:
 
 	bool check_win();
 	bool check_lose();
+	bool check_strawberry();
 
 	float spawnX;
 	float spawnY;
@@ -52,6 +54,8 @@ private:
 	float shakeAngle;
 	bool shake;
 	float shake_duration;
+	
+	int picked_up_strawberry_progress;
 
 	glm::mat4 projection;
 	vector<objects> objs;  //contiene info de los objetos de la escena (mulles, fresas, pinchos...)
@@ -61,6 +65,8 @@ private:
 	vector<Spring *> springObj; //tiene las instancias de los muelles
 	bool ballon;
 	vector<Ballon *> ballonObj;
+
+	vector<Number *> Plus1000Obj;
 
 	//faltan para los pinchos
 };

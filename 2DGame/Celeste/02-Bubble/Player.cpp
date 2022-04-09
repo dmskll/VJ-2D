@@ -31,6 +31,7 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	bJumping = false;
 	climb = false;
 	jumpSpring = false;
+	strawberry = false;
 
 	walljumpleft = false;
 	walljumpright = false;
@@ -601,6 +602,9 @@ void Player::touchBallon()
 	canDash = true;
 }
 
+void Player::touchStrawBerry() {
+	strawberry = true;
+}
 
 bool Player::check_win() {
 	return win;
@@ -608,4 +612,12 @@ bool Player::check_win() {
 
 bool Player::check_lose() {
 	return lose;
+}
+
+bool Player::check_strawberry() {
+	if (strawberry) {
+		strawberry = false;
+		return true;
+	}
+	return false;
 }
