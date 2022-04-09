@@ -17,6 +17,7 @@
     <ClInclude Include="Number.h" />
     <ClInclude Include="objects.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="Rectangulo.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="ShaderProgram.h" />
@@ -32,6 +33,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Number.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Rectangulo.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="ShaderProgram.cpp" />

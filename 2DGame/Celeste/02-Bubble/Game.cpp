@@ -12,7 +12,7 @@ void Game::init()
 	score = 0;
 	strawberry_counter = 0;
 	Strawberry_picked_up_in_level = false;
-	scene.init(level);
+	scene.init(level,0);
 }
 
 bool Game::update(int deltaTime)
@@ -21,8 +21,9 @@ bool Game::update(int deltaTime)
 
 	if (scene.check_win()) {
 		level++;
+		float t = scene.getTime();
 		scene = Scene();
-		scene.init(level);
+		scene.init(level,t);
 		if (Strawberry_picked_up_in_level) {
 			score += 1000;
 			strawberry_counter++;
@@ -31,10 +32,10 @@ bool Game::update(int deltaTime)
 	}
 
 	if (scene.check_lose()) {
+		float t = scene.getTime();
 		scene = Scene();
 		death_counter++;
-		scene.init(level);
-		scene.setShake();
+		scene.init(level,t);
 		Strawberry_picked_up_in_level = false;
 	}
 	if (scene.check_strawberry()) {

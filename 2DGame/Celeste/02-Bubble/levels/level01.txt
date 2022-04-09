@@ -3,8 +3,8 @@ TILEMAP
 32 32			-- Tile size & block size
 images/ice-blocks2.png 	-- Tilesheet
 4 4			-- Number of tiles in tilesheet
-670000009::66666
-6;0000000009:666
+671111009::66666
+6;1111000009:666
 7000000000000966
 7110000000000056
 70000000x00x0096

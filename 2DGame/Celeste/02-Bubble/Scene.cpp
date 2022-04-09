@@ -55,6 +55,26 @@ void Scene::initObjects()
 	berry = false;
 	spring = false;
 
+
+	Timer = vector<Number *>(6);
+	for (int i = 0; i < 6; i++) {
+		Timer[i] = new Number();
+		Timer[i]->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, 0);
+		auto pos = glm::vec2(i * 20 + 20, 20);
+		if (i > 1) pos.x += 13;
+		if (i > 3) pos.x += 13;
+		Timer[i]->setPosition(pos);
+	}
+	Timer_background = vector<Rectangulo *>(5);
+	for(int i = 0; i < 5; i++) Timer_background[i] = new Rectangulo();
+	Timer_background[0]->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, "black", glm::vec2(152,35), glm::vec2(30,30));
+
+	Timer_background[1]->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, "white", glm::vec2(5, 4), glm::vec2(77, 39));
+	Timer_background[2]->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, "white", glm::vec2(5, 5), glm::vec2(77, 51));
+	Timer_background[3]->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, "white", glm::vec2(5, 4), glm::vec2(130, 39));
+	Timer_background[4]->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, "white", glm::vec2(5, 5), glm::vec2(130, 51));
+
+
 	Plus1000Obj = vector<Number *>(4);
 	picked_up_strawberry_progress = 10000;
 
@@ -134,7 +154,28 @@ void Scene::renderObjects()
 		}
 		picked_up_strawberry_progress++;
 	}
-		
+	
+	//timer
+	if (overlay_progress < 80) {
+		overlay_progress++;
+		int time2 = currentTime/1000;
+		int hours = time2 / 3600;
+		int minutes = (time2%3600) / 60;
+		int seconds = time2 % 60;
+		for(int i = 0; i < 5; i++) Timer_background[i]->render();
+
+		Timer[0]->setNumber(hours / 10);
+		Timer[1]->setNumber(hours % 10);
+		Timer[2]->setNumber(minutes / 10);
+		Timer[3]->setNumber(minutes % 10);
+		Timer[4]->setNumber(seconds / 10);
+		Timer[5]->setNumber(seconds % 10);
+
+
+		for (int i = 0; i < 6; i++) {
+			Timer[i]->render();
+		}
+	}
 }
 
 void Scene::updateObjects(int deltaTime)
@@ -185,7 +226,7 @@ void Scene::setShake()
 	shakeAngle = 0;
 }
 
-void Scene::init(int level)
+void Scene::init(int level, float time)
 {
 	initShaders();
 	string s = "levels/level";
@@ -199,8 +240,11 @@ void Scene::init(int level)
 
 	shakeAngle = 0;
 	shake = false;
+
+	overlay_progress = 0;
+
 	projection = glm::ortho(CAM_OFFSET, float(SCREEN_WIDTH - CAM_OFFSET) + 0, float(SCREEN_HEIGHT - CAM_OFFSET), CAM_OFFSET);
-	currentTime = 0.0f;
+	currentTime = time;
 }
 
 void Scene::update(int deltaTime)
@@ -253,6 +297,10 @@ void Scene::render()
 	player->render();
 
 	renderObjects();
+}
+
+float Scene::getTime() {
+	return currentTime;
 }
 
 void Scene::initShaders()

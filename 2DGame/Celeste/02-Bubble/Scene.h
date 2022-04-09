@@ -11,6 +11,7 @@
 #include "Spring.h"
 #include "Ballon.h"
 #include "Number.h"
+#include "Rectangulo.h"
 
 
 // Scene contains all the entities of our game.
@@ -24,10 +25,12 @@ public:
 	Scene();
 	~Scene();
 
-	void init(int level);
+	void init(int level, float time);
 	void update(int deltaTime);
 	void render();
 	void setShake();
+
+	float getTime();
 
 	bool check_win();
 	bool check_lose();
@@ -54,8 +57,8 @@ private:
 	float shakeAngle;
 	bool shake;
 	float shake_duration;
-	
 	int picked_up_strawberry_progress;
+	float overlay_progress;
 
 	glm::mat4 projection;
 	vector<objects> objs;  //contiene info de los objetos de la escena (mulles, fresas, pinchos...)
@@ -67,6 +70,8 @@ private:
 	vector<Ballon *> ballonObj;
 
 	vector<Number *> Plus1000Obj;
+	vector<Number *> Timer;
+	vector<Rectangulo *> Timer_background;
 
 	//faltan para los pinchos
 };
