@@ -38,6 +38,7 @@ private:
 	void horizontalMovement();
 	void updatePressedKeys();
 	void updateAnimations();
+	void doSpawn(int deltaTime);
 
 
 	bool bJumping, canJump, climb, walljumpleft, walljumpright, jumpSpring;
@@ -50,7 +51,10 @@ private:
 
 	bool pre_lose;
 	float cd_lose;
-
+	
+	bool spawning;
+	float spawnSpeed, spawnDeceleration;
+	int spawnY, spawnX;
 
 	glm::ivec2 tileMapDispl, posPlayer;
 	int jumpAngle, startY, wallJumpProgress, floatTime, dashTime, cd_dash; //TOFIX EL TIMER DEBERIA DEPENDER DEL DELTA TIME

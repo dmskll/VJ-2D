@@ -25,6 +25,10 @@ enum PlayerAnims
 
 void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 {
+	spawning = true;
+	spawnSpeed = 0.5f;
+	spawnDeceleration = 0.003f;
+
 	win = false;
 	lose = false;
 	pre_lose = false;
@@ -182,16 +186,6 @@ void Player::updateDash()
 
 void Player::doDash()
 {
-	/*
-	if (dashTime < 0)
-	{
-		dashing = false;
-		//if(!godDash) canDash = false;
-	}
-	else
-		dashTime -= 1;
-	*/
-
 	dashSpeed += dashDeceleration;
 	if (dashSpeed < 0) dashing = false;
 
@@ -255,7 +249,7 @@ void Player::updateMeta(int deltaTime)
 	}
 
 	if (posPlayer.y <= -5) win = true;
-	else if (posPlayer.y > 479 && !pre_lose)
+	else if (posPlayer.y > 479 && !pre_lose && !spawning)
 	{
 		level->setShake();
 		pre_lose = true;
@@ -387,11 +381,38 @@ void Player::updateAnimations()
 	}
 }
 
+void Player::doSpawn(int deltaTime)
+{
+	if (posPlayer.y > spawnY)
+	{
+		posPlayer.y += -spawnSpeed * deltaTime;
+	}
+	else
+	{
+		spawnSpeed += -spawnDeceleration * deltaTime;
+		posPlayer.y += -spawnSpeed * deltaTime;
+
+		if (posPlayer.y > spawnY)
+		{
+			posPlayer.y = spawnY;
+			level->setShake();
+			spawning = false;
+		}
+	}
+
+	sprite->update(deltaTime);
+	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
+}
+
 void Player::update(int deltaTime)
 {
 	updateMeta(deltaTime); //cosas relacionadas con el godmode o ganar/perder
 
-	if (!pre_lose)
+	if (spawning)
+	{
+		doSpawn(deltaTime);
+	}
+	else if (!pre_lose)
 	{
 		sprite->update(deltaTime);
 
@@ -568,11 +589,14 @@ void Player::setTileMap(TileMap *tileMap)
 void Player::setLevel(Scene *scene)
 {
 	level = scene;
-}
+} 
 
 void Player::setPosition(const glm::vec2 &pos)
 {
-	posPlayer = pos;
+	spawnX = pos.x;
+	spawnY = pos.y;
+
+	posPlayer = glm::vec2 (pos.x, 600);
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
 }
 
