@@ -4,6 +4,7 @@
 
 #include "Sprite.h"
 #include "TileMap.h"
+#include "SoundControl.h"
 //#include "Scene.h"
 
 
@@ -62,6 +63,8 @@ private:
 	Scene *level;
 	Sprite *sprite;
 	TileMap *map;
+
+	ISoundEngine* engine;
 
 };
 

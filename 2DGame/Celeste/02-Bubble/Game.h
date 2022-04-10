@@ -3,6 +3,7 @@
 
 
 #include "Scene.h"
+#include "SoundControl.h"
 
 
 #define SCREEN_WIDTH 540
@@ -43,6 +44,8 @@ public:
 	bool getSpecialKey(int key) const;
 
 private:
+	ISoundEngine* engine;
+
 	bool bPlay;                       // Continue to play game?
 	int level;
 	Scene scene;                      // Scene to render

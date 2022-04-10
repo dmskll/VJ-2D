@@ -5,6 +5,9 @@
 
 void Game::init()
 {
+	SoundControl::instance().init();
+	engine = SoundControl::instance().getSoundEngine();
+
 	bPlay = true;
 	glClearColor(0.f, 0.f, 0.f, 1.0f);
 	level = 1;

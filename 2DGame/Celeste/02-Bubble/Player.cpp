@@ -58,6 +58,8 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	//god mode 
 	godDash = false; 
 
+	engine = SoundControl::instance().getSoundEngine();
+
 	spritesheet.loadFromFile("images/madeline.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	sprite = Sprite::createSprite(glm::ivec2(32, 32), glm::vec2(0.25, 0.20), &spritesheet, &shaderProgram);
 	sprite->setNumberAnimations(16);
@@ -166,6 +168,7 @@ void Player::updateDash()
 	{
 		if ((Game::instance().getKey(120) || Game::instance().getKey(88)) && !past_X)
 		{
+			engine->play2D("sounds/dash.wav", false);
 			level->setShake();
 			dashing = true;
 			bJumping = false; //si se hace un dash ya no se salta
