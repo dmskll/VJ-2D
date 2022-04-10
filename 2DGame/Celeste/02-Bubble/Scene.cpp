@@ -56,6 +56,28 @@ void Scene::initObjects()
 	spring = false;
 
 
+
+
+	//cosas de la nieve
+
+	snow = vector<SnowParticle *>(20);
+
+	for (int i = 0; i < snow.size(); i++) {
+		snow[i] = new SnowParticle;
+		snow[i]->altura_inicial = i * 27 + (rand()%40) -20;
+		snow[i]->lastPos_x = rand() % 530;
+		snow[i]->divisor_velocidad_y = (rand() % 40) + 100;
+		snow[i]->velocidad_x = (rand() % 8) + 1;
+		snow[i]->random_offset = rand() % 100;
+		snow[i]->altura_seno = (rand() % 30) + 10;
+
+		float p_size = (rand() % 4) + 3;
+
+		snow[i]->Particula = new Rectangulo();
+		snow[i]->Particula->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, "white", glm::vec2(p_size,p_size), glm::vec2(snow[i]->lastPos_x, snow[i]->altura_inicial));
+	}
+
+	//cosas del temporizador
 	Timer = vector<Number *>(6);
 	for (int i = 0; i < 6; i++) {
 		Timer[i] = new Number();
@@ -74,7 +96,7 @@ void Scene::initObjects()
 	Timer_background[3]->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, "white", glm::vec2(5, 4), glm::vec2(130, 39));
 	Timer_background[4]->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, "white", glm::vec2(5, 5), glm::vec2(130, 51));
 
-
+	//indicador de +1000 puntos
 	Plus1000Obj = vector<Number *>(4);
 	picked_up_strawberry_progress = 10000;
 
@@ -176,6 +198,13 @@ void Scene::renderObjects()
 			Timer[i]->render();
 		}
 	}
+	//nieve
+
+	for (int i = 0; i < snow.size(); i++) {
+		snow[i]->Particula->render();
+	}
+
+
 }
 
 void Scene::updateObjects(int deltaTime)
@@ -198,6 +227,15 @@ void Scene::updateObjects(int deltaTime)
 			ballonObj[i]->update(deltaTime);
 		}
 	}
+
+	//particulas de nieve
+	for (int i = 0; i < snow.size(); i++) {
+		snow[i]->lastPos_x += snow[i]->velocidad_x;
+		if (snow[i]->lastPos_x > 530) snow[i]->lastPos_x -= 550;
+		float altura = glm::sin((currentTime / snow[i]->divisor_velocidad_y) + snow[i]->random_offset) * snow[i]->altura_seno + snow[i]->altura_inicial;
+		snow[i]->Particula->setPosition(glm::vec2(snow[i]->lastPos_x, altura));
+	}
+
 }
 
 void Scene::updateShake(int deltaTime)

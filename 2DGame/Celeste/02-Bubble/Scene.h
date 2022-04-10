@@ -69,10 +69,16 @@ private:
 	bool ballon;
 	vector<Ballon *> ballonObj;
 
+	struct SnowParticle {
+		Rectangulo* Particula;
+		float altura_inicial, altura_seno, lastPos_x, random_offset;
+		int velocidad_x, divisor_velocidad_y;
+	};
+	
 	vector<Number *> Plus1000Obj;
 	vector<Number *> Timer;
 	vector<Rectangulo *> Timer_background;
-
+	vector<SnowParticle *> snow;
 	//faltan para los pinchos
 };
 
