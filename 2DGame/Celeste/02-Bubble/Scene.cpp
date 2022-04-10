@@ -47,14 +47,13 @@ void Scene::initPlayer()
 
 }
 
-void Scene::initObjects()
+void Scene::initObjects(int level)
 {
 
 
 	ballon = false;
 	berry = false;
 	spring = false;
-
 
 
 
@@ -96,10 +95,33 @@ void Scene::initObjects()
 	Timer_background[3]->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, "white", glm::vec2(5, 4), glm::vec2(130, 39));
 	Timer_background[4]->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, "white", glm::vec2(5, 5), glm::vec2(130, 51));
 
+	//cosas del overlay de altura
+
+	int height = level * 100;
+	while (height != 0) {
+		int n = height % 10;
+		height /= 10;
+		Number* num = new Number();
+		num->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, n);
+		num->setPosition(glm::vec2(250 - heightOverlay.height.size() * 18,245));
+		heightOverlay.height.push_back(num);
+	}
+
+	heightOverlay.letraM = new Character;
+	heightOverlay.letraM->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+	heightOverlay.letraM->setPosition(glm::vec2(280 , 245));
+	heightOverlay.letraM->setCharacter('M',"WHITE");
+
+	heightOverlay.Background = new Rectangulo;
+	heightOverlay.Background->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, "black", glm::vec2(300,45), glm::vec2(120,250));
+
+
+
 	//indicador de +1000 puntos
 	Plus1000Obj = vector<Number *>(4);
 	picked_up_strawberry_progress = 10000;
 
+	//objetos del nivel
 	for (int i = 0; i < objs.size(); i++)
 	{
 		if (objs[i].type == "BERRY")
@@ -177,7 +199,7 @@ void Scene::renderObjects()
 		picked_up_strawberry_progress++;
 	}
 	
-	//timer
+	//timer y altura
 	if (overlay_progress < 80) {
 		overlay_progress++;
 		int time2 = currentTime/1000;
@@ -197,7 +219,18 @@ void Scene::renderObjects()
 		for (int i = 0; i < 6; i++) {
 			Timer[i]->render();
 		}
+
+
+		heightOverlay.Background->render();
+
+		for (int i = 0; i < heightOverlay.height.size(); i++) {
+			heightOverlay.height[i]->render();
+		}
+		heightOverlay.letraM->render();
+
 	}
+
+
 	//nieve
 
 	for (int i = 0; i < snow.size(); i++) {
@@ -274,7 +307,7 @@ void Scene::init(int level, float time)
 	map = TileMap::createTileMap(s, glm::vec2(SCREEN_X, SCREEN_Y), texProgram, objs);
 
 	initPlayer();
-	initObjects();
+	initObjects(level);
 
 	shakeAngle = 0;
 	shake = false;

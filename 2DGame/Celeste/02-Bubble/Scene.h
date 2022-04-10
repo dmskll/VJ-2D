@@ -12,6 +12,7 @@
 #include "Ballon.h"
 #include "Number.h"
 #include "Rectangulo.h"
+#include "Character.h"
 
 
 // Scene contains all the entities of our game.
@@ -43,7 +44,7 @@ public:
 private:
 	void initShaders();
 	void initPlayer();
-	void initObjects();
+	void initObjects(int level);
 	void renderObjects();
 	void updateObjects(int deltaTime);
 	void updateShake(int deltaTime);
@@ -75,10 +76,20 @@ private:
 		int velocidad_x, divisor_velocidad_y;
 	};
 	
+	struct HeightDisplay {
+		Rectangulo* Background;
+		vector<Number *> height;
+		Character* letraM;
+	};
+
+	HeightDisplay heightOverlay;
 	vector<Number *> Plus1000Obj;
 	vector<Number *> Timer;
 	vector<Rectangulo *> Timer_background;
 	vector<SnowParticle *> snow;
+
+	
+
 	//faltan para los pinchos
 };
 
