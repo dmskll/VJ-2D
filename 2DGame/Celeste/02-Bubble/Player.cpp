@@ -209,16 +209,21 @@ void Player::doDash()
 	{
 		if (keyLeft)  //arriba izq
 		{
-			if (!map->collisionMoveUp(posPlayer, glm::ivec2(16, 16), &posPlayer.y)) posPlayer.y -= dashSpeed * 0.8;
-			if (!map->collisionMoveLeft(posPlayer, glm::ivec2(32, 32))) posPlayer.x -= dashSpeed * 0.8;
+			if (!map->collisionMoveUp(posPlayer, glm::ivec2(16, 16), &posPlayer.y)) 
+				posPlayer.y -= dashSpeed * 0.8;
+			if (!map->collisionMoveLeft(posPlayer, glm::ivec2(32, 32))) 
+				moveLeft(dashSpeed * 0.8);
 		}
 		else if (keyRight) //arriba derecha
 		{
-			if (!map->collisionMoveUp(posPlayer, glm::ivec2(16, 16), &posPlayer.y)) posPlayer.y -= dashSpeed * 0.8;
-			if (!map->collisionMoveRight(posPlayer, glm::ivec2(32, 32))) posPlayer.x += dashSpeed * 0.8;
+			if (!map->collisionMoveUp(posPlayer, glm::ivec2(16, 16), &posPlayer.y)) 
+				posPlayer.y -= dashSpeed * 0.8;
+			if (!map->collisionMoveRight(posPlayer, glm::ivec2(32, 32))) 
+				moveRight(dashSpeed * 0.8);
 		}
 		else //solo dash hacia arriba
-			if (!map->collisionMoveUp(posPlayer, glm::ivec2(16, 16), &posPlayer.y)) posPlayer.y -= dashSpeed;
+			if (!map->collisionMoveUp(posPlayer, glm::ivec2(16, 16), &posPlayer.y)) 
+				posPlayer.y -= dashSpeed;
 
 		startY = posPlayer.y;
 	}
@@ -226,28 +231,81 @@ void Player::doDash()
 	{
 		if (keyLeft)
 		{
-			if (!map->collisionMoveDown(posPlayer, glm::ivec2(16, 16), &posPlayer.y)) moveDown(dashSpeed * 0.8);
-			if (!map->collisionMoveLeft(posPlayer, glm::ivec2(32, 32))) posPlayer.x -= dashSpeed * 0.8;
+			if (!map->collisionMoveDown(posPlayer, glm::ivec2(16, 16), &posPlayer.y)) 
+				moveDown(dashSpeed * 0.8);
+			if (!map->collisionMoveLeft(posPlayer, glm::ivec2(32, 32)))
+				moveLeft(dashSpeed * 0.8);
 		}
 		else if (keyRight)
 		{
-			if (!map->collisionMoveDown(posPlayer, glm::ivec2(16, 16), &posPlayer.y)) moveDown(dashSpeed * 0.8);
-			if (!map->collisionMoveRight(posPlayer, glm::ivec2(32, 32))) posPlayer.x += dashSpeed * 0.8;
+			if (!map->collisionMoveDown(posPlayer, glm::ivec2(16, 16), &posPlayer.y)) 
+				moveDown(dashSpeed * 0.8);
+			if (!map->collisionMoveRight(posPlayer, glm::ivec2(32, 32)))  
+				moveRight(dashSpeed * 0.8);
 		}
 		else //solo dash hacia abajo
-			if (!map->collisionMoveDown(posPlayer, glm::ivec2(16, 16), &posPlayer.y)) moveDown(dashSpeed);
+			if (!map->collisionMoveDown(posPlayer, glm::ivec2(16, 16), &posPlayer.y)) 
+				moveDown(dashSpeed);
 
 		startY = posPlayer.y;
 	}
 	else if (keyLeft || !faceRight)
 	{
-		if (!map->collisionMoveLeft(posPlayer, glm::ivec2(32, 32))) posPlayer.x -= dashSpeed;
+		if (!map->collisionMoveLeft(posPlayer, glm::ivec2(32, 32))) 
+			moveLeft(dashSpeed);
 	}
 	else if (keyRight || faceRight)
 	{
-		if (!map->collisionMoveRight(posPlayer, glm::ivec2(32, 32))) posPlayer.x += dashSpeed;
+		if (!map->collisionMoveRight(posPlayer, glm::ivec2(32, 32))) 
+			moveRight(dashSpeed);
 	}	
 }
+
+void Player::moveLeft(float distance)
+{
+	float pool;
+	pool = 0;
+	glm::ivec2 posAux = posPlayer;
+
+	for (int i = 0; i < (distance * 2) && !map->collisionMoveLeft(posAux, glm::ivec2(32, 32)); i++) {
+		pool += 0.5f;
+		if (pool == 1.f)
+		{
+			posAux.x -= 1;
+		}
+		else if (pool == 2.f)
+		{
+			posAux.x -= 1;
+			posPlayer.x -= 2;
+			pool = 0;
+		}
+	}
+}
+
+void Player::moveRight(float distance)
+{
+	float pool;
+	pool = 0;
+	glm::ivec2 posAux = posPlayer;
+
+	for (int i = 0; i < (distance * 2) && !map->collisionMoveRight(posAux, glm::ivec2(32, 32)); i++) {
+		pool += 0.5f;
+		if (pool == 1.f)
+		{
+			posAux.x += 1;
+		}
+		else if (pool == 2.f)
+		{
+			posAux.x += 1;
+			posPlayer.x += 2;
+			pool = 0;
+		}
+	}
+}
+
+
+
+
 
 void Player::moveDown(float distance) {
 	for (int i = 0; i < distance && !map->collisionMoveDown(posPlayer, glm::ivec2(32, 32), &posPlayer.y); i++) {
@@ -539,7 +597,7 @@ void Player::update(int deltaTime)
 			if (climb) distance = CLIMB_STEP;
 			else distance = FALL_STEP;
 		
-		moveDown(distance);
+			moveDown(distance);
 
 
 			if (map->collisionMoveDown(posPlayer, glm::ivec2(32, 32), &posPlayer.y))
@@ -558,7 +616,8 @@ void Player::update(int deltaTime)
 				}
 				else
 				{
-					if(!canDash) engine->play2D("sounds/can-dash.wav", false);
+					if(!canDash) 
+						engine->play2D("sounds/can-dash.wav", false);
 					canDash = true;				
 				}
 

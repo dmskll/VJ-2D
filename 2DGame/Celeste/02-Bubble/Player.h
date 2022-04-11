@@ -42,6 +42,8 @@ private:
 	void updateAnimations();
 	void doSpawn(int deltaTime);
 	void moveDown(float distance);
+	void moveLeft(float distance);
+	void moveRight(float distance);
 
 	bool  win, lose, strawberry;
 	bool bJumping, canJump, climb, walljumpleft, walljumpright, jumpSpring;
