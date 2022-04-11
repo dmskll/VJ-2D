@@ -1,7 +1,7 @@
 #ifndef _GAME_INCLUDE
 #define _GAME_INCLUDE
 
-
+#include "Menu.h"
 #include "Scene.h"
 #include "SoundControl.h"
 
@@ -42,13 +42,18 @@ public:
 	
 	bool getKey(int key) const;
 	bool getSpecialKey(int key) const;
+	void setPlay();
 
 private:
+	void updateScene(int deltaTime);
+	void updateMenu(int deltaTime);
+
 	ISoundEngine* engine;
 
-	bool bPlay;                       // Continue to play game?
+	bool bPlay, playing;                       // Continue to play game?
 	int level, death_counter, score, strawberry_counter;
 	bool Strawberry_picked_up_in_level;
+	Menu menu;						  //Menu to render
 	Scene scene;                      // Scene to render
 	bool keys[256], specialKeys[256]; // Store key states so that 
 	                                  // we can have access at any time
