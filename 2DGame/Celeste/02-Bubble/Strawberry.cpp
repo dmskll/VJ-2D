@@ -10,6 +10,8 @@ enum StrawberryAnims
 
 void Strawberry::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 {
+	engine = SoundControl::instance().getSoundEngine();
+
 	spritesheet.loadFromFile("images/berries.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	sprite = Sprite::createSprite(glm::ivec2(32, 32), glm::vec2(0.5, 0.5), &spritesheet, &shaderProgram);
 	sprite->setNumberAnimations(1);
@@ -38,6 +40,7 @@ void Strawberry::update(int deltaTime)
 		{
 			if (posPlayer.y < posStrawBerry.y + 25 && posPlayer.y > posStrawBerry.y - 20)
 			{
+				engine->play2D("sounds/fresa.wav", false);
 				collected = true;
 			}
 		}

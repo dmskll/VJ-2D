@@ -25,9 +25,12 @@ enum PlayerAnims
 
 void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 {
+	engine = SoundControl::instance().getSoundEngine();
+
 	spawning = true;
 	spawnSpeed = 0.5f;
 	spawnDeceleration = 0.003f;
+	engine->play2D("sounds/next-level.wav", false);
 
 	win = false;
 	lose = false;
@@ -46,9 +49,9 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	faceRight = true;
 	moving = false;
 
-	canJump = true; //canJump no se utiliza, la puse al principio para probar el walljump en clase
+	canJump = true; 
 	dashing = false;
-	canDash = false;
+	canDash = true;
 	dashTime = 9; //se tiene que mover 5tiles
 	//cd_dash = 0;
 
@@ -58,7 +61,6 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	//god mode 
 	godDash = false; 
 
-	engine = SoundControl::instance().getSoundEngine();
 
 	spritesheet.loadFromFile("images/madeline.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	sprite = Sprite::createSprite(glm::ivec2(32, 32), glm::vec2(0.25, 0.20), &spritesheet, &shaderProgram);
@@ -132,6 +134,7 @@ void Player::updateWallJump()
 	{
 		if ((Game::instance().getKey(67) || Game::instance().getKey(99)) && !past_C && !canJump) //wall jump left to right
 		{
+			engine->play2D("sounds/jump-wall.wav", false);
 			bJumping = false;
 			walljumpleft = true;
 			wallJumpProgress = 0;
@@ -145,6 +148,7 @@ void Player::updateWallJump()
 	{
 		if ((Game::instance().getKey(67) || Game::instance().getKey(99)) && !past_C && !canJump) //wall jump right to left
 		{
+			engine->play2D("sounds/jump-wall.wav", false);
 			bJumping = false;
 			walljumpright = true;
 			wallJumpProgress = 0;
@@ -169,6 +173,7 @@ void Player::updateDash()
 		if ((Game::instance().getKey(120) || Game::instance().getKey(88)) && !past_X)
 		{
 			engine->play2D("sounds/dash.wav", false);
+
 			level->setShake();
 			dashing = true;
 			bJumping = false; //si se hace un dash ya no se salta
@@ -184,6 +189,14 @@ void Player::updateDash()
 				canDash = true;
 			}			
 		}
+	}
+	else
+	{
+		if ((Game::instance().getKey(120) || Game::instance().getKey(88)) && !past_X)
+		{
+			engine->play2D("sounds/no-dash.wav", false);
+		}
+
 	}
 }
 
@@ -254,6 +267,7 @@ void Player::updateMeta(int deltaTime)
 	if (posPlayer.y <= -5) win = true;
 	else if (posPlayer.y > 479 && !pre_lose && !spawning)
 	{
+		engine->play2D("sounds/muerte.wav", false);
 		level->setShake();
 		pre_lose = true;
 		cd_lose = 300;
@@ -433,6 +447,7 @@ void Player::update(int deltaTime)
 
 			if (!past_C && Game::instance().getSpecialKey(GLUT_KEY_UP) && canJump)
 			{
+				engine->play2D("sounds/jump.wav", false);
 				canJump = false;
 				jumpAngle = 0;
 				startY = posPlayer.y;
@@ -535,16 +550,23 @@ void Player::update(int deltaTime)
 				if (dashing)
 				{
 					if (dashTime < 7)
+					{
+						if (!canDash) engine->play2D("sounds/can-dash.wav", false);
 						canDash = true;
+					}
 				}
 				else
-					canDash = true;
+				{
+					if(!canDash) engine->play2D("sounds/can-dash.wav", false);
+					canDash = true;				
+				}
 
 
 				canJump = true;
 				air = false;
 				if (!past_C && (Game::instance().getKey(67) || Game::instance().getKey(99)))
 				{
+					engine->play2D("sounds/jump.wav", false);
 					air = true; //indica que esta en el aire
 					bJumping = true;
 					canJump = false;
@@ -610,11 +632,13 @@ glm::ivec2 Player::getPosition()
 
 void Player::setJumpSpring()
 {
+	engine->play2D("sounds/muelle.wav", false);
 	air = true; //indica que esta en el aire
 	jumpSpring = true;
 	bJumping = true;
 	canJump = false;
 	canDash = true;
+	dashing = false;
 	jumpAngle = 0;
 	startY = posPlayer.y;
 }

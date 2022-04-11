@@ -7,6 +7,8 @@ void Game::init()
 {
 	SoundControl::instance().init();
 	engine = SoundControl::instance().getSoundEngine();
+	engine->setSoundVolume(1);
+	engine->play2D("sounds/level-music-low.mp3", true);
 
 	bPlay = true;
 	glClearColor(0.f, 0.f, 0.f, 1.0f);

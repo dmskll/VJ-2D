@@ -25,5 +25,7 @@ private:
 	TileMap *map;
 	Player *player;
 
+	ISoundEngine* engine;
+
 };
 

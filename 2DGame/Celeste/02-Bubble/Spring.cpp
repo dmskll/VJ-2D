@@ -28,7 +28,7 @@ void Spring::update(int deltaTime)
 	sprite->update(deltaTime);
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posSpring.x), float(tileMapDispl.y + posSpring.y)));
 	posPlayer = player->getPosition();
-	if (posPlayer.x < posSpring.x + 50 && posPlayer.x > posSpring.x - 20)
+	if (posPlayer.x < posSpring.x + 35 && posPlayer.x > posSpring.x - 20)
 	{
 		if (posPlayer.y < posSpring.y + 20 && posPlayer.y > posSpring.y - 20)
 		{

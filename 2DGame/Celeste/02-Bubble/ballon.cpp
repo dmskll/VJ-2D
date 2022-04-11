@@ -10,6 +10,8 @@ enum BallonAnims
 
 void Ballon::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 {
+	engine = SoundControl::instance().getSoundEngine();
+
 	spritesheet.loadFromFile("images/ballon.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	sprite = Sprite::createSprite(glm::ivec2(32, 32), glm::vec2(0.5, 0.5), &spritesheet, &shaderProgram);
 	sprite->setNumberAnimations(1);
@@ -54,9 +56,10 @@ void Ballon::update(int deltaTime)
 		{
 			if (posPlayer.y < posBallon.y + 25 && posPlayer.y > posBallon.y - 20)
 			{
+				engine->play2D("sounds/globo.wav", false);
 				player->touchBallon();
 				collected = true;
-				cd_ballon = 5;
+				cd_ballon = 4;
 			}
 		}
 	}
@@ -64,7 +67,10 @@ void Ballon::update(int deltaTime)
 	{
 		cd_ballon -= 0.001f * deltaTime;
 		if (cd_ballon < 0)
+		{
+			engine->play2D("sounds/spawn-globo.wav", false);
 			collected = false;
+		}
 	}
 }
 
