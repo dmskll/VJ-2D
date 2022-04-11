@@ -20,15 +20,16 @@ public:
 	void update(int deltaTime);
 	void render();
 
-	bool  win, lose;
 	bool check_win();
 	bool check_lose();
+	bool check_strawberry();
 
 	void setTileMap(TileMap *tileMap);
 	void setLevel(Scene *scene);
 	void setPosition(const glm::vec2 &pos);
 	void setJumpSpring();
 	void touchBallon();
+	void touchStrawBerry();
 	glm::ivec2 getPosition();
 	
 private:
@@ -40,8 +41,9 @@ private:
 	void updatePressedKeys();
 	void updateAnimations();
 	void doSpawn(int deltaTime);
+	void moveDown(float distance);
 
-
+	bool  win, lose, strawberry;
 	bool bJumping, canJump, climb, walljumpleft, walljumpright, jumpSpring;
 	bool past_C, past_X, past_down, past_left, past_right, past_f1, past_f3, past_D;;//booleanos que indican si la tecla estaba presionada en el ultimo update
 	bool air; //indica si el jugador esta en el aire, se utiliza en las animaciones
@@ -52,7 +54,6 @@ private:
 
 	bool pre_lose;
 	float cd_lose;
-	
 	bool spawning;
 	float spawnSpeed, spawnDeceleration;
 	int spawnY, spawnX;

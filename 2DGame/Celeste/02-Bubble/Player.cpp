@@ -38,7 +38,7 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	bJumping = false;
 	climb = false;
 	jumpSpring = false;
-
+	strawberry = false;
 	walljumpleft = false;
 	walljumpright = false;
 
@@ -209,16 +209,16 @@ void Player::doDash()
 	{
 		if (keyLeft)  //arriba izq
 		{
-			posPlayer.y -= dashSpeed * 0.8;
-			posPlayer.x -= dashSpeed * 0.8;
+			if (!map->collisionMoveUp(posPlayer, glm::ivec2(16, 16), &posPlayer.y)) posPlayer.y -= dashSpeed * 0.8;
+			if (!map->collisionMoveLeft(posPlayer, glm::ivec2(32, 32))) posPlayer.x -= dashSpeed * 0.8;
 		}
 		else if (keyRight) //arriba derecha
 		{
-			posPlayer.y -= dashSpeed * 0.8;
-			posPlayer.x += dashSpeed * 0.8;
+			if (!map->collisionMoveUp(posPlayer, glm::ivec2(16, 16), &posPlayer.y)) posPlayer.y -= dashSpeed * 0.8;
+			if (!map->collisionMoveRight(posPlayer, glm::ivec2(32, 32))) posPlayer.x += dashSpeed * 0.8;
 		}
 		else //solo dash hacia arriba
-			posPlayer.y -= dashSpeed;
+			if (!map->collisionMoveUp(posPlayer, glm::ivec2(16, 16), &posPlayer.y)) posPlayer.y -= dashSpeed;
 
 		startY = posPlayer.y;
 	}
@@ -226,27 +226,36 @@ void Player::doDash()
 	{
 		if (keyLeft)
 		{
-			posPlayer.y += dashSpeed * 0.8;
-			posPlayer.x -= dashSpeed * 0.8;
+			if (!map->collisionMoveDown(posPlayer, glm::ivec2(16, 16), &posPlayer.y)) moveDown(dashSpeed * 0.8);
+			if (!map->collisionMoveLeft(posPlayer, glm::ivec2(32, 32))) posPlayer.x -= dashSpeed * 0.8;
 		}
 		else if (keyRight)
 		{
-			posPlayer.y += dashSpeed * 0.8;
-			posPlayer.x += dashSpeed * 0.8;
+			if (!map->collisionMoveDown(posPlayer, glm::ivec2(16, 16), &posPlayer.y)) moveDown(dashSpeed * 0.8);
+			if (!map->collisionMoveRight(posPlayer, glm::ivec2(32, 32))) posPlayer.x += dashSpeed * 0.8;
 		}
 		else //solo dash hacia abajo
-			posPlayer.y += dashSpeed;
+			if (!map->collisionMoveDown(posPlayer, glm::ivec2(16, 16), &posPlayer.y)) moveDown(dashSpeed);
 
 		startY = posPlayer.y;
 	}
 	else if (keyLeft || !faceRight)
 	{
-		posPlayer.x -= dashSpeed;
+		if (!map->collisionMoveLeft(posPlayer, glm::ivec2(32, 32))) posPlayer.x -= dashSpeed;
 	}
 	else if (keyRight || faceRight)
 	{
-		posPlayer.x += dashSpeed;
+		if (!map->collisionMoveRight(posPlayer, glm::ivec2(32, 32))) posPlayer.x += dashSpeed;
 	}	
+}
+
+void Player::moveDown(float distance) {
+	for (int i = 0; i < distance && !map->collisionMoveDown(posPlayer, glm::ivec2(32, 32), &posPlayer.y); i++) {
+		posPlayer.y += 1;
+	}
+
+	posPlayer.y += 1;
+
 }
 
 void Player::updateMeta(int deltaTime)
@@ -452,7 +461,6 @@ void Player::update(int deltaTime)
 				jumpAngle = 0;
 				startY = posPlayer.y;
 			}
-
 			if (!jumpSpring) jumpAngle += JUMP_ANGLE_STEP;
 			else jumpAngle += SPRING_ANGLE_STEP;
 
@@ -515,9 +523,7 @@ void Player::update(int deltaTime)
 					floatTime = 10;
 
 				}
-
 			}
-
 		}
 		else if (floatTime > 0) {
 			floatTime -= 1;
@@ -532,13 +538,8 @@ void Player::update(int deltaTime)
 
 			if (climb) distance = CLIMB_STEP;
 			else distance = FALL_STEP;
-
-
-			for (int i = 0; i < distance && !map->collisionMoveDown(posPlayer, glm::ivec2(32, 32), &posPlayer.y); i++) {
-				posPlayer.y += 1;
-			}
-
-			posPlayer.y += 1;
+		
+		moveDown(distance);
 
 
 			if (map->collisionMoveDown(posPlayer, glm::ivec2(32, 32), &posPlayer.y))
@@ -614,8 +615,7 @@ void Player::setTileMap(TileMap *tileMap)
 void Player::setLevel(Scene *scene)
 {
 	level = scene;
-} 
-
+}
 void Player::setPosition(const glm::vec2 &pos)
 {
 	spawnX = pos.x;
@@ -648,6 +648,9 @@ void Player::touchBallon()
 	canDash = true;
 }
 
+void Player::touchStrawBerry() {
+	strawberry = true;
+}
 
 bool Player::check_win() {
 	return win;
@@ -655,4 +658,12 @@ bool Player::check_win() {
 
 bool Player::check_lose() {
 	return lose;
+}
+
+bool Player::check_strawberry() {
+	if (strawberry) {
+		strawberry = false;
+		return true;
+	}
+	return false;
 }

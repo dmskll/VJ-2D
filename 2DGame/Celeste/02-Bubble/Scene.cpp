@@ -47,14 +47,77 @@ void Scene::initPlayer()
 
 }
 
-void Scene::initObjects()
+void Scene::initObjects(int level)
 {
-
-
 	ballon = false;
 	berry = false;
 	spring = false;
 
+	//cosas de la nieve
+
+	snow = vector<SnowParticle *>(20);
+
+	for (int i = 0; i < snow.size(); i++) {
+		snow[i] = new SnowParticle;
+		snow[i]->altura_inicial = i * 27 + (rand()%40) -20;
+		snow[i]->lastPos_x = rand() % 530;
+		snow[i]->divisor_velocidad_y = (rand() % 40) + 100;
+		snow[i]->velocidad_x = (rand() % 8) + 1;
+		snow[i]->random_offset = rand() % 100;
+		snow[i]->altura_seno = (rand() % 30) + 10;
+
+		float p_size = (rand() % 4) + 3;
+
+		snow[i]->Particula = new Rectangulo();
+		snow[i]->Particula->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, "white", glm::vec2(p_size,p_size), glm::vec2(snow[i]->lastPos_x, snow[i]->altura_inicial));
+	}
+
+	//cosas del temporizador
+	Timer = vector<Number *>(6);
+	for (int i = 0; i < 6; i++) {
+		Timer[i] = new Number();
+		Timer[i]->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, 0);
+		auto pos = glm::vec2(i * 20 + 20, 20);
+		if (i > 1) pos.x += 13;
+		if (i > 3) pos.x += 13;
+		Timer[i]->setPosition(pos);
+	}
+	Timer_background = vector<Rectangulo *>(5);
+	for(int i = 0; i < 5; i++) Timer_background[i] = new Rectangulo();
+	Timer_background[0]->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, "black", glm::vec2(152,35), glm::vec2(30,30));
+
+	Timer_background[1]->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, "white", glm::vec2(5, 4), glm::vec2(77, 39));
+	Timer_background[2]->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, "white", glm::vec2(5, 5), glm::vec2(77, 51));
+	Timer_background[3]->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, "white", glm::vec2(5, 4), glm::vec2(130, 39));
+	Timer_background[4]->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, "white", glm::vec2(5, 5), glm::vec2(130, 51));
+
+	//cosas del overlay de altura
+
+	int height = level * 100;
+	while (height != 0) {
+		int n = height % 10;
+		height /= 10;
+		Number* num = new Number();
+		num->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, n);
+		num->setPosition(glm::vec2(250 - heightOverlay.height.size() * 18,245));
+		heightOverlay.height.push_back(num);
+	}
+
+	heightOverlay.letraM = new Character;
+	heightOverlay.letraM->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+	heightOverlay.letraM->setPosition(glm::vec2(280 , 245));
+	heightOverlay.letraM->setCharacter('M',"WHITE");
+
+	heightOverlay.Background = new Rectangulo;
+	heightOverlay.Background->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, "black", glm::vec2(300,45), glm::vec2(120,250));
+
+
+
+	//indicador de +1000 puntos
+	Plus1000Obj = vector<Number *>(4);
+	picked_up_strawberry_progress = 10000;
+
+	//objetos del nivel
 	for (int i = 0; i < objs.size(); i++)
 	{
 		if (objs[i].type == "BERRY")
@@ -111,6 +174,66 @@ void Scene::renderObjects()
 			ballonObj[i]->render();
 		}
 	}
+
+	if (picked_up_strawberry_progress < 50) {
+		for (int i = 0; i < 4; i++) {
+
+			if (picked_up_strawberry_progress % 6 == 3) {
+				int digit = 0;
+				if (i == 0) digit += 1;
+				Plus1000Obj[i]->setNumber(digit);
+			}
+			else if (picked_up_strawberry_progress % 6 == 0) {
+				int digit = 10;
+				if (i == 0) digit += 1;
+				Plus1000Obj[i]->setNumber(digit);
+			};
+			Plus1000Obj[i]->increaseHeight();
+			Plus1000Obj[i]->render();
+
+		}
+		picked_up_strawberry_progress++;
+	}
+	
+	//timer y altura
+	if (overlay_progress < 80) {
+		overlay_progress++;
+		int time2 = currentTime/1000;
+		int hours = time2 / 3600;
+		int minutes = (time2%3600) / 60;
+		int seconds = time2 % 60;
+		for(int i = 0; i < 5; i++) Timer_background[i]->render();
+
+		Timer[0]->setNumber(hours / 10);
+		Timer[1]->setNumber(hours % 10);
+		Timer[2]->setNumber(minutes / 10);
+		Timer[3]->setNumber(minutes % 10);
+		Timer[4]->setNumber(seconds / 10);
+		Timer[5]->setNumber(seconds % 10);
+
+
+		for (int i = 0; i < 6; i++) {
+			Timer[i]->render();
+		}
+
+
+		heightOverlay.Background->render();
+
+		for (int i = 0; i < heightOverlay.height.size(); i++) {
+			heightOverlay.height[i]->render();
+		}
+		heightOverlay.letraM->render();
+
+	}
+
+
+	//nieve
+
+	for (int i = 0; i < snow.size(); i++) {
+		snow[i]->Particula->render();
+	}
+
+
 }
 
 void Scene::updateObjects(int deltaTime)
@@ -133,6 +256,15 @@ void Scene::updateObjects(int deltaTime)
 			ballonObj[i]->update(deltaTime);
 		}
 	}
+
+	//particulas de nieve
+	for (int i = 0; i < snow.size(); i++) {
+		snow[i]->lastPos_x += snow[i]->velocidad_x;
+		if (snow[i]->lastPos_x > 530) snow[i]->lastPos_x -= 550;
+		float altura = glm::sin((currentTime / snow[i]->divisor_velocidad_y) + snow[i]->random_offset) * snow[i]->altura_seno + snow[i]->altura_inicial;
+		snow[i]->Particula->setPosition(glm::vec2(snow[i]->lastPos_x, altura));
+	}
+
 }
 
 void Scene::updateShake(int deltaTime)
@@ -161,7 +293,7 @@ void Scene::setShake()
 	shakeAngle = 0;
 }
 
-void Scene::init(int level)
+void Scene::init(int level, float time)
 {
 	initShaders();
 	string s = "levels/level";
@@ -169,14 +301,16 @@ void Scene::init(int level)
 	s += std::to_string(level) + ".txt";
 	
 	map = TileMap::createTileMap(s, glm::vec2(SCREEN_X, SCREEN_Y), texProgram, objs);
-
 	initPlayer();
-	initObjects();
+	initObjects(level);
 
 	shakeAngle = 0;
 	shake = false;
+
+	overlay_progress = 0;
+
 	projection = glm::ortho(CAM_OFFSET, float(SCREEN_WIDTH - CAM_OFFSET) + 0, float(SCREEN_HEIGHT - CAM_OFFSET), CAM_OFFSET);
-	currentTime = 0.0f;
+	currentTime = time;
 }
 
 void Scene::update(int deltaTime)
@@ -195,7 +329,25 @@ bool Scene::check_win() {
 bool Scene::check_lose() {
 	return player->check_lose();
 }
+bool Scene::check_strawberry() {
+	if (player->check_strawberry()) {
 
+
+		for (int i = 0; i < 4; i++) {
+			Plus1000Obj[i] = new Number();
+			if (i == 0) Plus1000Obj[i]->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, 1);
+			else Plus1000Obj[i]->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, 0);
+			glm::vec2 pos = player->getPosition();
+			pos.x = player->getPosition().x + (i * 20) - 20;
+			pos.y = player->getPosition().y - 30;
+			Plus1000Obj[i]->setPosition(pos);
+			picked_up_strawberry_progress = 0;
+		}
+
+		return true;
+	}
+	return false;
+}
 
 void Scene::render()
 {
@@ -211,6 +363,10 @@ void Scene::render()
 	player->render();
 
 	renderObjects();
+}
+
+float Scene::getTime() {
+	return currentTime;
 }
 
 void Scene::initShaders()

@@ -47,13 +47,14 @@ private:
 	ISoundEngine* engine;
 
 	bool bPlay;                       // Continue to play game?
-	int level;
+	int level, death_counter, score, strawberry_counter;
+	bool Strawberry_picked_up_in_level;
 	Scene scene;                      // Scene to render
 	bool keys[256], specialKeys[256]; // Store key states so that 
 	                                  // we can have access at any time
-
+	
 };
-
+	
 
 #endif // _GAME_INCLUDE
 

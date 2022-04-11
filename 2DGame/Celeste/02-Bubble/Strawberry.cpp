@@ -41,6 +41,7 @@ void Strawberry::update(int deltaTime)
 			if (posPlayer.y < posStrawBerry.y + 25 && posPlayer.y > posStrawBerry.y - 20)
 			{
 				engine->play2D("sounds/fresa.wav", false);
+				player->touchStrawBerry();
 				collected = true;
 			}
 		}
