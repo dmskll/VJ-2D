@@ -152,6 +152,8 @@ void Scene::initObjects(int level)
 			ballonObj.back()->setPlayer(player);
 		}
 	}
+
+
 }
 
 void Scene::renderObjects()
@@ -264,6 +266,7 @@ void Scene::updateObjects(int deltaTime)
 		float altura = glm::sin((currentTime / snow[i]->divisor_velocidad_y) + snow[i]->random_offset) * snow[i]->altura_seno + snow[i]->altura_inicial;
 		snow[i]->Particula->setPosition(glm::vec2(snow[i]->lastPos_x, altura));
 	}
+
 
 }
 

@@ -41,6 +41,7 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	strawberry = false;
 	walljumpleft = false;
 	walljumpright = false;
+	spiked = false;
 
 	past_f1 = true;
 	past_f3 = true; //para que no empieze a iniciar niveles a lo loco
@@ -332,7 +333,7 @@ void Player::updateMeta(int deltaTime)
 	}
 
 	if (posPlayer.y <= -5) win = true;
-	else if (posPlayer.y > 479 && !pre_lose && !spawning)
+	else if ((spiked || posPlayer.y > 479) && !pre_lose && !spawning)
 	{
 		engine->play2D("sounds/muerte.wav", false);
 		level->setShake();
@@ -725,4 +726,8 @@ bool Player::check_strawberry() {
 		return true;
 	}
 	return false;
+}
+
+void Player::touchSpike() {
+	spiked = true;
 }

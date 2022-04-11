@@ -24,6 +24,7 @@
     <ClInclude Include="Shader.h" />
     <ClInclude Include="ShaderProgram.h" />
     <ClInclude Include="SoundControl.h" />
+    <ClInclude Include="Spike.h" />
     <ClInclude Include="Spring.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="Strawberry.h" />
@@ -43,6 +44,7 @@
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="ShaderProgram.cpp" />
     <ClCompile Include="SoundControl.cpp" />
+    <ClCompile Include="Spike.cpp" />
     <ClCompile Include="Spring.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="Strawberry.cpp" />
