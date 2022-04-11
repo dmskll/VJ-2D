@@ -39,10 +39,6 @@ public:
 	float spawnY;
 	
 
-	float spawnX;
-	float spawnY;
-	
-
 private:
 	void initShaders();
 	void initPlayer();
