@@ -7,14 +7,14 @@
 #include "Scene.h"
 
 
-#define JUMP_ANGLE_STEP 4       //el angulo que se suma al saltar
-#define WALK_STEP 4		//antes a 3 pero 4 es mas parecida al juego original		
-#define SPRING_ANGLE_STEP 3   //el angulo que se suma al utilizar un spring
-#define JUMP_HEIGHT 96			//altura del salto
-#define FALL_STEP 4	 //antes 5 pero creo que el celeste es mas lento		//velocidad a la que cae cuando acaba el salto
-#define CLIMB_STEP 2			//velocidad a la que se cae cuando se esta CLIMB
-#define WALL_JUMP_STEP 6		//incremento que se suma (o resta) en la componente 'x' y 'y' en cada instancia de wall jump
-#define DASH_STEP 10
+float JUMP_ANGLE_STEP;       //el angulo que se suma al saltar
+float WALK_STEP;		//antes a 3 pero 4 es mas parecida al juego original		
+float  SPRING_ANGLE_STEP;   //el angulo que se suma al utilizar un spring
+float  JUMP_HEIGHT;	//altura del salto
+float  FALL_STEP;	 //antes 5 pero creo que el celeste es mas lento		//velocidad a la que cae cuando acaba el salto
+float  CLIMB_STEP;		//velocidad a la que se cae cuando se esta CLIMB
+float  WALL_JUMP_STEP;		//incremento que se suma (o resta) en la componente 'x' y 'y' en cada instancia de wall jump
+float  DASH_STEP;
 
 
 enum PlayerAnims
@@ -31,6 +31,18 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	spawnSpeed = 0.5f;
 	spawnDeceleration = 0.003f;
 	engine->play2D("sounds/next-level.wav", false);
+
+
+	JUMP_ANGLE_STEP = 4;      
+	WALK_STEP = 4;				
+	SPRING_ANGLE_STEP = 3; 
+	JUMP_HEIGHT = 96;
+	FALL_STEP = 4;	
+	CLIMB_STEP = 2;			
+	WALL_JUMP_STEP = 6;		
+	DASH_STEP = 10;
+
+
 
 	win = false;
 	lose = false;
@@ -61,7 +73,8 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 
 	//god mode 
 	godDash = false; 
-
+	noSpikeDamage = false;
+	slowMode = false;
 
 	spritesheet.loadFromFile("images/madeline.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	sprite = Sprite::createSprite(glm::ivec2(32, 32), glm::vec2(0.25, 0.20), &spritesheet, &shaderProgram);
@@ -331,6 +344,35 @@ void Player::updateMeta(int deltaTime)
 	{
 		godDash = !godDash;
 	}
+	if((Game::instance().getKey(71) || Game::instance().getKey(103)) && !past_G)
+	{
+		noSpikeDamage = !noSpikeDamage;
+	}
+	if ((Game::instance().getKey(83) || Game::instance().getKey(115)) && !past_S) {
+		slowMode = !slowMode;
+
+		if (slowMode) {
+			JUMP_ANGLE_STEP /=2;      
+			WALK_STEP /=2 ;			
+			SPRING_ANGLE_STEP /=2; 
+			FALL_STEP /= 2;
+			CLIMB_STEP /= 2;
+			//float  WALL_JUMP_STEP = 6;		//incremento que se suma (o resta) en la componente 'x' y 'y' en cada instancia de wall jump
+			DASH_STEP /=2;
+
+		}
+		else {
+			JUMP_ANGLE_STEP *= 2;
+			WALK_STEP *= 2; 
+			SPRING_ANGLE_STEP *= 2;
+			FALL_STEP *= 2;
+			CLIMB_STEP *= 2;
+			DASH_STEP *= 2;
+
+		}
+
+	}
+
 
 	if (posPlayer.y <= -5) win = true;
 	else if ((spiked || posPlayer.y > 479) && !pre_lose && !spawning)
@@ -660,6 +702,8 @@ void Player::updatePressedKeys()
 	past_f1 = Game::instance().getSpecialKey(GLUT_KEY_F1);
 	past_f3 = Game::instance().getSpecialKey(GLUT_KEY_F3);
 	past_D = (Game::instance().getKey(68) || Game::instance().getKey(100));
+	past_G = (Game::instance().getKey(71) || Game::instance().getKey(103));
+	past_S = (Game::instance().getKey(83) || Game::instance().getKey(115));
 }
 
 void Player::render()
@@ -729,5 +773,5 @@ bool Player::check_strawberry() {
 }
 
 void Player::touchSpike() {
-	spiked = true;
+	if(!noSpikeDamage) spiked = true;
 }

@@ -88,6 +88,9 @@ private:
 	
 
 	//faltan para los pinchos
+
+	Spike* testSpike;
+
 };
 
 

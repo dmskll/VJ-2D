@@ -64,6 +64,7 @@ void Game::updateScene(int deltaTime)
 	if (scene.check_strawberry()) {
 		Strawberry_picked_up_in_level = true;
 	}
+	levelSkip();
 }
 
 void Game::render()
@@ -76,6 +77,80 @@ void Game::render()
 	else
 	{
 		scene.render();
+	}
+}
+
+
+void Game::levelSkip() {
+	if (Game::instance().getKey(49)) {
+		level = 1;
+		float t = scene.getTime();
+		scene = Scene();
+		scene.init(level, t);
+		Strawberry_picked_up_in_level = false;
+	}
+	else if (Game::instance().getKey(50)) {
+		level = 2;
+		float t = scene.getTime();
+		scene = Scene();
+		scene.init(level, t);
+		Strawberry_picked_up_in_level = false;
+	}
+	else if (Game::instance().getKey(51)) {
+		level = 3;
+		float t = scene.getTime();
+		scene = Scene();
+		scene.init(level, t);
+		Strawberry_picked_up_in_level = false;
+	}
+	else if (Game::instance().getKey(52)) {
+		level = 4;
+		float t = scene.getTime();
+		scene = Scene();
+		scene.init(level, t);
+		Strawberry_picked_up_in_level = false;
+	}
+	else if (Game::instance().getKey(53)) {
+		level = 5;
+		float t = scene.getTime();
+		scene = Scene();
+		scene.init(level, t);
+		Strawberry_picked_up_in_level = false;
+	}
+	else if (Game::instance().getKey(54)) {
+		level = 6;
+		float t = scene.getTime();
+		scene = Scene();
+		scene.init(level, t);
+		Strawberry_picked_up_in_level = false;
+	}
+	else if (Game::instance().getKey(55)) {
+		level = 7;
+		float t = scene.getTime();
+		scene = Scene();
+		scene.init(level, t);
+		Strawberry_picked_up_in_level = false;
+	}
+	else if (Game::instance().getKey(56)) {
+		level = 8;
+		float t = scene.getTime();
+		scene = Scene();
+		scene.init(level, t);
+		Strawberry_picked_up_in_level = false;
+	}
+	else if (Game::instance().getKey(57)) {
+		level = 9;
+		float t = scene.getTime();
+		scene = Scene();
+		scene.init(level, t);
+		Strawberry_picked_up_in_level = false;
+	}
+	else if (Game::instance().getKey(48)) {
+		level = 10;
+		float t = scene.getTime();
+		scene = Scene();
+		scene.init(level, t);
+		Strawberry_picked_up_in_level = false;
 	}
 }
 

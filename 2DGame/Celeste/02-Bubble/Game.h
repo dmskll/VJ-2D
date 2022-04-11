@@ -43,6 +43,7 @@ public:
 	bool getKey(int key) const;
 	bool getSpecialKey(int key) const;
 	void setPlay();
+	void levelSkip();
 
 private:
 	void updateScene(int deltaTime);
