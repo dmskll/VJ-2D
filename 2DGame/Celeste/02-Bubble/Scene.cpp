@@ -153,8 +153,6 @@ void Scene::initObjects(int level)
 		}
 	}
 
-	testSpike = new Spike();
-	testSpike->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram,1,glm::vec2(11,14),player);
 }
 
 void Scene::renderObjects()
@@ -268,7 +266,6 @@ void Scene::updateObjects(int deltaTime)
 		snow[i]->Particula->setPosition(glm::vec2(snow[i]->lastPos_x, altura));
 	}
 
-	testSpike->update();
 }
 
 void Scene::updateShake(int deltaTime)
@@ -367,7 +364,6 @@ void Scene::render()
 	player->render();
 
 	renderObjects();
-	testSpike->render();
 }
 
 float Scene::getTime() {

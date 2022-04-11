@@ -5,6 +5,7 @@
 #include "Sprite.h"
 #include "TileMap.h"
 #include "SoundControl.h"
+#include "Rectangulo.h"
 //#include "Scene.h"
 
 
@@ -45,6 +46,15 @@ private:
 	void moveDown(float distance);
 	void moveLeft(float distance);
 	void moveRight(float distance);
+
+	void shiftVector(vector<glm::vec2> &v);
+
+	struct Hair {
+		vector<Rectangulo* > pieces;
+		vector<glm::vec2> previousPositions;
+	};
+
+	Hair hair;
 
 	bool  win, lose, strawberry;
 	bool bJumping, canJump, climb, walljumpleft, walljumpright, jumpSpring;
