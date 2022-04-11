@@ -30,6 +30,7 @@ public:
 	void setJumpSpring();
 	void touchBallon();
 	void touchStrawBerry();
+	void touchSpike();
 	glm::ivec2 getPosition();
 	
 private:
@@ -51,6 +52,7 @@ private:
 	bool air; //indica si el jugador esta en el aire, se utiliza en las animaciones
 	bool faceRight, moving;
 	bool keyUp, keyLeft, keyDown, keyRight, dashing, canDash, godDash;
+	bool spiked;
 
 	float dashInitSpeed, dashSpeed, dashDeceleration;
 

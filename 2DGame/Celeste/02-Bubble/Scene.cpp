@@ -152,6 +152,10 @@ void Scene::initObjects(int level)
 			ballonObj.back()->setPlayer(player);
 		}
 	}
+
+	testSpike = new Spike();
+	testSpike->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, 1 , glm::vec2(11,14), player);
+
 }
 
 void Scene::renderObjects()
@@ -233,6 +237,7 @@ void Scene::renderObjects()
 		snow[i]->Particula->render();
 	}
 
+	testSpike->render();
 
 }
 
@@ -264,6 +269,8 @@ void Scene::updateObjects(int deltaTime)
 		float altura = glm::sin((currentTime / snow[i]->divisor_velocidad_y) + snow[i]->random_offset) * snow[i]->altura_seno + snow[i]->altura_inicial;
 		snow[i]->Particula->setPosition(glm::vec2(snow[i]->lastPos_x, altura));
 	}
+
+	testSpike->update();
 
 }
 
