@@ -7,7 +7,7 @@ pno PINZEL DE TILES pno
 5 CINCO   ;  . I ,
 6 SEIS    < MENOR
 > MAYOR	? INTERROG
-0 ZERO	
+0 ZERO	= IGUAL
 
 
 a A 	p P
