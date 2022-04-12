@@ -1,5 +1,75 @@
-﻿  Spike.cpp
-cl : Command line warning D9028: minimal rebuild failure, reverting to normal build
+﻿  main.cpp
+  TileMap.cpp
+  Spike.cpp
+  Scene.cpp
+c:\users\public\dani\vj-2d\2dgame\celeste\02-bubble\scene.cpp(34): warning C4018: '<': signed/unsigned mismatch
+c:\users\public\dani\vj-2d\2dgame\celeste\02-bubble\scene.cpp(38): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\public\dani\vj-2d\2dgame\celeste\02-bubble\scene.cpp(39): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\public\dani\vj-2d\2dgame\celeste\02-bubble\scene.cpp(61): warning C4018: '<': signed/unsigned mismatch
+c:\users\public\dani\vj-2d\2dgame\celeste\02-bubble\scene.cpp(63): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\public\dani\vj-2d\2dgame\celeste\02-bubble\scene.cpp(64): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\public\dani\vj-2d\2dgame\celeste\02-bubble\scene.cpp(67): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\public\dani\vj-2d\2dgame\celeste\02-bubble\scene.cpp(68): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\public\dani\vj-2d\2dgame\celeste\02-bubble\scene.cpp(70): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+c:\users\public\dani\vj-2d\2dgame\celeste\02-bubble\scene.cpp(122): warning C4018: '<': signed/unsigned mismatch
+c:\users\public\dani\vj-2d\2dgame\celeste\02-bubble\scene.cpp(188): warning C4018: '<': signed/unsigned mismatch
+c:\users\public\dani\vj-2d\2dgame\celeste\02-bubble\scene.cpp(195): warning C4018: '<': signed/unsigned mismatch
+c:\users\public\dani\vj-2d\2dgame\celeste\02-bubble\scene.cpp(203): warning C4018: '<': signed/unsigned mismatch
+c:\users\public\dani\vj-2d\2dgame\celeste\02-bubble\scene.cpp(232): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+c:\users\public\dani\vj-2d\2dgame\celeste\02-bubble\scene.cpp(253): warning C4018: '<': signed/unsigned mismatch
+c:\users\public\dani\vj-2d\2dgame\celeste\02-bubble\scene.cpp(263): warning C4018: '<': signed/unsigned mismatch
+c:\users\public\dani\vj-2d\2dgame\celeste\02-bubble\scene.cpp(278): warning C4018: '<': signed/unsigned mismatch
+c:\users\public\dani\vj-2d\2dgame\celeste\02-bubble\scene.cpp(285): warning C4018: '<': signed/unsigned mismatch
+c:\users\public\dani\vj-2d\2dgame\celeste\02-bubble\scene.cpp(292): warning C4018: '<': signed/unsigned mismatch
+c:\users\public\dani\vj-2d\2dgame\celeste\02-bubble\scene.cpp(299): warning C4018: '<': signed/unsigned mismatch
+c:\users\public\dani\vj-2d\2dgame\celeste\02-bubble\scene.cpp(378): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\public\dani\vj-2d\2dgame\celeste\02-bubble\scene.cpp(379): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+  Player.cpp
+c:\users\public\dani\vj-2d\2dgame\celeste\02-bubble\player.cpp(146): warning C4244: '-=': conversion from 'float' to 'int', possible loss of data
+c:\users\public\dani\vj-2d\2dgame\celeste\02-bubble\player.cpp(159): warning C4244: '+=': conversion from 'float' to 'int', possible loss of data
+c:\users\public\dani\vj-2d\2dgame\celeste\02-bubble\player.cpp(171): warning C4244: '-=': conversion from 'float' to 'int', possible loss of data
+c:\users\public\dani\vj-2d\2dgame\celeste\02-bubble\player.cpp(227): warning C4244: '-=': conversion from 'double' to 'int', possible loss of data
+c:\users\public\dani\vj-2d\2dgame\celeste\02-bubble\player.cpp(229): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+c:\users\public\dani\vj-2d\2dgame\celeste\02-bubble\player.cpp(234): warning C4244: '-=': conversion from 'double' to 'int', possible loss of data
+c:\users\public\dani\vj-2d\2dgame\celeste\02-bubble\player.cpp(236): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+c:\users\public\dani\vj-2d\2dgame\celeste\02-bubble\player.cpp(240): warning C4244: '-=': conversion from 'float' to 'int', possible loss of data
+c:\users\public\dani\vj-2d\2dgame\celeste\02-bubble\player.cpp(249): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+c:\users\public\dani\vj-2d\2dgame\celeste\02-bubble\player.cpp(251): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+c:\users\public\dani\vj-2d\2dgame\celeste\02-bubble\player.cpp(256): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+c:\users\public\dani\vj-2d\2dgame\celeste\02-bubble\player.cpp(258): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+c:\users\public\dani\vj-2d\2dgame\celeste\02-bubble\player.cpp(403): warning C4244: '-=': conversion from 'float' to 'int', possible loss of data
+c:\users\public\dani\vj-2d\2dgame\celeste\02-bubble\player.cpp(410): warning C4244: '+=': conversion from 'float' to 'int', possible loss of data
+c:\users\public\dani\vj-2d\2dgame\celeste\02-bubble\player.cpp(417): warning C4244: '+=': conversion from 'float' to 'int', possible loss of data
+c:\users\public\dani\vj-2d\2dgame\celeste\02-bubble\player.cpp(422): warning C4244: '-=': conversion from 'float' to 'int', possible loss of data
+c:\users\public\dani\vj-2d\2dgame\celeste\02-bubble\player.cpp(515): warning C4244: '+=': conversion from 'float' to 'int', possible loss of data
+c:\users\public\dani\vj-2d\2dgame\celeste\02-bubble\player.cpp(520): warning C4244: '+=': conversion from 'float' to 'int', possible loss of data
+c:\users\public\dani\vj-2d\2dgame\celeste\02-bubble\player.cpp(565): warning C4244: '+=': conversion from 'float' to 'int', possible loss of data
+c:\users\public\dani\vj-2d\2dgame\celeste\02-bubble\player.cpp(566): warning C4244: '+=': conversion from 'float' to 'int', possible loss of data
+c:\users\public\dani\vj-2d\2dgame\celeste\02-bubble\player.cpp(598): warning C4244: '+=': conversion from 'float' to 'int', possible loss of data
+c:\users\public\dani\vj-2d\2dgame\celeste\02-bubble\player.cpp(599): warning C4244: '-=': conversion from 'float' to 'int', possible loss of data
+c:\users\public\dani\vj-2d\2dgame\celeste\02-bubble\player.cpp(603): warning C4244: '-=': conversion from 'double' to 'int', possible loss of data
+c:\users\public\dani\vj-2d\2dgame\celeste\02-bubble\player.cpp(604): warning C4244: '+=': conversion from 'double' to 'int', possible loss of data
+c:\users\public\dani\vj-2d\2dgame\celeste\02-bubble\player.cpp(617): warning C4244: '-=': conversion from 'float' to 'int', possible loss of data
+c:\users\public\dani\vj-2d\2dgame\celeste\02-bubble\player.cpp(618): warning C4244: '-=': conversion from 'float' to 'int', possible loss of data
+c:\users\public\dani\vj-2d\2dgame\celeste\02-bubble\player.cpp(622): warning C4244: '+=': conversion from 'double' to 'int', possible loss of data
+c:\users\public\dani\vj-2d\2dgame\celeste\02-bubble\player.cpp(623): warning C4244: '+=': conversion from 'double' to 'int', possible loss of data
+c:\users\public\dani\vj-2d\2dgame\celeste\02-bubble\player.cpp(640): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+c:\users\public\dani\vj-2d\2dgame\celeste\02-bubble\player.cpp(641): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+c:\users\public\dani\vj-2d\2dgame\celeste\02-bubble\player.cpp(643): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+c:\users\public\dani\vj-2d\2dgame\celeste\02-bubble\player.cpp(725): warning C4244: '=': conversion from 'const float' to 'int', possible loss of data
+c:\users\public\dani\vj-2d\2dgame\celeste\02-bubble\player.cpp(726): warning C4244: '=': conversion from 'const float' to 'int', possible loss of data
+  Menu.cpp
+c:\users\public\dani\vj-2d\2dgame\celeste\02-bubble\menu.cpp(67): warning C4018: '<': signed/unsigned mismatch
+c:\users\public\dani\vj-2d\2dgame\celeste\02-bubble\menu.cpp(69): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\public\dani\vj-2d\2dgame\celeste\02-bubble\menu.cpp(70): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\public\dani\vj-2d\2dgame\celeste\02-bubble\menu.cpp(73): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\public\dani\vj-2d\2dgame\celeste\02-bubble\menu.cpp(74): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\public\dani\vj-2d\2dgame\celeste\02-bubble\menu.cpp(76): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+c:\users\public\dani\vj-2d\2dgame\celeste\02-bubble\menu.cpp(86): warning C4018: '<': signed/unsigned mismatch
+c:\users\public\dani\vj-2d\2dgame\celeste\02-bubble\menu.cpp(179): warning C4018: '<': signed/unsigned mismatch
+  Game.cpp
+  Generating Code...
+  LINK : C:\Users\Public\dani\VJ-2D\2DGame\Celeste\Debug\02-Bubble.exe not found or not built by the last incremental link; performing full link
 SOIL.lib(image_DXT.obj) : warning LNK4099: PDB 'vc100.pdb' was not found with 'SOIL.lib(image_DXT.obj)' or at 'C:\Users\Public\dani\VJ-2D\2DGame\Celeste\Debug\vc100.pdb'; linking object as if no debug info
 SOIL.lib(image_helper.obj) : warning LNK4099: PDB 'vc100.pdb' was not found with 'SOIL.lib(image_helper.obj)' or at 'C:\Users\Public\dani\VJ-2D\2DGame\Celeste\Debug\vc100.pdb'; linking object as if no debug info
 SOIL.lib(SOIL.obj) : warning LNK4099: PDB 'vc100.pdb' was not found with 'SOIL.lib(SOIL.obj)' or at 'C:\Users\Public\dani\VJ-2D\2DGame\Celeste\Debug\vc100.pdb'; linking object as if no debug info

@@ -27,6 +27,7 @@ private:
 	void updateShake(int deltaTime);
 	void initSnow();
 	void updateSnow(int deltaTime);
+	void updateStates();
 	void setShake();
 
 private:

@@ -91,14 +91,8 @@ void Menu::updateSnow(int deltaTime)
 	}
 }
 
-void Menu::update(int deltaTime)
+void Menu::updateStates()
 {
-	//teclas para moverse por el menu
-	if (shake) updateShake(deltaTime);
-	sprite->update(deltaTime);
-
-	updateSnow(deltaTime);
-
 	if (state == MAIN)
 	{
 		if ((Game::instance().getKey(99) || Game::instance().getKey(67)))
@@ -141,10 +135,20 @@ void Menu::update(int deltaTime)
 			sprite->changeAnimation(MAIN);
 		}
 	}
+}
 
+void Menu::update(int deltaTime)
+{
+	//teclas para moverse por el menu
+	if (shake) updateShake(deltaTime);
+	sprite->update(deltaTime);
 
+	updateSnow(deltaTime);
 
-
+	if (!shake)
+	{
+		updateStates();
+	}
 }
 
 void Menu::setShake()
