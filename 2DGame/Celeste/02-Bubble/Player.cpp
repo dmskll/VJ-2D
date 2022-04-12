@@ -218,6 +218,9 @@ void Player::updateDash()
 			else
 			{
 				canDash = true;
+				for (int i = 0; i < hair.pieces.size(); i++) {
+					hair.pieces[i]->changeColour("madelineRed");
+				}
 			}			
 		}
 	}
@@ -839,6 +842,10 @@ void Player::setJumpSpring()
 	bJumping = true;
 	canJump = false;
 	canDash = true;
+
+	for (int i = 0; i < hair.pieces.size(); i++) {
+		hair.pieces[i]->changeColour("madelineRed");
+	}
 	dashing = false;
 	jumpAngle = 0;
 	startY = posPlayer.y;
