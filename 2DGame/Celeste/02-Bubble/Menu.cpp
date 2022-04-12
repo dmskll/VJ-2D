@@ -36,7 +36,6 @@ void Menu::init()
 	state = MAIN;
 	engine = SoundControl::instance().getSoundEngine();
 
-	initSnow();
 	initShaders();
 	projection = glm::ortho(CAM_OFFSET, float(SCREEN_WIDTH - CAM_OFFSET), float(SCREEN_HEIGHT - CAM_OFFSET), CAM_OFFSET);
 
@@ -56,6 +55,7 @@ void Menu::init()
 	sprite->changeAnimation(MAIN);
 	sprite->setPosition(glm::vec2(10.f, 0.f));
 
+	initSnow();
 
 
 }
@@ -176,7 +176,7 @@ void Menu::render()
 
 	sprite->render();
 
-	for (int i = 0; i < snow.size(); i++) {
+	for (int i = 0; i < 20; i++) {
 		snow[i]->Particula->render();
 	}
 }

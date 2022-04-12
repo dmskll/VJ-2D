@@ -45,6 +45,8 @@ private:
 
 	ISoundEngine* engine;
 
+	Rectangulo test;
+
 	struct SnowParticle {
 		Rectangulo* Particula;
 		float altura_inicial, altura_seno, lastPos_x, random_offset;
