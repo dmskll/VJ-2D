@@ -18,6 +18,7 @@
     <ClInclude Include="Menu.h" />
     <ClInclude Include="Number.h" />
     <ClInclude Include="objects.h" />
+    <ClInclude Include="plants.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Rectangulo.h" />
     <ClInclude Include="Scene.h" />
@@ -38,6 +39,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="Number.cpp" />
+    <ClCompile Include="plants.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Rectangulo.cpp" />
     <ClCompile Include="Scene.cpp" />
