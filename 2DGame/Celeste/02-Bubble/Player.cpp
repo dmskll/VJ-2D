@@ -144,7 +144,7 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	hair.pieces[3]->init(glm::ivec2(16, 16), shaderProgram, "madelineRed", glm::vec2(5, 12), glm::vec2(150 + 4, 104));
 	hair.pieces[4]->init(glm::ivec2(16, 16), shaderProgram, "madelineRed", glm::vec2(12, 4), glm::vec2(150, 104 + 4));
 
-	hair.previousPositions = vector<glm::vec2>(100);
+	hair.previousPositions = vector<glm::vec2>(5);
 	for (int i = 0; i < hair.previousPositions.size(); i++) hair.previousPositions[i] = glm::vec2(0, 0);
 
 
