@@ -53,7 +53,7 @@ private:
 	TileMap *map;
 	Player *player;
 	ShaderProgram texProgram;
-	float currentTime;
+	float currentTime, finalTime;
 
 	float shakeAngle;
 	bool shake;
@@ -72,6 +72,7 @@ private:
 	vector<Spike *> spikeObj;
 	bool plant;
 	vector<plants *> plantsObj;
+	bool summit;
 
 	struct SnowParticle {
 		Rectangulo* Particula;
@@ -83,6 +84,7 @@ private:
 		Rectangulo* Background;
 		vector<Number *> height;
 		Character* letraM;
+		vector<Character *> summit;
 	};
 
 	HeightDisplay heightOverlay;
@@ -99,6 +101,16 @@ private:
 	vector<Cloud *> clouds;
 
 	Background background;
+
+	struct Counter {
+		vector<Character *> letters;
+		Rectangulo *point_1, *point_2;
+		vector<Number *> nums;
+	};
+
+	Counter deaths_indicator;
+
+
 };
 
 

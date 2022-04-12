@@ -97,23 +97,27 @@ void Scene::initObjects(int level)
 
 	//cosas del temporizador
 	Timer = vector<Number *>(6);
+	auto sum = glm::vec2(0, 0);
+	if (summit) sum = glm::vec2(200, 50);
 	for (int i = 0; i < 6; i++) {
 		Timer[i] = new Number();
 		Timer[i]->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, 0);
 		auto pos = glm::vec2(i * 20 + 20, 20);
 		if (i > 1) pos.x += 13;
 		if (i > 3) pos.x += 13;
+		pos += sum;
 		Timer[i]->setPosition(pos);
 	}
 	Timer_background = vector<Rectangulo *>(5);
 	for(int i = 0; i < 5; i++) Timer_background[i] = new Rectangulo();
-	Timer_background[0]->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, "black", glm::vec2(152,35), glm::vec2(30,30));
 
-	Timer_background[1]->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, "white", glm::vec2(5, 4), glm::vec2(77, 39));
-	Timer_background[2]->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, "white", glm::vec2(5, 5), glm::vec2(77, 51));
-	Timer_background[3]->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, "white", glm::vec2(5, 4), glm::vec2(130, 39));
-	Timer_background[4]->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, "white", glm::vec2(5, 5), glm::vec2(130, 51));
+	Timer_background[1]->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, "white", glm::vec2(5, 4), glm::vec2(77, 39) + sum);
+	Timer_background[2]->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, "white", glm::vec2(5, 5), glm::vec2(77, 51) + sum);
+	Timer_background[3]->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, "white", glm::vec2(5, 4), glm::vec2(130, 39) + sum);
+	Timer_background[4]->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, "white", glm::vec2(5, 5), glm::vec2(130, 51) + sum);
 
+	if(summit) Timer_background[0]->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, "black", glm::vec2(270, 135), glm::vec2(170,25));
+	else Timer_background[0]->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, "black", glm::vec2(152, 35), glm::vec2(30, 30));
 	//cosas del overlay de altura
 
 	int height = level * 100;
@@ -134,7 +138,57 @@ void Scene::initObjects(int level)
 	heightOverlay.Background = new Rectangulo;
 	heightOverlay.Background->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, "black", glm::vec2(300,45), glm::vec2(120,250));
 
+	if (summit) {
+		heightOverlay.summit = vector<Character *>(6);
+		for (int i = 0; i < 6; i++) heightOverlay.summit[i] = new Character();
+		heightOverlay.summit[0]->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+		heightOverlay.summit[0]->setCharacter('S', "WHITE");
+		heightOverlay.summit[1]->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+		heightOverlay.summit[1]->setCharacter('U', "WHITE");
+		heightOverlay.summit[2]->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+		heightOverlay.summit[2]->setCharacter('M', "WHITE");
+		heightOverlay.summit[3]->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+		heightOverlay.summit[3]->setCharacter('M', "WHITE");
+		heightOverlay.summit[4]->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+		heightOverlay.summit[4]->setCharacter('I', "WHITE");
+		heightOverlay.summit[5]->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+		heightOverlay.summit[5]->setCharacter('T', "WHITE");
 
+		for (int i = 0; i < 6; i++) heightOverlay.summit[i]->setPosition(glm::vec2((19 * i) + 200, 245));
+
+		deaths_indicator.letters = vector<Character*>(6);
+		for (int i = 0; i < 6; i++) deaths_indicator.letters[i] = new Character();
+
+		deaths_indicator.letters[0]->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+		deaths_indicator.letters[0]->setCharacter('O',"WHITE");
+
+		deaths_indicator.letters[1]->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+		deaths_indicator.letters[1]->setCharacter('E', "WHITE");
+
+		deaths_indicator.letters[2]->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+		deaths_indicator.letters[2]->setCharacter('A', "WHITE");
+
+		deaths_indicator.letters[3]->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+		deaths_indicator.letters[3]->setCharacter('T', "WHITE");
+
+		deaths_indicator.letters[4]->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+		deaths_indicator.letters[4]->setCharacter('H', "WHITE");
+
+		deaths_indicator.letters[5]->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+		deaths_indicator.letters[5]->setCharacter('S', "WHITE");
+
+
+		for (int i = 0; i < 6; i++) deaths_indicator.letters[i]->setPosition(glm::vec2((19 * i) + 205, 105));
+
+		deaths_indicator.point_1 = new Rectangulo();
+		deaths_indicator.point_2 = new Rectangulo();
+
+
+		deaths_indicator.point_1->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, "white", glm::vec2(5, 4), glm::vec2(337, 124));
+		deaths_indicator.point_2->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, "white", glm::vec2(5, 5), glm::vec2(337, 136));
+
+
+	}
 
 	//indicador de +1000 puntos
 	Plus1000Obj = vector<Number *>(4);
@@ -281,11 +335,44 @@ void Scene::renderObjects()
 	//timer y altura
 	if (overlay_progress < 80) {
 		overlay_progress++;
-		int time2 = currentTime/1000;
+
+		heightOverlay.Background->render();
+		if (!summit) {
+			int time2 = currentTime / 1000;
+			int hours = time2 / 3600;
+			int minutes = (time2 % 3600) / 60;
+			int seconds = time2 % 60;
+			for (int i = 0; i < 5; i++) Timer_background[i]->render();
+
+			Timer[0]->setNumber(hours / 10);
+			Timer[1]->setNumber(hours % 10);
+			Timer[2]->setNumber(minutes / 10);
+			Timer[3]->setNumber(minutes % 10);
+			Timer[4]->setNumber(seconds / 10);
+			Timer[5]->setNumber(seconds % 10);
+
+
+			for (int i = 0; i < 6; i++) {
+				Timer[i]->render();
+			}
+
+
+
+			for (int i = 0; i < heightOverlay.height.size(); i++) {
+				heightOverlay.height[i]->render();
+			}
+			heightOverlay.letraM->render();
+		}
+		else {
+			for (int i = 0; i < 6; i++) heightOverlay.summit[i]->render();
+		}
+	}
+	if (summit) {//display score
+		int time2 = finalTime / 1000;
 		int hours = time2 / 3600;
-		int minutes = (time2%3600) / 60;
+		int minutes = (time2 % 3600) / 60;
 		int seconds = time2 % 60;
-		for(int i = 0; i < 5; i++) Timer_background[i]->render();
+		for (int i = 0; i < 5; i++) Timer_background[i]->render();
 
 		Timer[0]->setNumber(hours / 10);
 		Timer[1]->setNumber(hours % 10);
@@ -299,14 +386,10 @@ void Scene::renderObjects()
 			Timer[i]->render();
 		}
 
+		for (int i = 0; i < 6; i++) deaths_indicator.letters[i]->render();
 
-		heightOverlay.Background->render();
-
-		for (int i = 0; i < heightOverlay.height.size(); i++) {
-			heightOverlay.height[i]->render();
-		}
-		heightOverlay.letraM->render();
-
+		deaths_indicator.point_1->render();
+		deaths_indicator.point_2->render();
 	}
 
 
@@ -403,6 +486,9 @@ void Scene::init(int level, float time)
 	if (level < 10) s += "0";
 	s += std::to_string(level) + ".txt";
 	
+	if (level == 11) summit = true;
+	else summit = false;
+
 	map = TileMap::createTileMap(s, glm::vec2(SCREEN_X, SCREEN_Y), texProgram, objs);
 	initPlayer();
 	initObjects(level);
@@ -414,11 +500,12 @@ void Scene::init(int level, float time)
 
 	projection = glm::ortho(CAM_OFFSET, float(SCREEN_WIDTH - CAM_OFFSET) + 0, float(SCREEN_HEIGHT - CAM_OFFSET), CAM_OFFSET);
 	currentTime = time;
+	finalTime = time;
 }
 
 void Scene::update(int deltaTime)
 {
-	currentTime += deltaTime;
+	currentTime += deltaTime;	
 	player->update(deltaTime);
 	updateObjects(deltaTime);
 	//berry->update(deltaTime);
@@ -427,7 +514,8 @@ void Scene::update(int deltaTime)
 }
 
 bool Scene::check_win() {
-	return player->check_win();
+	if(!summit)	return player->check_win();
+	else return false;
 }
 bool Scene::check_lose() {
 	return player->check_lose();
@@ -456,7 +544,7 @@ void Scene::render()
 {
 	for (int i = 0; i < clouds.size(); i++) clouds[i]->particula->render();
 	
-	background.render();
+	if(!summit) background.render();
 
 	glm::mat4 modelview;
 	
