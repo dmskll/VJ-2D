@@ -14,6 +14,7 @@
 #include "Rectangulo.h"
 #include "Character.h"
 #include "Spike.h"
+#include "plants.h"
 
 // Scene contains all the entities of our game.
 // It is responsible for updating and render them.
@@ -68,6 +69,8 @@ private:
 	vector<Ballon *> ballonObj;
 	bool spike;
 	vector<Spike *> spikeObj;
+	bool plant;
+	vector<plants *> plantsObj;
 
 	struct SnowParticle {
 		Rectangulo* Particula;

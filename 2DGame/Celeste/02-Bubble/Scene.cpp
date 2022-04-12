@@ -53,6 +53,7 @@ void Scene::initObjects(int level)
 	berry = false;
 	spring = false;
 	spike = false;
+	plant = false;
 
 	//cosas de la nieve
 
@@ -172,8 +173,39 @@ void Scene::initObjects(int level)
 			ballonObj.back()->setTileMap(map);
 			ballonObj.back()->setPlayer(player);
 		}
+		else if (objs[i].type == "GRASS1")
+		{
+			plant = true;
+			plantsObj.push_back(new plants());
+			plantsObj.back()->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, 0);
+			plantsObj.back()->setPosition(glm::vec2((objs[i].x) * map->getTileSize(), (objs[i].y) * map->getTileSize()));
+			plantsObj.back()->setTileMap(map);
+		}
+		else if (objs[i].type == "GRASS2")
+		{
+			plant = true;
+			plantsObj.push_back(new plants());
+			plantsObj.back()->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, 1);
+			plantsObj.back()->setPosition(glm::vec2((objs[i].x) * map->getTileSize(), (objs[i].y) * map->getTileSize()));
+			plantsObj.back()->setTileMap(map);
+		}
+		else if (objs[i].type == "FLOWER")
+		{
+			plant = true;
+			plantsObj.push_back(new plants());
+			plantsObj.back()->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, 2);
+			plantsObj.back()->setPosition(glm::vec2((objs[i].x) * map->getTileSize(), (objs[i].y) * map->getTileSize()));
+			plantsObj.back()->setTileMap(map);
+		}
+		else if (objs[i].type == "BUSH")
+		{
+			plant = true;
+			plantsObj.push_back(new plants());
+			plantsObj.back()->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, 3);
+			plantsObj.back()->setPosition(glm::vec2((objs[i].x) * map->getTileSize(), (objs[i].y) * map->getTileSize()));
+			plantsObj.back()->setTileMap(map);
+		}
 	}
-
 }
 
 void Scene::renderObjects()
@@ -293,6 +325,13 @@ void Scene::updateObjects(int deltaTime)
 			spikeObj[i]->update();
 		}
 	}
+	if (plant)
+	{
+		for (int i = 0; i < plantsObj.size(); ++i)
+		{
+			plantsObj[i]->update(deltaTime);
+		}
+	}
 
 	//particulas de nieve
 	for (int i = 0; i < snow.size(); i++) {
@@ -396,6 +435,13 @@ void Scene::render()
 	texProgram.setUniformMatrix4f("modelview", modelview);
 	texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
 	map->render();
+
+	for (int i = 0; i < plantsObj.size(); ++i)
+	{
+		plantsObj[i]->render();
+	}
+
+
 	player->render();
 
 	renderObjects();
