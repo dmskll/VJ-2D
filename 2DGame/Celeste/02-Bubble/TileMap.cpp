@@ -163,6 +163,34 @@ bool TileMap::loadLevel(const string &levelFile, vector<objects> &objs)
 				aux.x = i;
 				objs.push_back(aux);
 			}
+			else if (tile == 't')
+			{
+				aux.type = "FLOWER";
+				aux.y = j;
+				aux.x = i;
+				objs.push_back(aux);
+			}
+			else if (tile == 'u')
+			{
+				aux.type = "GRASS1";
+				aux.y = j;
+				aux.x = i;
+				objs.push_back(aux);
+			}
+			else if (tile == 'v')
+			{
+				aux.type = "GRASS2";
+				aux.y = j;
+				aux.x = i;
+				objs.push_back(aux);
+			}
+			else if (tile == 'w')
+			{
+				aux.type = "BUSH";
+				aux.y = j;
+				aux.x = i;
+				objs.push_back(aux);
+			}
 			
 			if(!isWall(tile))
 				map[j*mapSize.x+i] = 0;
