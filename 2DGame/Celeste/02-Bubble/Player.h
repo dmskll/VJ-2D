@@ -46,6 +46,7 @@ private:
 	void moveDown(float distance);
 	void moveLeft(float distance);
 	void moveRight(float distance);
+	void moveUp(float distance);
 
 	void shiftVector(vector<glm::vec2> &v);
 
@@ -67,6 +68,7 @@ private:
 	bool noSpikeDamage;
 	bool slowMode;
 	float dashInitSpeed, dashSpeed, dashDeceleration;
+	bool fixDashUp;
 
 	bool pre_lose;
 	float cd_lose;
