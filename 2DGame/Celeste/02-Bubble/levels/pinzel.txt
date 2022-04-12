@@ -1,9 +1,22 @@
-1 UNO	7   SIETE
-2 DOS	8   OCHO
-3 TRES	9    NUEVE
-4 CUATRO  :     ..
-5 CINCO   ;     . I ,
-6 SEIS    <    MENOR
-> MAYOR	? INTERROG
+pno PINZEL DE TILES pno
 
+1 UNO	7  SIETE
+2 DOS	8  OCHO
+3 TRES	9  NUEVE
+4 CUATRO  :  ..
+5 CINCO   ;  . I ,
+6 SEIS    < MENOR
+> MAYOR	? INTERROG
+0 ZERO	
+
+
+a A 	p P
+b B	q Q
+c C	r R
+o O	x X
+
+n N  	t T
+s S	u U
+	v V
+	w W
 
