@@ -736,7 +736,13 @@ void Player::update(int deltaTime)
 		}
 	}
 
+
+	if (posPlayer.x < 0) posPlayer.x = 0;
+	else if (posPlayer.x > 32 * 15) posPlayer.x = 32 * 15;
 	glm::vec2 pos = glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y));
+
+	
+
 	sprite->setPosition(pos);
 
 	//cosas del pelo
