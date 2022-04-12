@@ -24,6 +24,9 @@ void Rectangulo::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram
 	//madeline red
 	sprite->setAnimationSpeed(4, 8);
 	sprite->addKeyframe(4, glm::vec2(0.75, 0));
+	//cloud
+	sprite->setAnimationSpeed(5, 8);
+	sprite->addKeyframe(5, glm::vec2(0.5, 0.5));
 
 	changeColour(colour);
 	tileMapDispl = tileMapPos;
@@ -63,6 +66,9 @@ void Rectangulo::changeColour(string c) {
 	}
 	else if (c == "madelineRed") {
 		sprite->changeAnimation(4);
+	}
+	else if (c == "cloud") {
+		sprite->changeAnimation(5);
 	}
 
 

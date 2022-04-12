@@ -87,7 +87,12 @@ private:
 	vector<Rectangulo *> Timer_background;
 	vector<SnowParticle *> snow;
 
-	
+	struct Cloud {
+		Rectangulo* particula;
+		int velocidad, altura, lastPos_x;
+	};
+
+	vector<Cloud *> clouds;
 
 	//faltan para los pinchos
 

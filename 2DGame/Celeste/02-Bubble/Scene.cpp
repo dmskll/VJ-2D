@@ -54,6 +54,25 @@ void Scene::initObjects(int level)
 	spring = false;
 	spike = false;
 
+
+
+
+	//cosas de las nuves
+
+	clouds = vector<Cloud *>(20);
+	for (int i = 0; i < clouds.size(); i++) {
+		clouds[i] = new Cloud;
+		clouds[i]->particula = new Rectangulo();
+
+		int anchura = 20 + (rand()%40);
+		int longitud = 100 + (rand()% 60);
+
+		clouds[i]->particula->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, "cloud", glm::vec2(longitud,anchura),glm::vec2(100,100));
+		clouds[i]->altura = i*27 + (rand()%80) - 40;
+		clouds[i]->velocidad = (rand() % 15) + 1;
+		clouds[i]->lastPos_x = rand() % 800 - 150;
+	}
+
 	//cosas de la nieve
 
 	snow = vector<SnowParticle *>(20);
@@ -301,6 +320,13 @@ void Scene::updateObjects(int deltaTime)
 		float altura = glm::sin((currentTime / snow[i]->divisor_velocidad_y) + snow[i]->random_offset) * snow[i]->altura_seno + snow[i]->altura_inicial;
 		snow[i]->Particula->setPosition(glm::vec2(snow[i]->lastPos_x, altura));
 	}
+	//clouds
+	for (int i = 0; i < clouds.size(); i++) {
+		clouds[i]->lastPos_x = clouds[i]->lastPos_x + clouds[i]->velocidad;
+		if (clouds[i]->lastPos_x > 700) clouds[i]->lastPos_x -= 900;
+		clouds[i]->particula->setPosition(glm::vec2(clouds[i]->lastPos_x, clouds[i]->altura));
+	}
+
 }
 
 void Scene::updateShake(int deltaTime)
@@ -387,6 +413,7 @@ bool Scene::check_strawberry() {
 
 void Scene::render()
 {
+	for (int i = 0; i < clouds.size(); i++) clouds[i]->particula->render();
 	glm::mat4 modelview;
 
 	texProgram.use();
@@ -397,6 +424,7 @@ void Scene::render()
 	texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
 	map->render();
 	player->render();
+
 
 	renderObjects();
 }
