@@ -42,6 +42,7 @@ void Strawberry::update(int deltaTime)
 			{
 				engine->play2D("sounds/fresa.wav", false);
 				player->touchStrawBerry();
+				player->touchBallon();
 				collected = true;
 			}
 		}
