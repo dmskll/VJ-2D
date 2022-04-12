@@ -15,6 +15,7 @@
 #include "Character.h"
 #include "Spike.h"
 #include "plants.h"
+#include "Background.h"
 
 // Scene contains all the entities of our game.
 // It is responsible for updating and render them.
@@ -97,8 +98,7 @@ private:
 
 	vector<Cloud *> clouds;
 
-	//faltan para los pinchos
-
+	Background background;
 };
 
 

@@ -58,6 +58,8 @@ void Scene::initObjects(int level)
 
 
 
+	background.init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(580,580), glm::vec2(0, 0));
+
 	//cosas de las nuves
 
 	clouds = vector<Cloud *>(20);
@@ -453,8 +455,11 @@ bool Scene::check_strawberry() {
 void Scene::render()
 {
 	for (int i = 0; i < clouds.size(); i++) clouds[i]->particula->render();
-	glm::mat4 modelview;
+	
+	background.render();
 
+	glm::mat4 modelview;
+	
 	texProgram.use();
 	texProgram.setUniformMatrix4f("projection", projection);
 	texProgram.setUniform4f("color", 1.0f, 1.0f, 1.0f, 1.0f);
