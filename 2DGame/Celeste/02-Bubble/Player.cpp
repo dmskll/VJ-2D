@@ -166,6 +166,8 @@ void Player::updateWallJump()
 			bJumping = false;
 			walljumpleft = true;
 			wallJumpProgress = 0;
+			faceRight = true;
+			climb = false;
 		}
 	}
 
@@ -180,6 +182,8 @@ void Player::updateWallJump()
 			bJumping = false;
 			walljumpright = true;
 			wallJumpProgress = 0;
+			faceRight = false;
+			climb = false;
 		}
 	}
 	posPlayer.x -= WALK_STEP;
@@ -301,7 +305,7 @@ void Player::moveLeft(float distance)
 	pool = 0;
 	glm::ivec2 posAux = posPlayer;
 
-	for (int i = 0; i < (distance * 2) && !map->collisionMoveLeft(posAux, glm::ivec2(32, 32)); i++) {
+	for (int i = 0; i < (distance * 2) && !map->collisionMoveLeft(glm::ivec2(posAux.x - 2, posAux.y), glm::ivec2(32, 32)); i++) {
 		pool += 0.5f;
 		if (pool == 1.f)
 		{
@@ -322,7 +326,7 @@ void Player::moveRight(float distance)
 	pool = 0;
 	glm::ivec2 posAux = posPlayer;
 
-	for (int i = 0; i < (distance * 2) && !map->collisionMoveRight(posAux, glm::ivec2(32, 32)); i++) {
+	for (int i = 0; i < (distance * 2) && !map->collisionMoveRight(glm::ivec2(posAux.x + 2, posAux.y), glm::ivec2(32, 32)); i++) {
 		pool += 0.5f;
 		if (pool == 1.f)
 		{
@@ -418,10 +422,9 @@ void Player::horizontalMovement()
 		moving = true;
 		if (!walljumpright && !walljumpleft) posPlayer.x -= WALK_STEP;
 
-		if (map->collisionMoveLeft(posPlayer, glm::ivec2(32, 32))) //antes 32
+		if (map->collisionMoveLeft(posPlayer, glm::ivec2(32, 32)) && !walljumpleft) //antes 32
 		{
 			//canJump = true;
-			sprite->changeAnimation(CLIMB_LEFT);
 			climb = true; //cuando se toca una pared climb es true
 			if (!walljumpright && !walljumpleft) posPlayer.x += WALK_STEP;
 		}
@@ -431,7 +434,7 @@ void Player::horizontalMovement()
 		faceRight = true;
 		moving = true;
 		if (!walljumpright && !walljumpleft) posPlayer.x += WALK_STEP;
-		if (map->collisionMoveRight(posPlayer, glm::ivec2(32, 32)))
+		if (map->collisionMoveRight(posPlayer, glm::ivec2(32, 32)) && !walljumpright)
 		{
 			
 			climb = true;
