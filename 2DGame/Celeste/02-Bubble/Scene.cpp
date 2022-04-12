@@ -52,6 +52,7 @@ void Scene::initObjects(int level)
 	ballon = false;
 	berry = false;
 	spring = false;
+	spike = false;
 
 	//cosas de la nieve
 
@@ -138,9 +139,29 @@ void Scene::initObjects(int level)
 			springObj.back()->setTileMap(map);
 			springObj.back()->setPlayer(player);
 		}
-		else if (objs[i].type == "SPIKE")
+		else if (objs[i].type == "SPIKE-L")
 		{
-
+			spike = true;
+			spikeObj.push_back(new Spike());
+			spikeObj.back()->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, 3, glm::vec2(objs[i].x, objs[i].y), player);
+		}
+		else if (objs[i].type == "SPIKE-U")
+		{
+			spike = true;
+			spikeObj.push_back(new Spike());
+			spikeObj.back()->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, 1, glm::vec2(objs[i].x, objs[i].y), player);
+		}
+		else if (objs[i].type == "SPIKE-R")
+		{
+			spike = true;
+			spikeObj.push_back(new Spike());
+			spikeObj.back()->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, 4, glm::vec2(objs[i].x, objs[i].y), player);
+		}
+		else if (objs[i].type == "SPIKE-D")
+		{
+			spike = true;
+			spikeObj.push_back(new Spike());
+			spikeObj.back()->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, 2, glm::vec2(objs[i].x, objs[i].y), player);
 		}
 		else if (objs[i].type == "BALLON")
 		{
@@ -153,8 +174,7 @@ void Scene::initObjects(int level)
 		}
 	}
 
-	testSpike = new Spike();
-	testSpike->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram,1,glm::vec2(11,14),player);
+
 }
 
 void Scene::renderObjects()
@@ -175,6 +195,14 @@ void Scene::renderObjects()
 		for (int i = 0; i < ballonObj.size(); ++i)
 		{
 			ballonObj[i]->render();
+		}
+	}
+
+	if (spike)
+	{
+		for (int i = 0; i < spikeObj.size(); ++i)
+		{
+			spikeObj[i]->render();
 		}
 	}
 
@@ -259,6 +287,13 @@ void Scene::updateObjects(int deltaTime)
 			ballonObj[i]->update(deltaTime);
 		}
 	}
+	if (spike)
+	{
+		for (int i = 0; i < spikeObj.size(); ++i)
+		{
+			spikeObj[i]->update();
+		}
+	}
 
 	//particulas de nieve
 	for (int i = 0; i < snow.size(); i++) {
@@ -267,8 +302,6 @@ void Scene::updateObjects(int deltaTime)
 		float altura = glm::sin((currentTime / snow[i]->divisor_velocidad_y) + snow[i]->random_offset) * snow[i]->altura_seno + snow[i]->altura_inicial;
 		snow[i]->Particula->setPosition(glm::vec2(snow[i]->lastPos_x, altura));
 	}
-
-	testSpike->update();
 }
 
 void Scene::updateShake(int deltaTime)
@@ -367,7 +400,6 @@ void Scene::render()
 	player->render();
 
 	renderObjects();
-	testSpike->render();
 }
 
 float Scene::getTime() {

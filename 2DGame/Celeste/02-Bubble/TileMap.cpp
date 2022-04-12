@@ -95,6 +95,34 @@ bool TileMap::loadLevel(const string &levelFile, vector<objects> &objs)
 			fin.get(tile);
 			if (tile == 'o')
 			{
+				aux.type = "SPIKE-U";
+				aux.y = j;
+				aux.x = i;
+				objs.push_back(aux);
+			}
+			else if (tile == 'b')
+			{
+				aux.type = "SPIKE-D";
+				aux.y = j;
+				aux.x = i;
+				objs.push_back(aux);
+			}
+			if (tile == 'c')
+			{
+				aux.type = "SPIKE-R";
+				aux.y = j;
+				aux.x = i;
+				objs.push_back(aux);
+			}
+			if (tile == 'a')
+			{
+				aux.type = "SPIKE-L";
+				aux.y = j;
+				aux.x = i;
+				objs.push_back(aux);
+			}
+			if (tile == 'o')
+			{
 				aux.type = "SPIKE";
 				aux.y = j;
 				aux.x = i;

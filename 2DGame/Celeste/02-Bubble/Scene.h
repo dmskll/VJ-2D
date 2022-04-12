@@ -66,6 +66,8 @@ private:
 	vector<Spring *> springObj; //tiene las instancias de los muelles
 	bool ballon;
 	vector<Ballon *> ballonObj;
+	bool spike;
+	vector<Spike *> spikeObj;
 
 	struct SnowParticle {
 		Rectangulo* Particula;

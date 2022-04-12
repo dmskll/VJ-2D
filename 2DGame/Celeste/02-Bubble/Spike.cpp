@@ -31,20 +31,20 @@ void Spike::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, int
 	switch (orientation) {//modificar caja decolisión segun orientación
 
 	case 1://mirando hacia arriba
-		borderHigh.y += 15;
+		borderHigh.y += 25;
 		break;
 
 	case 2://mirando hacia abajo
-		borderLow.y -= 15;
+		borderLow.y -= 25;
 		break;
 
 	case 3://mirando hacia la derecha
-		borderLow.x -= 15;
+		borderLow.x -= 25;
 		break;
 
 	case 4://mirando hacia la izquierda
 
-		borderHigh.x += 15;
+		borderHigh.x += 25;
 		break;
 	}
 
