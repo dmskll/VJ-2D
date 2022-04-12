@@ -5,6 +5,7 @@
 #include "Sprite.h"
 #include "TileMap.h"
 #include "SoundControl.h"
+#include "Rectangulo.h"
 //#include "Scene.h"
 
 
@@ -46,11 +47,20 @@ private:
 	void moveLeft(float distance);
 	void moveRight(float distance);
 
+	void shiftVector(vector<glm::vec2> &v);
+
+	struct Hair {
+		vector<Rectangulo* > pieces;
+		vector<glm::vec2> previousPositions;
+	};
+
+	Hair hair;
+
 	bool  win, lose, strawberry;
 	bool bJumping, canJump, climb, walljumpleft, walljumpright, jumpSpring;
 	bool past_C, past_X, past_down, past_left, past_right, past_f1, past_f3, past_D, past_G, past_S;//booleanos que indican si la tecla estaba presionada en el ultimo update
 	bool air; //indica si el jugador esta en el aire, se utiliza en las animaciones
-	bool faceRight, moving;
+	bool faceRight, moving, crouch;
 	bool keyUp, keyLeft, keyDown, keyRight, dashing, canDash, godDash;
 	bool spiked;
 

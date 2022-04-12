@@ -174,7 +174,6 @@ void Scene::initObjects(int level)
 		}
 	}
 
-
 }
 
 void Scene::renderObjects()

@@ -11,6 +11,7 @@ public:
 
 	void setPosition(const glm::vec2 &pos);
 	void setTileMap(TileMap *tileMap);
+	void changeColour(string c);
 
 private:
 	glm::ivec2 tileMapDispl, posNumber;

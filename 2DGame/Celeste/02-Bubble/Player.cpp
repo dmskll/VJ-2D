@@ -22,7 +22,6 @@ enum PlayerAnims
 	STAND_LEFT, STAND_RIGHT, MOVE_LEFT, MOVE_RIGHT, JUMP_LEFT, JUMP_RIGHT, CLIMB_LEFT, CLIMB_RIGHT, CLIMB_LEFT_DASH, CLIMB_RIGHT_DASH, JUMP_LEFT_DASH, JUMP_RIGHT_DASH, UP_LEFT, UP_RIGHT, DOWN_LEFT, DOWN_RIGHT
 };
 
-
 void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 {
 	engine = SoundControl::instance().getSoundEngine();
@@ -136,6 +135,21 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	tileMapDispl = tileMapPos;
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
 	
+
+	hair.pieces = vector<Rectangulo*>(5);
+	for (int i = 0; i < 5; i++) hair.pieces[i] = new Rectangulo();
+	hair.pieces[0]->init(glm::ivec2(16, 16), shaderProgram, "madelineRed", glm::vec2(12, 20),glm::vec2(100 + 4,100));
+	hair.pieces[1]->init(glm::ivec2(16, 16), shaderProgram, "madelineRed", glm::vec2(20, 12), glm::vec2(100, 100 + 4));
+	hair.pieces[2]->init(glm::ivec2(16, 16), shaderProgram, "madelineRed", glm::vec2(12, 12), glm::vec2(130, 104));
+	hair.pieces[3]->init(glm::ivec2(16, 16), shaderProgram, "madelineRed", glm::vec2(5, 12), glm::vec2(150 + 4, 104));
+	hair.pieces[4]->init(glm::ivec2(16, 16), shaderProgram, "madelineRed", glm::vec2(12, 4), glm::vec2(150, 104 + 4));
+
+	hair.previousPositions = vector<glm::vec2>(100);
+	for (int i = 0; i < hair.previousPositions.size(); i++) hair.previousPositions[i] = glm::vec2(0, 0);
+
+
+
+
 }
 
 void Player::updateWallJump()
@@ -197,6 +211,9 @@ void Player::updateDash()
 			if (!godDash) 
 			{
 				canDash = false; //si el godDash está a true no ponemos el canDash a false
+				for (int i = 0; i < hair.pieces.size(); i++) {
+					hair.pieces[i]->changeColour("blue");
+				}
 			}
 			else
 			{
@@ -316,10 +333,6 @@ void Player::moveRight(float distance)
 		}
 	}
 }
-
-
-
-
 
 void Player::moveDown(float distance) {
 	for (int i = 0; i < distance && !map->collisionMoveDown(posPlayer, glm::ivec2(32, 32), &posPlayer.y); i++) {
@@ -471,15 +484,33 @@ void Player::updateAnimations()
 	}
 	else if (!moving)
 	{
-		if (faceRight)
-			if(keyDown) sprite->changeAnimation(DOWN_RIGHT);
-			else if (keyUp) sprite->changeAnimation(UP_RIGHT);
-			else sprite->changeAnimation(STAND_RIGHT);
-			
+		if (faceRight) {
+			if (keyDown) {
+				crouch = true;
+				sprite->changeAnimation(DOWN_RIGHT);
+			}
+			else if (keyUp) {
+				sprite->changeAnimation(UP_RIGHT);
+				crouch = false;
+			}
+			else {
+				crouch = false;
+				sprite->changeAnimation(STAND_RIGHT);
+			}
+		}
 		else
-			if (keyDown) sprite->changeAnimation(DOWN_LEFT);
-			else if (keyUp) sprite->changeAnimation(UP_LEFT);
-			else sprite->changeAnimation(STAND_LEFT);
+			if (keyDown) { 
+				crouch = true;
+				sprite->changeAnimation(DOWN_LEFT);
+			}
+			else if (keyUp) { 
+				sprite->changeAnimation(UP_LEFT);
+				crouch = false;
+			}
+			else { 
+				crouch = false;
+				sprite->changeAnimation(STAND_LEFT); 
+			}
 			
 	}
 	else if (climb)
@@ -493,16 +524,26 @@ void Player::updateAnimations()
 	{
 		if (faceRight)
 		{
-			if (sprite->animation() != MOVE_RIGHT)
+			if (sprite->animation() != MOVE_RIGHT && !keyDown)
 			{
+				crouch = false;
 				sprite->changeAnimation(MOVE_RIGHT);
+			}
+			else if (keyDown) {
+				crouch = true;
+				sprite->changeAnimation(DOWN_RIGHT);
 			}
 		}
 		else
 		{
-			if (sprite->animation() != MOVE_LEFT)
+			if (sprite->animation() != MOVE_LEFT && !keyDown)
 			{
+				crouch = false;
 				sprite->changeAnimation(MOVE_LEFT);
+			}
+			else if (keyDown) {
+				crouch = true;
+				sprite->changeAnimation(DOWN_LEFT);
 			}
 		}
 	}
@@ -655,13 +696,20 @@ void Player::update(int deltaTime)
 					{
 						if (!canDash) engine->play2D("sounds/can-dash.wav", false);
 						canDash = true;
+
+						for (int i = 0; i < hair.pieces.size(); i++) {
+							hair.pieces[i]->changeColour("madelineRed");
+						}
 					}
 				}
 				else
 				{
 					if(!canDash) 
 						engine->play2D("sounds/can-dash.wav", false);
-					canDash = true;				
+					canDash = true;
+					for (int i = 0; i < hair.pieces.size(); i++) {
+						hair.pieces[i]->changeColour("madelineRed");
+					}
 				}
 
 
@@ -683,9 +731,53 @@ void Player::update(int deltaTime)
 				canJump = false;
 			}
 		}
-
-		sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
 	}
+
+	glm::vec2 pos = glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y));
+	sprite->setPosition(pos);
+
+	//cosas del pelo
+	shiftVector(hair.previousPositions);
+	hair.previousPositions[0] = pos;
+
+
+	auto sum = vector<glm::vec2>(5);
+	sum[0] = glm::vec2(-20, -12);
+	sum[1] = glm::vec2(-24, -8);
+	sum[2] = glm::vec2(-20, -4);
+	sum[3] = glm::vec2(-16, 0);
+	sum[4] = glm::vec2(-20, 4);
+
+	if (crouch) {
+		sum[0] += glm::vec2(0, 4);
+		sum[1] += glm::vec2(0, 4);
+		sum[2] += glm::vec2(0, 4);
+	}
+	if (!faceRight) {
+		sum[0] += glm::vec2(26, 0);
+		sum[1] += glm::vec2(26, 0);
+		sum[2] += glm::vec2(26, 0);
+		sum[3] += glm::vec2(26, 0);
+		sum[4] += glm::vec2(26, 0);
+		
+	}
+
+	hair.pieces[0]->setPosition(hair.previousPositions[0] + sum[0]);
+	hair.pieces[1]->setPosition(hair.previousPositions[0] + sum[1]);
+	hair.pieces[2]->setPosition(hair.previousPositions[2] + sum[2]);
+	hair.pieces[3]->setPosition(hair.previousPositions[4] + sum[3]);
+	hair.pieces[4]->setPosition(hair.previousPositions[4] + sum[4]);
+
+
+
+/*
+		hair.pieces[0]->init(glm::ivec2(16, 16), shaderProgram, "madelineRed", glm::vec2(12, 20), glm::vec2(100 + 4, 100));
+	hair.pieces[1]->init(glm::ivec2(16, 16), shaderProgram, "madelineRed", glm::vec2(20, 12), glm::vec2(100, 100 + 4));
+	hair.pieces[2]->init(glm::ivec2(16, 16), shaderProgram, "madelineRed", glm::vec2(12, 12), glm::vec2(130, 104));
+	hair.pieces[3]->init(glm::ivec2(16, 16), shaderProgram, "madelineRed", glm::vec2(5, 12), glm::vec2(150 + 4, 104));
+	hair.pieces[4]->init(glm::ivec2(16, 16), shaderProgram, "madelineRed", glm::vec2(12, 4), glm::vec2(150, 104 + 4));
+	*/
+
 
 	//actualizar valores para el siguiente update
 	updatePressedKeys();
@@ -708,7 +800,11 @@ void Player::updatePressedKeys()
 
 void Player::render()
 {
-	if(!pre_lose) sprite->render();
+	if (!pre_lose) { 
+		for (int i = 0; i < hair.pieces.size(); i++) hair.pieces[i]->render();
+		sprite->render();
+	}
+
 }
 
 void Player::setTileMap(TileMap *tileMap)
@@ -720,6 +816,7 @@ void Player::setLevel(Scene *scene)
 {
 	level = scene;
 }
+
 void Player::setPosition(const glm::vec2 &pos)
 {
 	spawnX = pos.x;
@@ -750,6 +847,9 @@ void Player::setJumpSpring()
 void Player::touchBallon()
 {
 	canDash = true;
+	for (int i = 0; i < hair.pieces.size(); i++) {
+		hair.pieces[i]->changeColour("madelineRed");
+	}
 }
 
 void Player::touchStrawBerry() {
@@ -774,4 +874,10 @@ bool Player::check_strawberry() {
 
 void Player::touchSpike() {
 	if(!noSpikeDamage) spiked = true;
+}
+
+void Player::shiftVector(vector<glm::vec2> &v) {
+	for (int i = v.size() - 1; i > 0; i--) {
+		v[i] = v[i - 1];
+	}
 }
