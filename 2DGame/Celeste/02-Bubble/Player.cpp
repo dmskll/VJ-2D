@@ -208,6 +208,7 @@ void Player::updateDash()
 
 			level->setShake();
 			dashing = true;
+			fixDashUp = false;
 			bJumping = false; //si se hace un dash ya no se salta
 			//dashTime = 12;
 			dashSpeed = dashInitSpeed;
@@ -248,20 +249,20 @@ void Player::doDash()
 		if (keyLeft)  //arriba izq
 		{
 			if (!map->collisionMoveUp(posPlayer, glm::ivec2(16, 16), &posPlayer.y)) 
-				posPlayer.y -= dashSpeed * 0.8;
+				moveUp(dashSpeed * 0.8);
 			if (!map->collisionMoveLeft(posPlayer, glm::ivec2(32, 32))) 
 				moveLeft(dashSpeed * 0.8);
 		}
 		else if (keyRight) //arriba derecha
 		{
 			if (!map->collisionMoveUp(posPlayer, glm::ivec2(16, 16), &posPlayer.y)) 
-				posPlayer.y -= dashSpeed * 0.8;
+				moveUp(dashSpeed * 0.8);
 			if (!map->collisionMoveRight(posPlayer, glm::ivec2(32, 32))) 
 				moveRight(dashSpeed * 0.8);
 		}
 		else //solo dash hacia arriba
 			if (!map->collisionMoveUp(posPlayer, glm::ivec2(16, 16), &posPlayer.y)) 
-				posPlayer.y -= dashSpeed;
+				moveUp(dashSpeed);
 
 		startY = posPlayer.y;
 	}
@@ -341,13 +342,38 @@ void Player::moveRight(float distance)
 	}
 }
 
+
+
 void Player::moveDown(float distance) {
 	for (int i = 0; i < distance && !map->collisionMoveDown(posPlayer, glm::ivec2(32, 32), &posPlayer.y); i++) {
 		posPlayer.y += 1;
 	}
 
 	posPlayer.y += 1;
+}
 
+void Player::moveUp(float distance)
+{
+	bool collision, collisionAux;
+	
+	for (int i = 0; i < distance; i++) {
+		posPlayer.y -= 1;
+
+		if (!fixDashUp)
+		{
+			collision = map->collisionMoveRight(glm::ivec2(posPlayer), glm::ivec2(32, 32));
+			collisionAux = map->collisionMoveRight(glm::ivec2(posPlayer.x - 1, posPlayer.y + 10), glm::ivec2(32, 32));
+
+			while (collisionAux)
+			{
+				fixDashUp = true;
+				posPlayer.x -= 1;
+				collision = map->collisionMoveRight(glm::ivec2(posPlayer), glm::ivec2(32, 32));
+				collisionAux = map->collisionMoveRight(glm::ivec2(posPlayer.x + 2, posPlayer.y), glm::ivec2(32, 32));
+			}
+		}
+	}
+	posPlayer.y -= 1;
 }
 
 void Player::updateMeta(int deltaTime)
