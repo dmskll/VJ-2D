@@ -28,7 +28,7 @@ public:
 	Scene();
 	~Scene();
 
-	void init(int level, float time);
+	void init(int level, float time, int deaths, int strawberries);
 	void update(int deltaTime);
 	void render();
 	void setShake();
@@ -44,7 +44,7 @@ public:
 private:
 	void initShaders();
 	void initPlayer();
-	void initObjects(int level);
+	void initObjects(int level, int deaths, int strawberries);
 	void renderObjects();
 	void updateObjects(int deltaTime);
 	void updateShake(int deltaTime);
@@ -110,6 +110,10 @@ private:
 
 	Counter deaths_indicator;
 
+	
+	Strawberry decorative_berry;
+	vector<Number *> strawberry_counter;
+	Character iks;
 
 };
 

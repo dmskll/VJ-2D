@@ -47,7 +47,7 @@ void Scene::initPlayer()
 
 }
 
-void Scene::initObjects(int level)
+void Scene::initObjects(int level, int deaths, int strawberries)
 {
 	ballon = false;
 	berry = false;
@@ -187,6 +187,52 @@ void Scene::initObjects(int level)
 		deaths_indicator.point_1->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, "white", glm::vec2(5, 4), glm::vec2(337, 124));
 		deaths_indicator.point_2->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, "white", glm::vec2(5, 5), glm::vec2(337, 136));
 
+		deaths_indicator.nums = vector<Number *>(0);
+		if (deaths == 0) {
+			auto n = new Number();
+			n->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, 0);
+			deaths_indicator.nums.push_back(n);
+		}
+		while (deaths != 0) {
+			int digit = deaths % 10;
+			deaths /= 10;
+			auto n = new Number();
+			n->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, digit);
+			deaths_indicator.nums.push_back(n);
+		}
+
+		for (int i = 0; i < deaths_indicator.nums.size(); i++) {
+			int i2 = deaths_indicator.nums.size() - i;
+			deaths_indicator.nums[i]->setPosition(glm::vec2(320 + 20 * i2, 105));
+		}
+
+		decorative_berry.init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+		decorative_berry.setPosition(glm::vec2(247,25));
+		iks.init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+		iks.setCharacter('X',"white");
+		iks.setPosition(glm::vec2(282,34));
+
+		int s = 13;
+
+		strawberry_counter = vector<Number *>(0);
+
+
+		if (strawberries == 0) {
+			auto n = new Number();
+			n->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, 0);
+			strawberry_counter.push_back(n);
+		}
+		while (strawberries != 0) {
+			int digit = strawberries % 10;
+			strawberries /= 10;
+			auto n = new Number();
+			n->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, digit);
+			strawberry_counter.push_back(n);
+		}
+		for (int i = 0; i < strawberry_counter.size(); i++) {
+			int i2 = strawberry_counter.size() - i;
+			strawberry_counter[i]->setPosition(glm::vec2(285 + 20 * i2, 34));
+		}
 
 	}
 
@@ -390,6 +436,14 @@ void Scene::renderObjects()
 
 		deaths_indicator.point_1->render();
 		deaths_indicator.point_2->render();
+
+		for (int i = 0; i < deaths_indicator.nums.size(); i++) deaths_indicator.nums[i]->render();
+
+		decorative_berry.render();
+		iks.render();
+
+		for (int i = 0; i < strawberry_counter.size(); i++) strawberry_counter[i]->render();
+
 	}
 
 
@@ -479,7 +533,7 @@ void Scene::setShake()
 	shakeAngle = 0;
 }
 
-void Scene::init(int level, float time)
+void Scene::init(int level, float time, int deaths, int strawberries)
 {
 	initShaders();
 	string s = "levels/level";
@@ -491,7 +545,7 @@ void Scene::init(int level, float time)
 
 	map = TileMap::createTileMap(s, glm::vec2(SCREEN_X, SCREEN_Y), texProgram, objs);
 	initPlayer();
-	initObjects(level);
+	initObjects(level, deaths, strawberries);
 
 	shakeAngle = 0;
 	shake = false;
