@@ -1,0 +1,95 @@
+﻿  Game.cpp
+  Menu.cpp
+Menu.cpp(67): warning C4018: '<': signed/unsigned mismatch
+Menu.cpp(69): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+Menu.cpp(70): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+Menu.cpp(73): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+Menu.cpp(74): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+Menu.cpp(76): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+Menu.cpp(86): warning C4018: '<': signed/unsigned mismatch
+  Player.cpp
+Player.cpp(148): warning C4018: '<': signed/unsigned mismatch
+Player.cpp(160): warning C4244: '-=': conversion from 'float' to 'int', possible loss of data
+Player.cpp(175): warning C4244: '+=': conversion from 'float' to 'int', possible loss of data
+Player.cpp(189): warning C4244: '-=': conversion from 'float' to 'int', possible loss of data
+Player.cpp(219): warning C4018: '<': signed/unsigned mismatch
+Player.cpp(226): warning C4018: '<': signed/unsigned mismatch
+Player.cpp(252): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+Player.cpp(254): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+Player.cpp(259): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+Player.cpp(261): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+Player.cpp(274): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+Player.cpp(276): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+Player.cpp(281): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+Player.cpp(283): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+Player.cpp(449): warning C4244: '-=': conversion from 'float' to 'int', possible loss of data
+Player.cpp(455): warning C4244: '+=': conversion from 'float' to 'int', possible loss of data
+Player.cpp(462): warning C4244: '+=': conversion from 'float' to 'int', possible loss of data
+Player.cpp(467): warning C4244: '-=': conversion from 'float' to 'int', possible loss of data
+Player.cpp(588): warning C4244: '+=': conversion from 'float' to 'int', possible loss of data
+Player.cpp(593): warning C4244: '+=': conversion from 'float' to 'int', possible loss of data
+Player.cpp(638): warning C4244: '+=': conversion from 'float' to 'int', possible loss of data
+Player.cpp(639): warning C4244: '+=': conversion from 'float' to 'int', possible loss of data
+Player.cpp(671): warning C4244: '+=': conversion from 'float' to 'int', possible loss of data
+Player.cpp(672): warning C4244: '-=': conversion from 'float' to 'int', possible loss of data
+Player.cpp(676): warning C4244: '-=': conversion from 'double' to 'int', possible loss of data
+Player.cpp(677): warning C4244: '+=': conversion from 'double' to 'int', possible loss of data
+Player.cpp(690): warning C4244: '-=': conversion from 'float' to 'int', possible loss of data
+Player.cpp(691): warning C4244: '-=': conversion from 'float' to 'int', possible loss of data
+Player.cpp(695): warning C4244: '+=': conversion from 'double' to 'int', possible loss of data
+Player.cpp(696): warning C4244: '+=': conversion from 'double' to 'int', possible loss of data
+Player.cpp(713): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+Player.cpp(714): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+Player.cpp(716): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+Player.cpp(732): warning C4018: '<': signed/unsigned mismatch
+Player.cpp(742): warning C4018: '<': signed/unsigned mismatch
+Player.cpp(842): warning C4018: '<': signed/unsigned mismatch
+Player.cpp(860): warning C4244: '=': conversion from 'const float' to 'int', possible loss of data
+Player.cpp(861): warning C4244: '=': conversion from 'const float' to 'int', possible loss of data
+Player.cpp(881): warning C4018: '<': signed/unsigned mismatch
+Player.cpp(892): warning C4018: '<': signed/unsigned mismatch
+  Scene.cpp
+Scene.cpp(34): warning C4018: '<': signed/unsigned mismatch
+Scene.cpp(38): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+Scene.cpp(39): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+Scene.cpp(64): warning C4018: '<': signed/unsigned mismatch
+Scene.cpp(81): warning C4018: '<': signed/unsigned mismatch
+Scene.cpp(83): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+Scene.cpp(84): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+Scene.cpp(87): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+Scene.cpp(88): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+Scene.cpp(90): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+Scene.cpp(202): warning C4018: '<': signed/unsigned mismatch
+Scene.cpp(230): warning C4018: '<': signed/unsigned mismatch
+Scene.cpp(242): warning C4018: '<': signed/unsigned mismatch
+Scene.cpp(348): warning C4018: '<': signed/unsigned mismatch
+Scene.cpp(355): warning C4018: '<': signed/unsigned mismatch
+Scene.cpp(363): warning C4018: '<': signed/unsigned mismatch
+Scene.cpp(399): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+Scene.cpp(419): warning C4018: '<': signed/unsigned mismatch
+Scene.cpp(429): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+Scene.cpp(452): warning C4018: '<': signed/unsigned mismatch
+Scene.cpp(457): warning C4018: '<': signed/unsigned mismatch
+Scene.cpp(464): warning C4018: '<': signed/unsigned mismatch
+Scene.cpp(479): warning C4018: '<': signed/unsigned mismatch
+Scene.cpp(486): warning C4018: '<': signed/unsigned mismatch
+Scene.cpp(493): warning C4018: '<': signed/unsigned mismatch
+Scene.cpp(500): warning C4018: '<': signed/unsigned mismatch
+Scene.cpp(511): warning C4018: '<': signed/unsigned mismatch
+Scene.cpp(518): warning C4018: '<': signed/unsigned mismatch
+Scene.cpp(606): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+Scene.cpp(607): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+Scene.cpp(619): warning C4018: '<': signed/unsigned mismatch
+Scene.cpp(633): warning C4018: '<': signed/unsigned mismatch
+  main.cpp
+SOIL.lib(SOIL.obj) : warning LNK4075: ignoring '/EDITANDCONTINUE' due to '/OPT:ICF' specification
+LINK : warning LNK4098: defaultlib 'MSVCRTD' conflicts with use of other libs; use /NODEFAULTLIB:library
+  Generating code
+  All 1612 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Finished generating code
+SOIL.lib(image_DXT.obj) : warning LNK4099: PDB 'vc100.pdb' was not found with 'SOIL.lib(image_DXT.obj)' or at 'C:\Users\Leo\Desktop\UNI\VJ\VJ-2D\2DGame\Celeste\Release\vc100.pdb'; linking object as if no debug info
+SOIL.lib(image_helper.obj) : warning LNK4099: PDB 'vc100.pdb' was not found with 'SOIL.lib(image_helper.obj)' or at 'C:\Users\Leo\Desktop\UNI\VJ\VJ-2D\2DGame\Celeste\Release\vc100.pdb'; linking object as if no debug info
+SOIL.lib(SOIL.obj) : warning LNK4099: PDB 'vc100.pdb' was not found with 'SOIL.lib(SOIL.obj)' or at 'C:\Users\Leo\Desktop\UNI\VJ\VJ-2D\2DGame\Celeste\Release\vc100.pdb'; linking object as if no debug info
+SOIL.lib(stb_image_aug.obj) : warning LNK4099: PDB 'vc100.pdb' was not found with 'SOIL.lib(stb_image_aug.obj)' or at 'C:\Users\Leo\Desktop\UNI\VJ\VJ-2D\2DGame\Celeste\Release\vc100.pdb'; linking object as if no debug info
+  02-Bubble.vcxproj -> C:\Users\Leo\Desktop\UNI\VJ\VJ-2D\2DGame\Celeste\Release\02-Bubble.exe
+  02-Bubble.vcxproj -> C:\Users\Leo\Desktop\UNI\VJ\VJ-2D\2DGame\Celeste\Release\02-Bubble.pdb (Full PDB)

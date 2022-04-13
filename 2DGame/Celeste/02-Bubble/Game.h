@@ -44,12 +44,15 @@ public:
 	bool getSpecialKey(int key) const;
 	void setPlay();
 	void levelSkip();
+	
 
 private:
 	void updateScene(int deltaTime);
 	void updateMenu(int deltaTime);
 
 	ISoundEngine* engine;
+
+	bool past1, past2, past3, past4, past5, past6, past7, past8, past9, past0;
 
 	bool bPlay, playing;                       // Continue to play game?
 	int level, death_counter, score, strawberry_counter;

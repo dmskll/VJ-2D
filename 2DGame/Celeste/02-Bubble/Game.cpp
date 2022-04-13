@@ -30,6 +30,16 @@ bool Game::update(int deltaTime)
 		updateScene(deltaTime);
 	}
 
+	past1 = Game::instance().getKey(49);
+	past2 = Game::instance().getKey(50);
+	past3 = Game::instance().getKey(51);
+	past4 = Game::instance().getKey(52);
+	past5 = Game::instance().getKey(53);
+	past6 = Game::instance().getKey(54);
+	past7 = Game::instance().getKey(55);
+	past8 = Game::instance().getKey(56);
+	past9 = Game::instance().getKey(57);
+	past0 = Game::instance().getKey(48);
 	return bPlay;
 }
 
@@ -94,70 +104,70 @@ void Game::render()
 
 
 void Game::levelSkip() {
-	if (Game::instance().getKey(49)) {
+	if (Game::instance().getKey(49) && !past1) {
 		level = 1;
 		float t = scene.getTime();
 		scene = Scene();
 		scene.init(level, t, death_counter, strawberry_counter);
 		Strawberry_picked_up_in_level = false;
 	}
-	else if (Game::instance().getKey(50)) {
+	else if (Game::instance().getKey(50) && !past2) {
 		level = 2;
 		float t = scene.getTime();
 		scene = Scene();
 		scene.init(level, t, death_counter, strawberry_counter);
 		Strawberry_picked_up_in_level = false;
 	}
-	else if (Game::instance().getKey(51)) {
+	else if (Game::instance().getKey(51) && !past3) {
 		level = 3;
 		float t = scene.getTime();
 		scene = Scene();
 		scene.init(level, t, death_counter, strawberry_counter);
 		Strawberry_picked_up_in_level = false;
 	}
-	else if (Game::instance().getKey(52)) {
+	else if (Game::instance().getKey(52) && !past4) {
 		level = 4;
 		float t = scene.getTime();
 		scene = Scene();
 		scene.init(level, t, death_counter, strawberry_counter);
 		Strawberry_picked_up_in_level = false;
 	}
-	else if (Game::instance().getKey(53)) {
+	else if (Game::instance().getKey(53) && !past5) {
 		level = 5;
 		float t = scene.getTime();
 		scene = Scene();
 		scene.init(level, t, death_counter, strawberry_counter);
 		Strawberry_picked_up_in_level = false;
 	}
-	else if (Game::instance().getKey(54)) {
+	else if (Game::instance().getKey(54) && !past6) {
 		level = 6;
 		float t = scene.getTime();
 		scene = Scene();
 		scene.init(level, t, death_counter, strawberry_counter);
 		Strawberry_picked_up_in_level = false;
 	}
-	else if (Game::instance().getKey(55)) {
+	else if (Game::instance().getKey(55) && !past7) {
 		level = 7;
 		float t = scene.getTime();
 		scene = Scene();
 		scene.init(level, t, death_counter, strawberry_counter);
 		Strawberry_picked_up_in_level = false;
 	}
-	else if (Game::instance().getKey(56)) {
+	else if (Game::instance().getKey(56) && !past8) {
 		level = 8;
 		float t = scene.getTime();
 		scene = Scene();
 		scene.init(level, t, death_counter, strawberry_counter);
 		Strawberry_picked_up_in_level = false;
 	}
-	else if (Game::instance().getKey(57)) {
+	else if (Game::instance().getKey(57) && !past9) {
 		level = 9;
 		float t = scene.getTime();
 		scene = Scene();
 		scene.init(level, t, death_counter, strawberry_counter);
 		Strawberry_picked_up_in_level = false;
 	}
-	else if (Game::instance().getKey(48)) {
+	else if (Game::instance().getKey(48) && !past0) {
 		level = 10;
 		float t = scene.getTime();
 		scene = Scene();
