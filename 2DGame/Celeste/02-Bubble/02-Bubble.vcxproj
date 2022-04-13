@@ -15,6 +15,7 @@
     <ClInclude Include="Background.h" />
     <ClInclude Include="ballon.h" />
     <ClInclude Include="Character.h" />
+    <ClInclude Include="Flag.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="Number.h" />
@@ -37,6 +38,7 @@
     <ClCompile Include="Background.cpp" />
     <ClCompile Include="ballon.cpp" />
     <ClCompile Include="Character.cpp" />
+    <ClCompile Include="Flag.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Menu.cpp" />

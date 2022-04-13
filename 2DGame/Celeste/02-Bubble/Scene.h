@@ -16,6 +16,7 @@
 #include "Spike.h"
 #include "plants.h"
 #include "Background.h"
+#include "Flag.h"
 
 // Scene contains all the entities of our game.
 // It is responsible for updating and render them.
@@ -32,10 +33,12 @@ public:
 	void update(int deltaTime);
 	void render();
 	void setShake();
+	void setTouchFlag();
 	float getTime();
 	bool check_win();
 	bool check_lose();
 	bool check_strawberry();
+	
 
 	float spawnX;
 	float spawnY;
@@ -48,6 +51,7 @@ private:
 	void renderObjects();
 	void updateObjects(int deltaTime);
 	void updateShake(int deltaTime);
+
 
 private:
 	TileMap *map;
@@ -73,6 +77,8 @@ private:
 	bool plant;
 	vector<plants *> plantsObj;
 	bool summit;
+	bool flag, touchFlag;
+	Flag *flagObj;
 
 	struct SnowParticle {
 		Rectangulo* Particula;
