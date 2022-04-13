@@ -37,7 +37,7 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	SPRING_ANGLE_STEP = 3; 
 	JUMP_HEIGHT = 96;
 	FALL_STEP = 4;	
-	CLIMB_STEP = 2;			
+	CLIMB_STEP = 1;			
 	WALL_JUMP_STEP = 6;		
 	DASH_STEP = 10;
 
