@@ -44,6 +44,12 @@ void Game::updateScene(int deltaTime)
 
 	if (scene.check_win()) {
 		level++;
+		if (level == 11)
+		{
+			engine->stopAllSounds();
+			engine->play2D("sounds/end-music.wav", true);
+		}
+
 		float t = scene.getTime();
 		scene = Scene();
 		scene.init(level, t);
@@ -52,6 +58,12 @@ void Game::updateScene(int deltaTime)
 			strawberry_counter++;
 			Strawberry_picked_up_in_level = false;
 		}
+	}
+
+	if (level != 11 && engine->isCurrentlyPlaying("sounds/end-music.wav"))
+	{
+		engine->stopAllSounds();
+		engine->play2D("sounds/level-music.mp3", true);
 	}
 
 	if (scene.check_lose()) {

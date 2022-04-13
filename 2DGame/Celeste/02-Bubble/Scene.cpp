@@ -54,9 +54,7 @@ void Scene::initObjects(int level)
 	spring = false;
 	spike = false;
 	plant = false;
-
-
-
+	flag = false;
 
 	background.init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(580,580), glm::vec2(0, 0));
 
@@ -280,6 +278,16 @@ void Scene::initObjects(int level)
 			plantsObj.back()->setPosition(glm::vec2((objs[i].x) * map->getTileSize(), (objs[i].y) * map->getTileSize()));
 			plantsObj.back()->setTileMap(map);
 		}
+		else if (objs[i].type == "FLAG")
+		{
+			flag = true;
+			flagObj = new Flag();
+			flagObj->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+			flagObj->setPosition(glm::vec2(objs[i].x * map->getTileSize(), objs[i].y * map->getTileSize()));
+			flagObj->setTileMap(map);
+			flagObj->setPlayer(player);
+			flagObj->setLevel(this);
+		}
 	}
 }
 
@@ -310,6 +318,10 @@ void Scene::renderObjects()
 		{
 			spikeObj[i]->render();
 		}
+	}
+	if (flag)
+	{
+		flagObj->render();
 	}
 
 	if (picked_up_strawberry_progress < 50) {
@@ -367,7 +379,7 @@ void Scene::renderObjects()
 			for (int i = 0; i < 6; i++) heightOverlay.summit[i]->render();
 		}
 	}
-	if (summit) {//display score
+	if (summit && touchFlag) {//display score
 		int time2 = finalTime / 1000;
 		int hours = time2 / 3600;
 		int minutes = (time2 % 3600) / 60;
@@ -436,6 +448,10 @@ void Scene::updateObjects(int deltaTime)
 			plantsObj[i]->update(deltaTime);
 		}
 	}
+	if (flag)
+	{
+		flagObj->update(deltaTime);
+	}
 
 	//particulas de nieve
 	for (int i = 0; i < snow.size(); i++) {
@@ -479,6 +495,11 @@ void Scene::setShake()
 	shakeAngle = 0;
 }
 
+void Scene::setTouchFlag()
+{
+	touchFlag = true;
+}
+
 void Scene::init(int level, float time)
 {
 	initShaders();
@@ -486,6 +507,7 @@ void Scene::init(int level, float time)
 	if (level < 10) s += "0";
 	s += std::to_string(level) + ".txt";
 	
+	touchFlag = false;
 	if (level == 11) summit = true;
 	else summit = false;
 
@@ -508,8 +530,6 @@ void Scene::update(int deltaTime)
 	currentTime += deltaTime;	
 	player->update(deltaTime);
 	updateObjects(deltaTime);
-	//berry->update(deltaTime);
-	//spring->update(deltaTime);
 	if (shake) updateShake(deltaTime);
 }
 
