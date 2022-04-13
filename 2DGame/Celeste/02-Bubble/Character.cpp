@@ -8,7 +8,7 @@ void Character::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 {
 	spritesheet.loadFromFile("images/text.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	sprite = Sprite::createSprite(glm::ivec2(14, 23), glm::vec2(0.125, 0.125), &spritesheet, &shaderProgram);
-	sprite->setNumberAnimations(55);
+	sprite->setNumberAnimations(70);
 
 
 	sprite->setAnimationSpeed(0, 8);//A blanco
@@ -185,6 +185,30 @@ void Character::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	sprite->setAnimationSpeed(55, 8);//Y rojo
 	sprite->addKeyframe(55, glm::vec2(0.625, 0.875));
 
+	sprite->setAnimationSpeed(56, 8);//I rojo
+	sprite->addKeyframe(56, glm::vec2(0.75, 0.875));
+
+	sprite->setAnimationSpeed(57, 8);//I Blanco
+	sprite->addKeyframe(57, glm::vec2(0.75, 0.125));
+
+	sprite->setAnimationSpeed(58, 8);//I Negro
+	sprite->addKeyframe(58, glm::vec2(0.75, 0.375));
+
+	sprite->setAnimationSpeed(59, 8);//I gris
+	sprite->addKeyframe(59, glm::vec2(0.75, 0.625));
+
+	sprite->setAnimationSpeed(60, 8);//u rojo
+	sprite->addKeyframe(60, glm::vec2(0.875, 0.875));
+
+	sprite->setAnimationSpeed(61, 8);//u Blanco
+	sprite->addKeyframe(61, glm::vec2(0.875, 0.125));
+
+	sprite->setAnimationSpeed(62, 8);//u Negro
+	sprite->addKeyframe(62, glm::vec2(0.875, 0.375));
+
+	sprite->setAnimationSpeed(63, 8);//u gris
+	sprite->addKeyframe(63, glm::vec2(0.875, 0.625));
+
 
 	tileMapDispl = tileMapPos;
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posNumber.x), float(tileMapDispl.y + posNumber.y)));
@@ -230,6 +254,19 @@ void Character::setCharacter(char ch, string colour) {
 	else if (colour == "GRAY") num += 28;
 	else if (colour == "RED") num += 42;
 
+	//añado I y U un poco a lo cutre
+	if (ch == 'I') {
+		num = 56;
+		if (colour == "WHITE") num += 1;
+		else if (colour == "BLACK") num += 2;
+		else if (colour == "GRAY") num += 3;
+	}
+	if (ch == 'U') {
+		num = 60;
+		if (colour == "WHITE") num += 1;
+		else if (colour == "BLACK") num += 2;
+		else if (colour == "GRAY") num += 3;
+	}
 
 	sprite->changeAnimation(num);
 }
